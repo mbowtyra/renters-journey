@@ -1107,20 +1107,23 @@ function renderChapterQuests(screenEl, n, persona) {
   var chData = (PERSONA_CHAPTERS[persona] || PERSONA_CHAPTERS.jordan)[n];
   if (!chData) return;
 
+  var allQuests  = (chData.quests || []);
+  var sideQuests = (chData.sideQuests || []);
+  var combined   = allQuests.concat(sideQuests);
+
+  // If this persona has no quest data for this chapter, the chapter HTML
+  // (from the mockup) is already correct for them — leave it untouched.
+  if (combined.length === 0) return;
+
   // Find the main content column
   var main = screenEl.querySelector('.main');
   if (!main) return;
 
-  // Remove existing quest/sidequest articles (but keep tonight-card, framing-card, reflection-card)
+  // Remove existing quest/sidequest articles (keep tonight-card, framing-card, reflection-card)
   main.querySelectorAll('.quest').forEach(function(q) { q.remove(); });
 
   // Find anchor before which to insert (insert before the final reflection-card)
   var reflCard = main.querySelector('.reflection-card');
-
-  // Core quests
-  var allQuests = (chData.quests || []);
-  var sideQuests = (chData.sideQuests || []);
-  var combined = allQuests.concat(sideQuests);
 
   combined.forEach(function(q, i) {
     var html = renderQuestCard(q, n, i);
