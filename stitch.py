@@ -454,6 +454,12 @@ function syncMapScreen() {
   if (profile.skin && SKIN_TO_LIP[profile.skin])
     document.documentElement.style.setProperty('--avatar-lip', SKIN_TO_LIP[profile.skin]);
 
+  // Show the correct hair style in the map sidebar sprite
+  var hs = profile.hairStyle || 'short';
+  document.querySelectorAll('#screen-map .avatar-frame .hair-style').forEach(function(g) {
+    g.style.display = (g.getAttribute('data-style') === hs) ? '' : 'none';
+  });
+
   // Wire change-renter (once)
   var changeEl = document.querySelector('#screen-map .persona-context .change:not([data-wired])');
   if (changeEl) { changeEl.setAttribute('data-wired','1'); changeEl.style.cursor='pointer'; changeEl.addEventListener('click',function(){RJ.navigate('screen-intro');}); }
