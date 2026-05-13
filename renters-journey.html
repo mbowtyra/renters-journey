@@ -13649,7 +13649,7 @@ function syncMapScreen() {
     return html;
   }
 
-  // Hero lede
+  // Hero lede — name-swap is sufficient here (generic narrative)
   var lede = mapEl.querySelector('.hero .lede');
   if (lede) lede.innerHTML = _swapMapName(lede.innerHTML);
 
@@ -13664,9 +13664,15 @@ function syncMapScreen() {
     chChip.innerHTML = '<span class="dot"></span><strong>You\'re at:</strong> Chapter ' + curCh + ' \u00b7 ' + (CH_NAMES[curCh] || '');
   }
 
-  // Chapter-card teasers (contains persona name in Ch1 and others)
-  mapEl.querySelectorAll('.chapter-card .teaser').forEach(function(t) {
-    t.innerHTML = _swapMapName(t.innerHTML);
+  // Chapter-card teasers: use fully persona-specific copy from PERSONA_CHAPTERS
+  var pChapters = PERSONA_CHAPTERS[profile.persona] || PERSONA_CHAPTERS.jordan;
+  mapEl.querySelectorAll('.chapter-card').forEach(function(card, idx) {
+    var chNum = idx + 1;
+    var chData = pChapters[chNum];
+    var teaserEl = card.querySelector('.teaser');
+    if (teaserEl && chData && chData.mapTeaser) {
+      teaserEl.textContent = chData.mapTeaser;
+    }
   });
 
   // Wire change-renter (once)
@@ -13718,6 +13724,7 @@ var PERSONA_CHAPTERS = {
     1: {
       "eyebrow": "Where Jordan is tonight",
       "blurb": "Jordan got a new job, and they're up late journaling and thinking about the move. Here's what was running through their head.",
+      "mapTeaser": "The triggering event: a job offer, a late night, a move to Seattle in eighteen days. Jordan's journaling through it with Max asleep nearby.",
       "q1": "What stood out to you about the start of Jordan's renter journey?",
       "q2": "What is Jordan looking for in an apartment?",
       "q2hint": "What's negotiable, and what's not?",
@@ -13734,6 +13741,7 @@ var PERSONA_CHAPTERS = {
     2: {
       "eyebrow": "Where Jordan starts",
       "blurb": "The job starts in sixteen days. Jordan is on the couch in Portland with Max asleep at their feet, phone out, searching for Seattle apartments. Apartment List came up. They click in. They haven't taken the quiz and aren't sure they have time for it.",
+      "mapTeaser": "Sixteen days left. Jordan's on the couch in Portland with Max, phone out, searching Seattle apartments. Apartment List just came up.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -13839,6 +13847,7 @@ var PERSONA_CHAPTERS = {
     3: {
       "eyebrow": "Where Jordan starts",
       "blurb": "Thirteen days. Jordan takes the quiz on their phone. Max is on the couch next to them. The quiz wants to know about Jordan's personality type. Jordan clicks through it.",
+      "mapTeaser": "Thirteen days left. Jordan takes the quiz with Max on the couch. The clock is running, the filters matter.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -13941,6 +13950,7 @@ var PERSONA_CHAPTERS = {
     4: {
       "eyebrow": "Where Jordan starts",
       "blurb": "Ten days left. Jordan has eight properties in their shortlist, all in Seattle. They search each one on Reddit. Two have management complaints. One has a dog park within a quarter mile. Jordan moves that one to the top.",
+      "mapTeaser": "Ten days left and eight properties on the shortlist. Jordan's on Reddit checking reviews, and moving the dog-park-adjacent one to the top.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14064,6 +14074,7 @@ var PERSONA_CHAPTERS = {
     5: {
       "eyebrow": "Where Jordan starts",
       "blurb": "Jordan has two live remote tours scheduled. The first is Tuesday morning. There's no time to wait three days for a property to respond. The eighteen-day window closes next Monday.",
+      "mapTeaser": "Two remote tours scheduled. Jordan can't wait three days for a reply — the eighteen-day window closes next Monday. The messages are out.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14193,6 +14204,7 @@ var PERSONA_CHAPTERS = {
     6: {
       "eyebrow": "Where Jordan starts",
       "blurb": "The live remote tour was Tuesday morning. The agent walked through every closet and showed the back yard for Max. Jordan has been thinking about it since. The pet rent is $75 a month. The lease is due back by tomorrow.",
+      "mapTeaser": "The agent showed the back yard for Max. The pet rent is $75 a month. The lease is due back by tomorrow. Jordan's been thinking about it since Tuesday.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14264,6 +14276,7 @@ var PERSONA_CHAPTERS = {
     7: {
       "eyebrow": "Where Jordan starts",
       "blurb": "Three weeks in Seattle. Max has claimed a corner of the back yard. Jordan's new colleagues keep asking where they found their place. The five-star review went up the morning after signing. The app is still on the phone.",
+      "mapTeaser": "Three weeks in Seattle. Max has claimed a corner of the back yard. Jordan's new colleagues keep asking where they found their place.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14340,6 +14353,7 @@ var PERSONA_CHAPTERS = {
     1: {
       "eyebrow": "Where Alex is tonight",
       "blurb": "Alex got the lease non-renewal today and they're at their studio desk, already running the numbers. Here's what was running through their head.",
+      "mapTeaser": "The lease non-renewal arrived. Alex is already at their desk, running numbers on the upgrade they've been putting off for a year.",
       "q1": "What stood out to you about the start of Alex's renter journey?",
       "q2": "What is Alex looking for in an apartment?",
       "q2hint": "What's negotiable, and what's not?",
@@ -14356,6 +14370,7 @@ var PERSONA_CHAPTERS = {
     2: {
       "eyebrow": null,
       "blurb": null,
+      "mapTeaser": "Alex opens Apartment List for the first time — three platforms, one right monitor. It has sixty seconds to prove it belongs in the rotation.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14367,6 +14382,7 @@ var PERSONA_CHAPTERS = {
     3: {
       "eyebrow": "Where Alex starts",
       "blurb": "Alex has cleared Sunday afternoon for the quiz. The spreadsheet is on the second monitor. Apartment List gets five minutes to prove it understands what \"one bedroom, Hayes Valley, $4,200 hard cap\" actually means.",
+      "mapTeaser": "Alex clears Sunday afternoon for the quiz. The spreadsheet is on the second monitor. Five minutes to prove it understands Hayes Valley and a $4,200 hard cap.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14473,6 +14489,7 @@ var PERSONA_CHAPTERS = {
     4: {
       "eyebrow": "Where Alex starts",
       "blurb": "The cycling has been running in the background for two days. The shortlist has eight properties. Alex opens the spreadsheet, adds a comparison column, and starts reading LDPs slowly. Tonight eight becomes three.",
+      "mapTeaser": "Eight properties on the shortlist. Alex opens the comparison column in the spreadsheet and starts reading listings slowly. Tonight eight becomes three.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14553,6 +14570,7 @@ var PERSONA_CHAPTERS = {
     5: {
       "eyebrow": "Where Alex starts",
       "blurb": "Three contenders, three messages queued. Alex has one list of questions for all three leasing offices: smart home features, exact monthly cost, earliest move-in date. The 24-hour rule applies. Tonight they hit send.",
+      "mapTeaser": "Three contenders, one list of questions for each leasing office. Alex hits send. The 24-hour rule applies — replies that don't come get crossed off.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14642,6 +14660,7 @@ var PERSONA_CHAPTERS = {
     6: {
       "eyebrow": "Where Alex starts",
       "blurb": "The Hayes Valley place said yes. The Docusign link arrived at 6pm. Alex is reading the lease.",
+      "mapTeaser": "The Hayes Valley place said yes. The Docusign link arrived at 6pm. Alex is reading the lease — every clause, twice.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14713,6 +14732,7 @@ var PERSONA_CHAPTERS = {
     7: {
       "eyebrow": null,
       "blurb": null,
+      "mapTeaser": "Six months into the upgrade. The bike has a real storage spot. The counter space finally gets used. Alex's colleagues keep asking which platform they used.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14726,6 +14746,7 @@ var PERSONA_CHAPTERS = {
     1: {
       "eyebrow": "Where Taylor & Riley are tonight",
       "blurb": "Riley said \"where next\" again last night. Taylor knew it was coming before they said it. Three years in Chicago, the Polaroids from Lisbon still on the fridge. Austin is winning. Here's what was running through Taylor's head.",
+      "mapTeaser": "Riley said \"where next\" again. Taylor knew it was coming. Three years in Chicago, the Lisbon Polaroids on the fridge — Austin is winning.",
       "q1": "What stood out to you about the start of Taylor & Riley's renter journey?",
       "q2": "What is Taylor & Riley looking for in an apartment?",
       "q2hint": "What's negotiable, and what's not?",
@@ -14742,6 +14763,7 @@ var PERSONA_CHAPTERS = {
     2: {
       "eyebrow": "Where Taylor & Riley start",
       "blurb": "Taylor and Riley have been sending each other Google Maps links to Austin neighborhoods for two weeks. Tonight they sit down together with the laptop and open Apartment List for the first time. Riley is already asking about the map view.",
+      "mapTeaser": "Taylor and Riley sit down together and open Apartment List for the first time. Riley is already asking about the map view.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14851,6 +14873,7 @@ var PERSONA_CHAPTERS = {
     3: {
       "eyebrow": "Where Taylor & Riley start",
       "blurb": "Taylor and Riley are on the laptop together. The quiz is open. The budget step is coming and they're already arguing about the number. $2,500 is where they've landed, but Riley keeps looking at $2,800 options in East Austin.",
+      "mapTeaser": "Taylor and Riley take the quiz together. The budget step is already an argument — Riley keeps looking at $2,800 options in East Austin.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -14972,6 +14995,7 @@ var PERSONA_CHAPTERS = {
     4: {
       "eyebrow": "Where Taylor & Riley start",
       "blurb": "Taylor and Riley have twelve properties in their shortlist. They review it over a shared screen on Sunday afternoon. Riley pulls up Street View on each one. They settle on six. Three feel like them. Three don't, but they're still arguing about which is which.",
+      "mapTeaser": "Twelve properties, a shared screen, Sunday afternoon. Riley pulls up Street View on each one. They settle on six — and start arguing about which three feel right.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -15093,6 +15117,7 @@ var PERSONA_CHAPTERS = {
     5: {
       "eyebrow": "Where Taylor & Riley start",
       "blurb": "One property on top. Taylor wants to schedule a Sunday morning tour. The in-app scheduler doesn't have Sunday slots. They call the leasing office. The agent picks up. The tour is booked for this weekend.",
+      "mapTeaser": "One property on top. The in-app scheduler has no Sunday slots. They call the leasing office. The agent picks up. The tour is booked.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -15202,6 +15227,7 @@ var PERSONA_CHAPTERS = {
     6: {
       "eyebrow": "Where Taylor & Riley start",
       "blurb": "Taylor and Riley spent two days on the lease. Riley pushed on the move-in date. Taylor pushed on the deposit. They got the move-in date. They accepted the deposit. Both of them sign on a Saturday morning, with coffee.",
+      "mapTeaser": "Riley pushed on the move-in date. Taylor pushed on the deposit. They got the move-in date. Both of them sign on a Saturday morning, with coffee.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -15273,6 +15299,7 @@ var PERSONA_CHAPTERS = {
     7: {
       "eyebrow": "Where Taylor & Riley start",
       "blurb": "Six months in East Austin. Taylor's notebook is full. Riley has a wall of prints from the neighborhood. The Apartment List newsletter arrives most Tuesdays. They've told three people to use the app. The story always includes the specific thing in the listings that made Austin feel right.",
+      "mapTeaser": "Six months in East Austin. Taylor's notebook is full. Riley has a wall of prints from the neighborhood. They've told three people to use the app.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -15348,6 +15375,7 @@ var PERSONA_CHAPTERS = {
     1: {
       "eyebrow": "Where Jamie is tonight",
       "blurb": "Emma asked again where they're moving. Jamie hasn't said Jersey City yet, partly because they haven't said it to themselves yet. Here's what was running through their head.",
+      "mapTeaser": "Emma asked again where they're moving. Jamie hasn't said Jersey City yet — not to Emma, not to themselves. The budget has to work first.",
       "q1": "What stood out to you about the start of Jamie's renter journey?",
       "q2": "What is Jamie looking for in an apartment?",
       "q2hint": "What's negotiable, and what's not?",
@@ -15364,6 +15392,7 @@ var PERSONA_CHAPTERS = {
     2: {
       "eyebrow": "Where Jamie starts",
       "blurb": "Emma is asleep. Jamie is at the kitchen table with the laptop, GreatSchools open in one tab, Apartment List in another. The Rent Calculator is open too. The numbers have to work.",
+      "mapTeaser": "Emma is asleep. Jamie is at the kitchen table: GreatSchools in one tab, Apartment List in another. The numbers have to work.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -15473,6 +15502,7 @@ var PERSONA_CHAPTERS = {
     3: {
       "eyebrow": "Where Jamie starts",
       "blurb": "Late Tuesday. Emma is in bed. Jamie takes the quiz on the laptop. The budget step is careful. The bedroom step is not flexible. The Personality step is confusing. Jamie clicks through it and hopes the matches surface something in the right school zone.",
+      "mapTeaser": "Late Tuesday. Emma's in bed. Jamie takes the quiz, hoping the results surface something in the right school zone.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -15596,6 +15626,7 @@ var PERSONA_CHAPTERS = {
     4: {
       "eyebrow": "Where Jamie starts",
       "blurb": "It's 11pm. Emma's asleep, and the six properties Jamie has been chewing on are open in six tabs. They have a school-zone spreadsheet on the side. Three listings are in the right zone. The Google reviews for one have a complaint about water pressure.",
+      "mapTeaser": "Eleven pm. Six listings, six tabs, a school-zone spreadsheet on the side. Three are in the right zone. One has a complaint about water pressure.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -15721,6 +15752,7 @@ var PERSONA_CHAPTERS = {
     5: {
       "eyebrow": "Where Jamie starts",
       "blurb": "Jamie has three serious contenders. Each message to a leasing office asks the same three things: school zone, parking, playground within walking distance. The first reply came in four hours with specific answers. The second replied with a marketing pitch. The third said \"come tour.\" Jamie books a tour at the first.",
+      "mapTeaser": "Three contenders. Every message asks the same three things: school zone, parking, playground. The first reply had real answers. Jamie books a tour.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -15810,6 +15842,7 @@ var PERSONA_CHAPTERS = {
     6: {
       "eyebrow": "Where Jamie starts",
       "blurb": "Emma's school list is on the fridge. The deposit is counted. Jamie has been reading the same two listings for three days. Tonight they pick one. The lease is due by the end of the week.",
+      "mapTeaser": "Emma's school list is on the fridge. Jamie has been reading the same two listings for three days. Tonight they pick one.",
       "q1": null,
       "q2": null,
       "q2hint": null,
@@ -15903,6 +15936,7 @@ var PERSONA_CHAPTERS = {
     7: {
       "eyebrow": "Where Jamie starts",
       "blurb": "Emma has been in school for four months. They have a Tuesday evening routine: the park, then dinner. Jamie reads Apartment Living articles sometimes — the ones about decorating small spaces, budgeting after a move, setting up a home for two. Some are useful. Some aren't written for a single parent.",
+      "mapTeaser": "Emma has been in school four months. They have a Tuesday park routine. Some Apartment List articles are written for a single parent. Some aren't.",
       "q1": null,
       "q2": null,
       "q2hint": null,

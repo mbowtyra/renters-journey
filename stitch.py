@@ -26,6 +26,18 @@ def _field_block(label, text):
         return None
     return m.group(1).strip()
 
+def _section_prose(heading, text):
+    """Return the prose paragraph immediately after ### heading (until next ### or ## or ---)."""
+    m = re.search(
+        r'### ' + re.escape(heading) + r'\s*\n+([\s\S]+?)(?=\n###|\n##|\n---|\Z)',
+        text
+    )
+    if not m:
+        return None
+    # Return first non-empty paragraph
+    para = m.group(1).strip().split('\n\n')[0].strip()
+    return para if para else None
+
 def _parse_surface(surface_str):
     """Extract surface list from a markdown surface string."""
     if not surface_str:
@@ -102,8 +114,9 @@ def parse_content_file(fpath):
         ch_body = ch_parts[i + 1]
 
         # Tonight-card fields
-        eyebrow = _field('Eyebrow', ch_body)
-        blurb   = _field_block('Blurb', ch_body)
+        eyebrow   = _field('Eyebrow', ch_body)
+        blurb     = _field_block('Blurb', ch_body)
+        mapTeaser = _section_prose('Map teaser', ch_body)
         # Reflection labels (ch1 persona-specific)
         q1      = _field('Q1 label', ch_body)
         q2      = _field('Q2 label', ch_body)
@@ -131,6 +144,7 @@ def parse_content_file(fpath):
         result[ch_num] = {
             'eyebrow':       eyebrow,
             'blurb':         blurb,
+            'mapTeaser':     mapTeaser,
             'q1':            q1,
             'q2':            q2,
             'q2hint':        q2hint,
@@ -857,7 +871,7 @@ function syncMapScreen() {
     return html;
   }
 
-  // Hero lede
+  // Hero lede — name-swap is sufficient here (generic narrative)
   var lede = mapEl.querySelector('.hero .lede');
   if (lede) lede.innerHTML = _swapMapName(lede.innerHTML);
 
@@ -872,9 +886,15 @@ function syncMapScreen() {
     chChip.innerHTML = '<span class="dot"></span><strong>You\'re at:</strong> Chapter ' + curCh + ' \u00b7 ' + (CH_NAMES[curCh] || '');
   }
 
-  // Chapter-card teasers (contains persona name in Ch1 and others)
-  mapEl.querySelectorAll('.chapter-card .teaser').forEach(function(t) {
-    t.innerHTML = _swapMapName(t.innerHTML);
+  // Chapter-card teasers: use fully persona-specific copy from PERSONA_CHAPTERS
+  var pChapters = PERSONA_CHAPTERS[profile.persona] || PERSONA_CHAPTERS.jordan;
+  mapEl.querySelectorAll('.chapter-card').forEach(function(card, idx) {
+    var chNum = idx + 1;
+    var chData = pChapters[chNum];
+    var teaserEl = card.querySelector('.teaser');
+    if (teaserEl && chData && chData.mapTeaser) {
+      teaserEl.textContent = chData.mapTeaser;
+    }
   });
 
   // Wire change-renter (once)
