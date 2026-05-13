@@ -1271,34 +1271,62 @@ function renderChapterQuests(screenEl, n, persona) {
   var main = screenEl.querySelector('.main');
   if (!main) return;
 
-  // Remove existing quest/sidequest articles and any previous type-headers
-  // (keep tonight-card, framing-card, reflection-card)
-  main.querySelectorAll('.quest, .side-quest-header').forEach(function(q) { q.remove(); });
+  // Remove all quest-related markup from the previous render/mockup:
+  // .quest articles, both header variants, both block wrappers, and our
+  // previously-injected side-quest-header divs.
+  main.querySelectorAll(
+    '.quest, .quests-header, .sidequest-header, .quests-block, .side-quest-header'
+  ).forEach(function(el) { el.remove(); });
 
   // Find anchor before which to insert (insert before the final reflection-card)
   var reflCard = main.querySelector('.reflection-card');
 
-  function _insertBefore(html) {
-    var tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    var el = tmp.firstElementChild;
+  function _insertBefore(el) {
     if (reflCard) main.insertBefore(el, reflCard);
     else main.appendChild(el);
   }
+  function _makeEl(html) {
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.firstElementChild;
+  }
 
-  // Core quests
-  allQuests.forEach(function(q, i) { _insertBefore(renderQuestCard(q, n, i)); });
+  // Core quests header + block
+  var coreHeader = _makeEl(
+    '<div class="quests-header">'
+    + '<div class="eyebrow"><span class="pixel-dot" style="background:var(--indigo)"></span>'
+    + 'Core Quests \u00b7 ' + allQuests.length + ' of ' + allQuests.length
+    + '<span class="pixel-dot" style="background:var(--indigo)"></span></div>'
+    + '<h2>' + (allQuests.length === 1 ? 'One quest, one field note.' : allQuests.length + ' quests, ' + allQuests.length + ' field notes.') + '</h2>'
+    + '<p>Open each quest, do the action, write a quick reflection.</p>'
+    + '</div>'
+  );
+  var coreBlock = document.createElement('div');
+  coreBlock.className = 'quests-block';
+  allQuests.forEach(function(q, i) {
+    coreBlock.appendChild(_makeEl(renderQuestCard(q, n, i)));
+  });
+  _insertBefore(coreHeader);
+  _insertBefore(coreBlock);
 
-  // Side quest separator + cards
+  // Side quest header + block (only when there are side quests)
   if (sideQuests.length > 0) {
-    _insertBefore(
-      '<div class="quest-type-header side-quest-header">'
-      + '<div class="label">Side Quest \u00b7 Optional</div>'
+    var sideHeader = _makeEl(
+      '<div class="quests-header sidequest-header">'
+      + '<div class="eyebrow"><span class="pixel-dot" style="background:var(--magenta)"></span>'
+      + 'Side Quest \u00b7 Optional'
+      + '<span class="pixel-dot" style="background:var(--magenta)"></span></div>'
       + '<h2>For the curious.</h2>'
-      + '<p class="sub">Optional. Skip it without consequence, or take a small detour and see what\'s out there.</p>'
+      + '<p>Optional. Skip it without consequence, or take a small detour and see what\'s out there.</p>'
       + '</div>'
     );
-    sideQuests.forEach(function(q, i) { _insertBefore(renderQuestCard(q, n, allQuests.length + i)); });
+    var sideBlock = document.createElement('div');
+    sideBlock.className = 'quests-block';
+    sideQuests.forEach(function(q, i) {
+      sideBlock.appendChild(_makeEl(renderQuestCard(q, n, allQuests.length + i)));
+    });
+    _insertBefore(sideHeader);
+    _insertBefore(sideBlock);
   }
 
   // Update final reflection card content
