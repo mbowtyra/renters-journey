@@ -213,8 +213,126 @@ def adapt(html):
         html = html.replace(f'src="{icon}.png"', f'src="mockups/{icon}.png"')
     return html
 
+DYNAMIC_AVATAR_FRAME = '''\
+        <div class="avatar-frame" onclick="RJ.navigate('screen-avatar')" title="Edit your avatar" style="cursor:pointer;position:relative;">
+          <svg viewBox="0 0 32 48" shape-rendering="crispEdges">
+            <g class="hair-style hair-short" data-style="short">
+              <rect x="9" y="3" width="14" height="2" fill="var(--avatar-hair)"/>
+              <rect x="8" y="5" width="16" height="3" fill="var(--avatar-hair)"/>
+              <rect x="8" y="8" width="2" height="3" fill="var(--avatar-hair)"/>
+              <rect x="22" y="8" width="2" height="3" fill="var(--avatar-hair)"/>
+              <rect x="11" y="6" width="7" height="1" fill="var(--avatar-hair)" opacity="0.55"/>
+            </g>
+            <g class="hair-style hair-long" data-style="long" style="display:none">
+              <rect x="9" y="3" width="14" height="2" fill="var(--avatar-hair)"/>
+              <rect x="8" y="5" width="16" height="3" fill="var(--avatar-hair)"/>
+              <rect x="9" y="8" width="14" height="2" fill="var(--avatar-hair)"/>
+              <rect x="8" y="8" width="2" height="9" fill="var(--avatar-hair)"/>
+              <rect x="22" y="8" width="2" height="9" fill="var(--avatar-hair)"/>
+              <rect x="9" y="16" width="1" height="2" fill="var(--avatar-hair)"/>
+              <rect x="22" y="16" width="1" height="2" fill="var(--avatar-hair)"/>
+            </g>
+            <g class="hair-style hair-bun" data-style="bun" style="display:none">
+              <rect x="14" y="0" width="4" height="3" fill="var(--avatar-hair)"/>
+              <rect x="13" y="1" width="6" height="2" fill="var(--avatar-hair)"/>
+              <rect x="9" y="3" width="14" height="2" fill="var(--avatar-hair)"/>
+              <rect x="8" y="5" width="16" height="3" fill="var(--avatar-hair)"/>
+              <rect x="8" y="8" width="2" height="3" fill="var(--avatar-hair)"/>
+              <rect x="22" y="8" width="2" height="3" fill="var(--avatar-hair)"/>
+              <rect x="11" y="6" width="10" height="1" fill="var(--avatar-hair)" opacity="0.6"/>
+            </g>
+            <g class="hair-style hair-space-buns" data-style="space-buns" style="display:none">
+              <rect x="9" y="0" width="3" height="3" fill="var(--avatar-hair)"/>
+              <rect x="8" y="1" width="5" height="2" fill="var(--avatar-hair)"/>
+              <rect x="20" y="0" width="3" height="3" fill="var(--avatar-hair)"/>
+              <rect x="19" y="1" width="5" height="2" fill="var(--avatar-hair)"/>
+              <rect x="9" y="3" width="14" height="2" fill="var(--avatar-hair)"/>
+              <rect x="8" y="5" width="16" height="3" fill="var(--avatar-hair)"/>
+              <rect x="8" y="8" width="2" height="3" fill="var(--avatar-hair)"/>
+              <rect x="22" y="8" width="2" height="3" fill="var(--avatar-hair)"/>
+              <rect x="11" y="6" width="3" height="1" fill="var(--avatar-hair)" opacity="0.6"/>
+              <rect x="18" y="6" width="3" height="1" fill="var(--avatar-hair)" opacity="0.6"/>
+            </g>
+            <g class="hair-style hair-buzz" data-style="buzz" style="display:none">
+              <rect x="10" y="5" width="12" height="2" fill="var(--avatar-hair)"/>
+              <rect x="9" y="6" width="14" height="2" fill="var(--avatar-hair)"/>
+              <rect x="9" y="8" width="1" height="2" fill="var(--avatar-hair)" opacity="0.5"/>
+              <rect x="22" y="8" width="1" height="2" fill="var(--avatar-hair)" opacity="0.5"/>
+            </g>
+            <g class="hair-style hair-mohawk" data-style="mohawk" style="display:none">
+              <rect x="15" y="0" width="2" height="2" fill="var(--avatar-hair)"/>
+              <rect x="14" y="2" width="4" height="2" fill="var(--avatar-hair)"/>
+              <rect x="13" y="4" width="6" height="2" fill="var(--avatar-hair)"/>
+              <rect x="12" y="6" width="8" height="3" fill="var(--avatar-hair)"/>
+              <rect x="10" y="6" width="2" height="2" fill="var(--avatar-hair)" opacity="0.35"/>
+              <rect x="20" y="6" width="2" height="2" fill="var(--avatar-hair)" opacity="0.35"/>
+              <rect x="9" y="7" width="1" height="2" fill="var(--avatar-hair)" opacity="0.3"/>
+              <rect x="22" y="7" width="1" height="2" fill="var(--avatar-hair)" opacity="0.3"/>
+            </g>
+            <rect x="10" y="6" width="12" height="11" fill="var(--avatar-skin)"/>
+            <rect x="9" y="7" width="1" height="9" fill="var(--avatar-skin)"/>
+            <rect x="22" y="7" width="1" height="9" fill="var(--avatar-skin)"/>
+            <rect x="12" y="10" width="1" height="3" fill="#1A0E2E"/>
+            <rect x="19" y="10" width="1" height="3" fill="#1A0E2E"/>
+            <rect x="14" y="14" width="1" height="1" fill="var(--avatar-lip)"/>
+            <rect x="17" y="14" width="1" height="1" fill="var(--avatar-lip)"/>
+            <rect x="15" y="15" width="2" height="1" fill="var(--avatar-lip)"/>
+            <rect x="14" y="17" width="4" height="2" fill="var(--avatar-skin)"/>
+            <rect x="8" y="19" width="16" height="9" fill="var(--avatar-shirt)"/>
+            <rect x="6" y="19" width="2" height="9" fill="var(--avatar-shirt)"/>
+            <rect x="24" y="19" width="2" height="9" fill="var(--avatar-shirt)"/>
+            <rect x="6" y="28" width="2" height="2" fill="var(--avatar-skin)"/>
+            <rect x="24" y="28" width="2" height="2" fill="var(--avatar-skin)"/>
+            <rect x="8" y="28" width="16" height="11" fill="var(--avatar-pants)"/>
+            <rect x="15" y="32" width="2" height="7" fill="var(--avatar-pants)"/>
+            <rect x="15" y="34" width="2" height="5" fill="rgba(0,0,0,0.15)"/>
+            <rect x="8" y="39" width="7" height="3" fill="var(--avatar-shoes)"/>
+            <rect x="17" y="39" width="7" height="3" fill="var(--avatar-shoes)"/>
+            <g class="hair-style hair-long-flow" data-style="long-flow" style="display:none">
+              <rect x="9" y="3" width="14" height="2" fill="var(--avatar-hair)"/>
+              <rect x="8" y="5" width="16" height="3" fill="var(--avatar-hair)"/>
+              <rect x="9" y="8" width="14" height="2" fill="var(--avatar-hair)"/>
+              <rect x="8" y="8" width="2" height="22" fill="var(--avatar-hair)"/>
+              <rect x="22" y="8" width="2" height="22" fill="var(--avatar-hair)"/>
+              <rect x="7" y="20" width="2" height="11" fill="var(--avatar-hair)"/>
+              <rect x="23" y="20" width="2" height="11" fill="var(--avatar-hair)"/>
+              <rect x="10" y="6" width="3" height="1" fill="var(--avatar-hair)" opacity="0.6"/>
+              <rect x="19" y="6" width="3" height="1" fill="var(--avatar-hair)" opacity="0.6"/>
+            </g>
+            <g class="hair-style hair-long-wavy" data-style="long-wavy" style="display:none">
+              <rect x="9" y="3" width="14" height="2" fill="var(--avatar-hair)"/>
+              <rect x="8" y="5" width="16" height="2" fill="var(--avatar-hair)"/>
+              <rect x="15" y="5" width="2" height="2" fill="var(--avatar-skin)"/>
+              <rect x="8" y="7" width="3" height="2" fill="var(--avatar-hair)"/>
+              <rect x="21" y="7" width="3" height="2" fill="var(--avatar-hair)"/>
+              <rect x="8" y="9" width="2" height="22" fill="var(--avatar-hair)"/>
+              <rect x="22" y="9" width="2" height="22" fill="var(--avatar-hair)"/>
+              <rect x="7" y="22" width="1" height="3" fill="var(--avatar-hair)"/>
+              <rect x="24" y="22" width="1" height="3" fill="var(--avatar-hair)"/>
+              <rect x="7" y="20" width="2" height="11" fill="var(--avatar-hair)"/>
+              <rect x="23" y="20" width="2" height="11" fill="var(--avatar-hair)"/>
+              <rect x="6" y="27" width="1" height="3" fill="var(--avatar-hair)"/>
+              <rect x="25" y="27" width="1" height="3" fill="var(--avatar-hair)"/>
+              <rect x="10" y="6" width="3" height="1" fill="var(--avatar-hair)" opacity="0.6"/>
+              <rect x="19" y="6" width="3" height="1" fill="var(--avatar-hair)" opacity="0.6"/>
+            </g>
+          </svg>
+          <div style="position:absolute;bottom:4px;right:4px;background:rgba(26,14,46,0.7);color:#fff;font-family:\'VT323\',monospace;font-size:10px;letter-spacing:1px;padding:2px 4px;pointer-events:none;">EDIT</div>
+        </div>'''
+
+def fix_chapter_avatar(html):
+    """Replace hardcoded avatar SVG in chapter sidebars with the dynamic CSS-var version."""
+    return re.sub(
+        r'<div class="avatar-frame">\s*<svg[^>]*>[\s\S]*?</svg>\s*</div>',
+        DYNAMIC_AVATAR_FRAME,
+        html,
+    )
+
 def process(path):
     return adapt(extract_body(path))
+
+def process_chapter(path):
+    return fix_chapter_avatar(process(path))
 
 # ── Build scoped CSS blocks ────────────────────────────────────────────────
 
@@ -242,7 +360,7 @@ combined_css = "\n\n".join(css_blocks)
 html_intro    = process(MOCKUPS / "persona-selection-mockup.html")
 html_avatar   = process(MOCKUPS / "avatar-creation-mockup.html")
 html_map      = process(MOCKUPS / "journey-map-mockup.html")
-html_ch = {n: process(MOCKUPS / f) for n, f in [
+html_ch = {n: process_chapter(MOCKUPS / f) for n, f in [
     (1, "chapter-1-long-night-jordan-mockup.html"),
     (2, "chapter-2-first-light-alex-mockup.html"),
     (3, "chapter-3-search-begins-taylor-mockup.html"),
@@ -251,7 +369,7 @@ html_ch = {n: process(MOCKUPS / f) for n, f in [
     (6, "chapter-6-the-key-jamie-mockup.html"),
     (7, "chapter-7-welcome-mat-alex-mockup.html"),
 ]}
-html_ultimate = process(MOCKUPS / "ultimate-quest-mockup.html")
+html_ultimate = fix_chapter_avatar(process(MOCKUPS / "ultimate-quest-mockup.html"))
 
 # ── JS ────────────────────────────────────────────────────────────────────
 
@@ -561,6 +679,19 @@ function syncChapterScreen(n) {
   var screenEl = document.getElementById('screen-ch' + n);
   if (!screenEl) return;
   applyPersonaTheme(profile.persona);
+
+  // Apply saved avatar CSS vars to chapter HUD sprite
+  Object.keys(AVATAR_VARS).forEach(function(k) {
+    if (profile[k]) document.documentElement.style.setProperty(AVATAR_VARS[k], profile[k]);
+  });
+  if (profile.skin && SKIN_TO_LIP[profile.skin])
+    document.documentElement.style.setProperty('--avatar-lip', SKIN_TO_LIP[profile.skin]);
+
+  // Show the correct hair style in the chapter sidebar sprite
+  var hs = profile.hairStyle || 'short';
+  screenEl.querySelectorAll('.avatar-frame .hair-style').forEach(function(g) {
+    g.style.display = (g.getAttribute('data-style') === hs) ? '' : 'none';
+  });
 
   // Wire change-renter (once)
   var changeEl = screenEl.querySelector('.persona-context .change:not([data-wired])');
