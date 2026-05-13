@@ -13364,7 +13364,12 @@ var PERSONA_CHAPTERS = {
       "reflectionIntro": "Scan Jordan's journal entry again and reread their \"About Jordan\" bio in the upper right corner. When you're ready, reflect below.",
       "quests": [],
       "sideQuests": [],
-      "finalReflection": {}
+      "finalReflection": {},
+      "journalParas": [
+        "The job offer just came in! Excited for the new role, but they said I have to start in three weeks.",
+        "Texted Courtney, they live in Seattle. They said Capitol Hill might be a vibe, but also said it's gotten expensive. Browsed a couple Seattle subreddits, but got overwhelmed by people venting about cost. I still have Craigslist on my phone since the last time I moved, but it doesn't seem like Seattle uses Craigslist the same way.",
+        "Max is asleep in the corner on his dog bed. I'll have to pack that this week, I still have to buy moving boxes. How will Max feel about all this? I'll have to make sure he really likes the new place. I keep telling myself I'll break the news to him in the morning, but he won't understand. I'll have to rent a car. A U-Haul? I'm not sure. I feel so overwhelmed!"
+      ]
     },
     2: {
       "eyebrow": "Where Jordan starts",
@@ -13981,7 +13986,12 @@ var PERSONA_CHAPTERS = {
       "reflectionIntro": "Scan Alex's journal entry again and reread their \"About Alex\" bio in the upper right corner. When you're ready, reflect below.",
       "quests": [],
       "sideQuests": [],
-      "finalReflection": {}
+      "finalReflection": {},
+      "journalParas": [
+        "Got the lease non-renewal today. Honestly? Kind of a relief. I've been wanting to leave this studio for a year and haven't gotten around to admitting it.",
+        "Started a spreadsheet tonight: must-haves, nice-to-haves, deal-breakers. My sister made fun of me on the phone about it, but I think in spreadsheets (sometimes I dream in spreadsheets.) SoMa looks promising, commute is 12 minutes, but I have no idea what the neighborhoods are like outside of Google Maps and Reddit. Budget is fine I think?",
+        "90 days to search, that's enough. I want a real bedroom door. I want a couch I can sit on without seeing my desk. I want my bike on a wall mount (or, better yet, in a storage locker,) not leaning against the wall like it's furniture. Going to send the spreadsheet to Priya tomorrow and see if they think I'm being delusional about Hayes Valley."
+      ]
     },
     2: {
       "eyebrow": null,
@@ -14362,7 +14372,12 @@ var PERSONA_CHAPTERS = {
       "reflectionIntro": "Scan Taylor's journal entry again and reread the \"About Taylor & Riley\" bio in the upper right corner. When you're ready, reflect below.",
       "quests": [],
       "sideQuests": [],
-      "finalReflection": {}
+      "finalReflection": {},
+      "journalParas": [
+        "Riley said it again last night. \"Where next.\" We were eating leftover pad see ew on the couch, they were scrolling their photos from our Germany trip, and I knew they were about to say it before they said it. Three years is the longest we've ever stayed anywhere.",
+        "Austin is winning right now. We've been sending each other Google maps links to restaurants and places to visit, mostly East Austin, mostly the food markets and that one zine shop Riley has sent me three times already. The Polaroids from Lisbon are still on the fridge. We do this. We pick a city, we make it a project, and then we go. But I don't actually know what East Austin feels like at 6pm on a Tuesday, which is the only thing that matters.",
+        "Riley is already on Reddit looking at neighborhoods people recommend, but I'm crowd sourcing. Texted Mara, who lived there in 2022. They said something about how the rent has changed but the music hasn't. I'll take it."
+      ]
     },
     2: {
       "eyebrow": "Where Taylor & Riley start",
@@ -14979,7 +14994,12 @@ var PERSONA_CHAPTERS = {
       "reflectionIntro": "Scan Jamie's journal entry again and reread their \"About Jamie\" bio in the upper right corner. When you're ready, reflect below.",
       "quests": [],
       "sideQuests": [],
-      "finalReflection": {}
+      "finalReflection": {},
+      "journalParas": [
+        "Emma asked me again where we're moving. I haven't told them it's Jersey City yet, partly because I haven't told myself it's Jersey City yet, partly because I don't know if I can make the budget work.",
+        "Looked at GreatSchools again after they went to bed. Three districts I'd accept, two within reach. Cross-referenced with the NJ parent Facebook group I joined under my work email. One parent was complaining about the pickup line at PS-8 and another responded with a paragraph about how the morning art program saved their kid's first month.",
+        "I keep coming back to one listing. Two-bedroom, sixth floor, the photos show a park across the street with wooden swings I know Emma would love. Need to verify the school zone. Need to ask about laundry. Need to sleep, probably."
+      ]
     },
     2: {
       "eyebrow": "Where Jamie starts",
@@ -15888,27 +15908,41 @@ function syncChapterScreen(n) {
     }
   }
 
-  // Persona name substitution in static chapter copy
+  // ── Persona name substitution in static chapter copy ───────────────────
+  // Covers all four source-mockup persona names so the correct name
+  // appears regardless of which mockup a chapter was stitched from.
+  var _PERSONA_NAMES = ['Jordan', 'Alex', 'Taylor', 'Jamie'];
+  function _swapName(html) {
+    _PERSONA_NAMES.forEach(function(n) {
+      var re_poss = new RegExp('\\b' + n + "'s\\b", 'g');
+      var re_bare = new RegExp('\\b' + n + '\\b', 'g');
+      html = html.replace(re_poss, poss).replace(re_bare, meta.shortName);
+    });
+    return html;
+  }
+
   // hero lede
   var heroLede = screenEl.querySelector('.lede');
-  if (heroLede) {
-    heroLede.innerHTML = heroLede.innerHTML
-      .replace(/Jordan's/g, poss)
-      .replace(/\bJordan\b/g, meta.shortName);
-  }
+  if (heroLede) heroLede.innerHTML = _swapName(heroLede.innerHTML);
+
   // framing list (how to walk this chapter)
-  var framingItems = screenEl.querySelectorAll('.framing-list li');
-  framingItems.forEach(function(li) {
-    li.innerHTML = li.innerHTML
-      .replace(/Jordan's/g, poss)
-      .replace(/\bJordan\b/g, meta.shortName);
+  screenEl.querySelectorAll('.framing-list li').forEach(function(li) {
+    li.innerHTML = _swapName(li.innerHTML);
   });
+
   // journal meta ("Jordan's journal · Tuesday, late")
   var journalMeta = screenEl.querySelector('.journal-meta');
-  if (journalMeta) {
-    journalMeta.innerHTML = journalMeta.innerHTML
-      .replace(/Jordan's/g, poss)
-      .replace(/\bJordan\b/g, meta.shortName);
+  if (journalMeta) journalMeta.innerHTML = _swapName(journalMeta.innerHTML);
+
+  // ── Ch1 journal entry: swap to the active persona's canonical text ───────
+  if (n === 1) {
+    var entryEl = screenEl.querySelector('.tonight-card .journal .entry');
+    var ch1Data = (PERSONA_CHAPTERS[profile.persona] || PERSONA_CHAPTERS.jordan)[1];
+    if (entryEl && ch1Data && ch1Data.journalParas) {
+      entryEl.innerHTML = ch1Data.journalParas.map(function(p) {
+        return '<p>' + p.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>';
+      }).join('');
+    }
   }
 
   // Apply saved avatar CSS vars to chapter HUD sprite

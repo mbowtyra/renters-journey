@@ -142,6 +142,22 @@ def parse_content_file(fpath):
 
     return result
 
+def parse_journals():
+    """Extract each persona's ch1 journal paragraphs from memory/renter-journey.md."""
+    text = open(MEMORY / 'renter-journey.md', encoding='utf-8').read()
+    # Match headings like "### Alex's journal" or "### Taylor's journal"
+    parts = re.split(r"### ([\w][\w &']+)'s journal", text)
+    journals = {}
+    for i in range(1, len(parts), 2):
+        # First word lowercased = key: alex, jordan, taylor, jamie
+        key = parts[i].strip().lower().split()[0]
+        body = parts[i + 1]
+        # Stop at next heading
+        body = re.split(r'\n##', body)[0].strip()
+        paras = [p.strip() for p in body.split('\n\n') if p.strip()]
+        journals[key] = paras
+    return journals
+
 def build_persona_chapters():
     """Read all four content files and return a dict suitable for JSON serialisation."""
     files = [
@@ -153,6 +169,13 @@ def build_persona_chapters():
     data = {}
     for key, path in files:
         data[key] = parse_content_file(path)
+
+    # Attach canonical journal paragraphs to each persona's ch1 entry
+    journals = parse_journals()
+    for persona_key, chapters in data.items():
+        if 1 in chapters and persona_key in journals:
+            chapters[1]['journalParas'] = journals[persona_key]
+
     return data
 
 # ── CSS scoping ────────────────────────────────────────────────────────────
@@ -1225,27 +1248,41 @@ function syncChapterScreen(n) {
     }
   }
 
-  // Persona name substitution in static chapter copy
+  // ── Persona name substitution in static chapter copy ───────────────────
+  // Covers all four source-mockup persona names so the correct name
+  // appears regardless of which mockup a chapter was stitched from.
+  var _PERSONA_NAMES = ['Jordan', 'Alex', 'Taylor', 'Jamie'];
+  function _swapName(html) {
+    _PERSONA_NAMES.forEach(function(n) {
+      var re_poss = new RegExp('\\b' + n + "'s\\b", 'g');
+      var re_bare = new RegExp('\\b' + n + '\\b', 'g');
+      html = html.replace(re_poss, poss).replace(re_bare, meta.shortName);
+    });
+    return html;
+  }
+
   // hero lede
   var heroLede = screenEl.querySelector('.lede');
-  if (heroLede) {
-    heroLede.innerHTML = heroLede.innerHTML
-      .replace(/Jordan's/g, poss)
-      .replace(/\bJordan\b/g, meta.shortName);
-  }
+  if (heroLede) heroLede.innerHTML = _swapName(heroLede.innerHTML);
+
   // framing list (how to walk this chapter)
-  var framingItems = screenEl.querySelectorAll('.framing-list li');
-  framingItems.forEach(function(li) {
-    li.innerHTML = li.innerHTML
-      .replace(/Jordan's/g, poss)
-      .replace(/\bJordan\b/g, meta.shortName);
+  screenEl.querySelectorAll('.framing-list li').forEach(function(li) {
+    li.innerHTML = _swapName(li.innerHTML);
   });
+
   // journal meta ("Jordan's journal · Tuesday, late")
   var journalMeta = screenEl.querySelector('.journal-meta');
-  if (journalMeta) {
-    journalMeta.innerHTML = journalMeta.innerHTML
-      .replace(/Jordan's/g, poss)
-      .replace(/\bJordan\b/g, meta.shortName);
+  if (journalMeta) journalMeta.innerHTML = _swapName(journalMeta.innerHTML);
+
+  // ── Ch1 journal entry: swap to the active persona's canonical text ───────
+  if (n === 1) {
+    var entryEl = screenEl.querySelector('.tonight-card .journal .entry');
+    var ch1Data = (PERSONA_CHAPTERS[profile.persona] || PERSONA_CHAPTERS.jordan)[1];
+    if (entryEl && ch1Data && ch1Data.journalParas) {
+      entryEl.innerHTML = ch1Data.journalParas.map(function(p) {
+        return '<p>' + p.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>';
+      }).join('');
+    }
   }
 
   // Apply saved avatar CSS vars to chapter HUD sprite
