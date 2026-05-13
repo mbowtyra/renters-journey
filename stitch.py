@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """
 Stitch mockup HTML files into renters-journey.html (single-page app).
-Each mockup's body content becomes the inner HTML of its screen div.
-Each mockup's CSS is added as a <style> block in the <head>.
-The JS is a lean IIFE that syncs static HTML without overwriting it.
+Each screen's CSS is scoped to its screen ID to prevent cross-screen conflicts.
 """
 
 import re
@@ -12,7 +10,160 @@ from pathlib import Path
 BASE    = Path("/Users/melissabowden/Documents/Dev/Renter's Journey")
 MOCKUPS = BASE / "mockups"
 
-# ── helpers ────────────────────────────────────────────────────────────────
+# ── CSS scoping ────────────────────────────────────────────────────────────
+
+def _find_block_end(css, start):
+    """Return the index just after the matching closing } starting from start (after opening {).
+    Handles CSS comments (/* ... */) and quoted strings to avoid false brace matches."""
+    depth = 1
+    i = start
+    n = len(css)
+    in_str = None
+    while i < n and depth > 0:
+        # Skip CSS block comments (/* ... */)
+        if not in_str and css[i] == '/' and i + 1 < n and css[i+1] == '*':
+            end = css.find('*/', i + 2)
+            i = end + 2 if end != -1 else n
+            continue
+        c = css[i]
+        if in_str:
+            if c == '\\':
+                i += 2  # skip escaped character
+                continue
+            if c == in_str:
+                in_str = None
+        elif c in ('"', "'"):
+            in_str = c
+        elif c == '{':
+            depth += 1
+        elif c == '}':
+            depth -= 1
+        i += 1
+    return i  # points just past the closing }
+
+def scope_css(css, scope):
+    """
+    Prefix every CSS selector block with `scope`, keeping global rules
+    (:root, @keyframes, @font-face, @import, @charset, html/body resets) untouched.
+    Handles nested @media / @supports by recursively scoping inner rules.
+    """
+    out = []
+    pos = 0
+    n = len(css)
+
+    while pos < n:
+        # Skip whitespace
+        ws = re.match(r'\s+', css[pos:])
+        if ws:
+            out.append(ws.group(0))
+            pos += len(ws.group(0))
+            continue
+
+        # Skip /* comments */
+        cm = re.match(r'/\*.*?\*/', css[pos:], re.DOTALL)
+        if cm:
+            out.append(cm.group(0))
+            pos += len(cm.group(0))
+            continue
+
+        # At-rules
+        at_m = re.match(r'@([\w-]+)', css[pos:])
+        if at_m:
+            at_name = at_m.group(1).lower()
+            # Simple at-rules (end with ;)
+            if at_name in ('import', 'charset', 'namespace', 'layer'):
+                end = css.find(';', pos)
+                if end == -1:
+                    out.append(css[pos:])
+                    break
+                out.append(css[pos:end+1])
+                pos = end + 1
+                continue
+            # Block at-rules we pass through verbatim
+            if at_name in ('keyframes', '-webkit-keyframes', '-moz-keyframes',
+                           'font-face', 'counter-style', 'page'):
+                open_b = css.find('{', pos)
+                if open_b == -1:
+                    out.append(css[pos:])
+                    break
+                end = _find_block_end(css, open_b + 1)
+                out.append(css[pos:end])
+                pos = end
+                continue
+            # Conditional at-rules (@media, @supports): scope inner rules
+            if at_name in ('media', 'supports', 'layer'):
+                open_b = css.find('{', pos)
+                if open_b == -1:
+                    out.append(css[pos:])
+                    break
+                header = css[pos:open_b+1]
+                inner_start = open_b + 1
+                end = _find_block_end(css, inner_start)
+                inner = css[inner_start:end-1]
+                out.append(header)
+                out.append(scope_css(inner, scope))
+                out.append('}')
+                pos = end
+                continue
+            # Unknown at-rule: pass through verbatim
+            open_b = css.find('{', pos)
+            semi = css.find(';', pos)
+            if semi != -1 and (open_b == -1 or semi < open_b):
+                out.append(css[pos:semi+1])
+                pos = semi + 1
+            elif open_b != -1:
+                end = _find_block_end(css, open_b + 1)
+                out.append(css[pos:end])
+                pos = end
+            else:
+                out.append(css[pos:])
+                break
+            continue
+
+        # Regular selector { ... }
+        open_b = css.find('{', pos)
+        if open_b == -1:
+            # No more rules
+            out.append(css[pos:])
+            break
+
+        selector_raw = css[pos:open_b]
+        # Skip empty selectors
+        if not selector_raw.strip():
+            pos = open_b + 1
+            continue
+
+        end = _find_block_end(css, open_b + 1)
+        body = css[open_b:end]  # includes { ... }
+
+        # Scope each comma-part of the selector
+        # `scope` may itself be comma-separated (e.g. for chapters).
+        # We need to produce a cross-product: each scope × each selector part.
+        scope_ids = [s.strip() for s in scope.split(',')]
+        sel_parts = [p.strip() for p in selector_raw.split(',')]
+        scoped = []
+        for p in sel_parts:
+            if not p:
+                continue
+            if (p.startswith(':root') or
+                    re.match(r'^html\b', p) or
+                    re.match(r'^body\b', p) or
+                    p.strip() == '*'):
+                scoped.append(p)
+            else:
+                for sid in scope_ids:
+                    scoped.append(sid + ' ' + p)
+
+        if scoped:
+            out.append(',\n'.join(scoped))
+            out.append(' ')
+        out.append(body)
+        pos = end
+
+    return ''.join(out)
+
+
+# ── HTML helpers ───────────────────────────────────────────────────────────
 
 def extract_css(path):
     html = Path(path).read_text(encoding="utf-8")
@@ -20,7 +171,6 @@ def extract_css(path):
     return m.group(1).strip() if m else ""
 
 def extract_body(path):
-    """Extract <body> content; strip <style> and <script> blocks."""
     html = Path(path).read_text(encoding="utf-8")
     m = re.search(r'<body[^>]*>(.*?)</body>', html, re.DOTALL)
     if not m:
@@ -45,14 +195,12 @@ NAV_MAP = {
 }
 
 def adapt(html):
-    """Adapt hrefs and asset paths for the SPA context."""
     for fname, sid in NAV_MAP.items():
         html = re.sub(
             rf'href="{re.escape(fname)}"',
             f'href="#{sid}" onclick="RJ.navigate(\'{sid}\'); return false;"',
             html,
         )
-    # "Change renter" spans -> navigate to intro
     html = re.sub(
         r'(<span class="change"(?:[^>]*)>)(.*?)(</span>)',
         lambda m: m.group(1).rstrip('>') +
@@ -60,8 +208,7 @@ def adapt(html):
                   m.group(2) + m.group(3),
         html,
     )
-    # Asset paths
-    html = html.replace('src="footer-town-scene.svg"',   'src="mockups/footer-town-scene.svg"')
+    html = html.replace('src="footer-town-scene.svg"', 'src="mockups/footer-town-scene.svg"')
     for icon in ["icon-alex-bike","icon-jordan-dog","icon-taylor-camera","icon-jamie-drawing"]:
         html = html.replace(f'src="{icon}.png"', f'src="mockups/{icon}.png"')
     return html
@@ -69,13 +216,26 @@ def adapt(html):
 def process(path):
     return adapt(extract_body(path))
 
-# ── Extract CSS ────────────────────────────────────────────────────────────
+# ── Build scoped CSS blocks ────────────────────────────────────────────────
 
-css_intro    = extract_css(MOCKUPS / "persona-selection-mockup.html")
-css_avatar   = extract_css(MOCKUPS / "avatar-creation-mockup.html")
-css_map      = extract_css(MOCKUPS / "journey-map-mockup.html")
-css_chapter  = extract_css(MOCKUPS / "chapter-1-long-night-jordan-mockup.html")
-css_ultimate = extract_css(MOCKUPS / "ultimate-quest-mockup.html")
+SCREEN_CSS_MAP = [
+    # (scope_selector,  mockup_file)
+    ("#screen-intro",   "persona-selection-mockup.html"),
+    ("#screen-avatar",  "avatar-creation-mockup.html"),
+    ("#screen-map",     "journey-map-mockup.html"),
+    # All chapter screens share the same design system CSS
+    ("#screen-ch1, #screen-ch2, #screen-ch3, #screen-ch4, #screen-ch5, #screen-ch6, #screen-ch7",
+                        "chapter-1-long-night-jordan-mockup.html"),
+    ("#screen-ultimate","ultimate-quest-mockup.html"),
+]
+
+css_blocks = []
+for scope_sel, fname in SCREEN_CSS_MAP:
+    raw_css = extract_css(MOCKUPS / fname)
+    scoped = scope_css(raw_css, scope_sel)
+    css_blocks.append(f"/* === {fname} === */\n{scoped}")
+
+combined_css = "\n\n".join(css_blocks)
 
 # ── Extract body HTML ──────────────────────────────────────────────────────
 
@@ -93,25 +253,19 @@ html_ch = {n: process(MOCKUPS / f) for n, f in [
 ]}
 html_ultimate = process(MOCKUPS / "ultimate-quest-mockup.html")
 
-# ── Lean JS IIFE ──────────────────────────────────────────────────────────
+# ── JS ────────────────────────────────────────────────────────────────────
 
 JS = r"""<script>
 (function() {
 'use strict';
 
-// ── State ─────────────────────────────────────────────────────────────
 var STORAGE_KEY = 'rj.profile.v1';
 var NOTES_KEY   = 'rj.notes.v1';
 
 var DEFAULTS = {
-  persona: 'jordan',
-  unlockedChapter: 1,
-  skin: '#FCE0C2',
-  hair: '#A06940',
-  shirt: '#6105C4',
-  pants: '#3B2A1F',
-  shoes: '#1A0E2E',
-  hairStyle: 'short'
+  persona: 'jordan', unlockedChapter: 1,
+  skin: '#FCE0C2', hair: '#A06940', shirt: '#6105C4',
+  pants: '#3B2A1F', shoes: '#1A0E2E', hairStyle: 'short'
 };
 
 function loadProfile() {
@@ -119,8 +273,7 @@ function loadProfile() {
   catch(e) { return Object.assign({}, DEFAULTS); }
 }
 function saveProfile(patch) {
-  var p = loadProfile();
-  Object.assign(p, patch);
+  var p = loadProfile(); Object.assign(p, patch);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
 }
 function loadNotes() {
@@ -128,8 +281,7 @@ function loadNotes() {
   catch(e) { return []; }
 }
 function saveNote(note) {
-  var notes = loadNotes();
-  notes = notes.filter(function(n) { return n.id !== note.id; });
+  var notes = loadNotes().filter(function(n) { return n.id !== note.id; });
   notes.push(note);
   localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
 }
@@ -137,16 +289,11 @@ function getPersonaNotes(persona) {
   return loadNotes().filter(function(n) { return n.persona === persona; });
 }
 
-// ── Persona metadata ──────────────────────────────────────────────────
 var PERSONA_META = {
-  jordan: { fullName: 'Jordan the Rising Star', shortName: 'Jordan', color: '#FF974D',
-            badge: 'Rising Star' },
-  alex:   { fullName: 'Alex the Ambitious',     shortName: 'Alex',   color: '#6105C4',
-            badge: 'Ambitious' },
-  taylor: { fullName: 'Taylor & Riley',         shortName: 'Taylor', color: '#C384F0',
-            badge: 'Duo Quest' },
-  jamie:  { fullName: 'Jamie the Planner',      shortName: 'Jamie',  color: '#5C8841',
-            badge: 'Planner' },
+  jordan: { fullName: 'Jordan the Rising Star', shortName: 'Jordan', color: '#FF974D' },
+  alex:   { fullName: 'Alex the Ambitious',     shortName: 'Alex',   color: '#6105C4' },
+  taylor: { fullName: 'Taylor & Riley',         shortName: 'Taylor', color: '#C384F0' },
+  jamie:  { fullName: 'Jamie the Planner',      shortName: 'Jamie',  color: '#5C8841' },
 };
 
 function applyPersonaTheme(key) {
@@ -154,293 +301,211 @@ function applyPersonaTheme(key) {
   document.documentElement.style.setProperty('--persona-color', meta.color);
 }
 
-// ── Navigation ────────────────────────────────────────────────────────
 var VALID_SCREENS = ['screen-intro','screen-avatar','screen-map',
   'screen-ch1','screen-ch2','screen-ch3','screen-ch4',
   'screen-ch5','screen-ch6','screen-ch7','screen-ultimate'];
 
 var RJ = {
   navigate: function(screenId) {
-    document.querySelectorAll('.screen').forEach(function(s) {
-      s.style.display = 'none';
-    });
+    document.querySelectorAll('.screen').forEach(function(s) { s.style.display = 'none'; });
     var target = document.getElementById(screenId);
-    if (target) {
-      target.style.display = 'block';
-      window.scrollTo(0, 0);
-      window.location.hash = screenId;
-    }
-    var profile = loadProfile();
-    applyPersonaTheme(profile.persona);
-
+    if (target) { target.style.display = 'block'; window.scrollTo(0,0); window.location.hash = screenId; }
+    applyPersonaTheme(loadProfile().persona);
     if (screenId === 'screen-avatar')   { syncAvatarScreen(); }
     if (screenId === 'screen-map')      { syncMapScreen(); }
     if (screenId === 'screen-ultimate') { syncUltimateScreen(); }
-    var chMatch = screenId.match(/^screen-ch(\d+)$/);
-    if (chMatch) { syncChapterScreen(parseInt(chMatch[1])); }
+    var ch = screenId.match(/^screen-ch(\d+)$/);
+    if (ch) { syncChapterScreen(parseInt(ch[1])); }
   }
 };
 
-// ── Persona selection ─────────────────────────────────────────────────
+// ── Persona selection ─────────────────────────────────────────────────────
+var CARD_TO_KEY = { 'alex':'alex', 'jordan':'jordan', 'taylor-riley':'taylor', 'jamie':'jamie' };
+function personaKey(card) {
+  var cls = Array.from(card.classList);
+  for (var i=0;i<cls.length;i++) { if (CARD_TO_KEY[cls[i]]) return CARD_TO_KEY[cls[i]]; }
+  return card.getAttribute('data-persona');
+}
 function initPersonaSelection() {
-  document.querySelectorAll('article.card[data-persona]').forEach(function(card) {
-    var key = card.getAttribute('data-persona');
+  document.querySelectorAll('article.card').forEach(function(card) {
+    var key = personaKey(card);
+    if (!key) return;
     var btn = card.querySelector('.btn-embark');
     if (!btn) return;
     btn.addEventListener('click', function(e) {
       e.stopPropagation();
       var existing = loadProfile();
       var hasNotes = existing.persona && getPersonaNotes(existing.persona).length > 0;
-      if (hasNotes && existing.persona !== key) {
-        showSwitchWarning(key);
-      } else {
-        selectPersona(key);
-      }
+      if (hasNotes && existing.persona !== key) { showSwitchWarning(key); }
+      else { selectPersona(key); }
     });
   });
 }
-
 function selectPersona(key) {
   saveProfile({ persona: key, unlockedChapter: 1 });
   applyPersonaTheme(key);
   RJ.navigate('screen-avatar');
 }
-
 function showSwitchWarning(newKey) {
-  var holder = document.getElementById('rjSwitchDialogHolder');
-  if (!holder) return;
-  holder.innerHTML =
-    '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;">'
-    + '<div style="background:#F5F2ED;border:3px solid #1A0E2E;padding:28px 32px;max-width:360px;font-family:\'Source Serif 4\',serif;">'
-    + '<h3 style="font-family:\'Pixelify Sans\',monospace;margin:0 0 12px;">Switch renters?</h3>'
-    + '<p style="margin:0 0 20px;font-size:14px;">You have saved Field Notes for your current renter. Starting over will clear them.</p>'
-    + '<div style="display:flex;gap:12px;">'
-    + '<button onclick="window._rjConfirmSwitch(\'' + newKey + '\')" style="font-family:\'VT323\',monospace;font-size:16px;padding:8px 16px;background:#6105C4;color:#fff;border:none;cursor:pointer;">Yes, switch</button>'
-    + '<button onclick="document.getElementById(\'rjSwitchDialogHolder\').innerHTML=\'\'" style="font-family:\'VT323\',monospace;font-size:16px;padding:8px 16px;background:#fff;border:2px solid #1A0E2E;cursor:pointer;">Keep going</button>'
-    + '</div></div></div>';
-}
-
-window._rjConfirmSwitch = function(key) {
-  localStorage.removeItem(NOTES_KEY);
-  selectPersona(key);
   var h = document.getElementById('rjSwitchDialogHolder');
-  if (h) h.innerHTML = '';
+  if (!h) return;
+  h.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;">'
+    +'<div style="background:#F5F2ED;border:3px solid #1A0E2E;padding:28px 32px;max-width:360px;font-family:\'Source Serif 4\',serif;">'
+    +'<h3 style="font-family:\'Pixelify Sans\',monospace;margin:0 0 12px;">Switch renters?</h3>'
+    +'<p style="margin:0 0 20px;font-size:14px;">You have saved Field Notes for your current renter. Starting over will clear them.</p>'
+    +'<div style="display:flex;gap:12px;">'
+    +'<button onclick="window._rjConfirmSwitch(\''+newKey+'\')" style="font-family:\'VT323\',monospace;font-size:16px;padding:8px 16px;background:#6105C4;color:#fff;border:none;cursor:pointer;">Yes, switch</button>'
+    +'<button onclick="document.getElementById(\'rjSwitchDialogHolder\').innerHTML=\'\'" style="font-family:\'VT323\',monospace;font-size:16px;padding:8px 16px;background:#fff;border:2px solid #1A0E2E;cursor:pointer;">Keep going</button>'
+    +'</div></div></div>';
+}
+window._rjConfirmSwitch = function(key) {
+  localStorage.removeItem(NOTES_KEY); selectPersona(key);
+  var h=document.getElementById('rjSwitchDialogHolder'); if(h) h.innerHTML='';
 };
 
-// ── Avatar screen ─────────────────────────────────────────────────────
-var AVATAR_VARS = {
-  skin: '--avatar-skin', hair: '--avatar-hair',
-  shirt: '--avatar-shirt', pants: '--avatar-pants', shoes: '--avatar-shoes'
-};
-var SKIN_TO_LIP = {
-  '#FCE0C2':'#E07590','#E8C5A4':'#C8576B','#D4A57A':'#A8425A',
-  '#A87A52':'#8B3548','#7A5236':'#8B3548','#4A3220':'#B85968'
-};
+// ── Avatar screen ─────────────────────────────────────────────────────────
+var AVATAR_VARS = { skin:'--avatar-skin', hair:'--avatar-hair', shirt:'--avatar-shirt', pants:'--avatar-pants', shoes:'--avatar-shoes' };
+var SKIN_TO_LIP = { '#FCE0C2':'#E07590','#E8C5A4':'#C8576B','#D4A57A':'#A8425A','#A87A52':'#8B3548','#7A5236':'#8B3548','#4A3220':'#B85968' };
 
-function applyAvatarVars(profile) {
+function syncAvatarScreen() {
+  var profile = loadProfile();
+  var meta = PERSONA_META[profile.persona] || PERSONA_META.jordan;
+  var nameEl = document.querySelector('#screen-avatar .persona-context .name');
+  if (nameEl) nameEl.textContent = meta.fullName;
+  // Restore CSS vars
   Object.keys(AVATAR_VARS).forEach(function(k) {
     if (profile[k]) document.documentElement.style.setProperty(AVATAR_VARS[k], profile[k]);
   });
   if (profile.skin && SKIN_TO_LIP[profile.skin])
     document.documentElement.style.setProperty('--avatar-lip', SKIN_TO_LIP[profile.skin]);
-}
-
-function applyHairStyle(style) {
+  // Hair style
+  var hs = profile.hairStyle || 'short';
   document.querySelectorAll('#screen-avatar .avatar .hair-style').forEach(function(g) {
-    g.style.display = (g.getAttribute('data-style') === style) ? '' : 'none';
+    g.style.display = (g.getAttribute('data-style') === hs) ? '' : 'none';
   });
-}
-
-function syncAvatarScreen() {
-  var profile = loadProfile();
-  var meta    = PERSONA_META[profile.persona] || PERSONA_META.jordan;
-
-  // Persona name in top bar
-  var nameEl = document.querySelector('#screen-avatar .persona-context .name');
-  if (nameEl) nameEl.textContent = meta.fullName;
-
-  // Restore saved appearance
-  applyAvatarVars(profile);
-  applyHairStyle(profile.hairStyle || 'short');
-
-  // Restore selected swatch highlights
+  // Swatch selection highlights
   document.querySelectorAll('#screen-avatar .swatches').forEach(function(grp) {
-    var target = grp.getAttribute('data-target');
-    var saved  = profile[target];
+    var t = grp.getAttribute('data-target'); var saved = profile[t];
     grp.querySelectorAll('.swatch').forEach(function(sw) {
       sw.classList.toggle('selected', sw.getAttribute('data-color') === saved);
     });
   });
-
   // Wire swatches (once)
   document.querySelectorAll('#screen-avatar .swatches:not([data-wired])').forEach(function(grp) {
-    grp.setAttribute('data-wired', '1');
+    grp.setAttribute('data-wired','1');
     var target = grp.getAttribute('data-target');
     grp.querySelectorAll('.swatch').forEach(function(sw) {
       sw.addEventListener('click', function() {
-        grp.querySelectorAll('.swatch').forEach(function(s) { s.classList.remove('selected'); });
+        grp.querySelectorAll('.swatch').forEach(function(s){s.classList.remove('selected');});
         sw.classList.add('selected');
         var color = sw.getAttribute('data-color');
         document.documentElement.style.setProperty(AVATAR_VARS[target], color);
-        if (target === 'skin' && SKIN_TO_LIP[color])
+        if (target==='skin' && SKIN_TO_LIP[color])
           document.documentElement.style.setProperty('--avatar-lip', SKIN_TO_LIP[color]);
-        var patch = {}; patch[target] = color;
-        saveProfile(patch);
+        var p={}; p[target]=color; saveProfile(p);
       });
     });
   });
-
   // Wire hair-style thumbs (once)
   var thumbsEl = document.querySelector('#screen-avatar .thumbs[data-target="hair-style"]:not([data-wired])');
   if (thumbsEl) {
-    thumbsEl.setAttribute('data-wired', '1');
+    thumbsEl.setAttribute('data-wired','1');
     thumbsEl.querySelectorAll('.thumb').forEach(function(thumb) {
       thumb.addEventListener('click', function() {
-        thumbsEl.querySelectorAll('.thumb').forEach(function(t) { t.classList.remove('selected'); });
+        thumbsEl.querySelectorAll('.thumb').forEach(function(t){t.classList.remove('selected');});
         thumb.classList.add('selected');
         var style = thumb.getAttribute('data-style');
-        applyHairStyle(style);
+        document.querySelectorAll('#screen-avatar .avatar .hair-style').forEach(function(g){
+          g.style.display=(g.getAttribute('data-style')===style)?'':'none';
+        });
         saveProfile({ hairStyle: style });
       });
     });
   }
-  // Restore selected hair thumb highlight
-  var hs = profile.hairStyle || 'short';
-  document.querySelectorAll('#screen-avatar .thumbs[data-target="hair-style"] .thumb').forEach(function(t) {
+  document.querySelectorAll('#screen-avatar .thumbs[data-target="hair-style"] .thumb').forEach(function(t){
     t.classList.toggle('selected', t.getAttribute('data-style') === hs);
   });
-
-  // Wire begin button (once)
+  // Begin button (once)
   var beginBtn = document.querySelector('#screen-avatar .btn-begin:not([data-wired])');
-  if (beginBtn) {
-    beginBtn.setAttribute('data-wired', '1');
-    beginBtn.addEventListener('click', function() { RJ.navigate('screen-map'); });
-  }
+  if (beginBtn) { beginBtn.setAttribute('data-wired','1'); beginBtn.addEventListener('click', function(){RJ.navigate('screen-map');}); }
 }
 
-// ── Map screen ────────────────────────────────────────────────────────
+// ── Map screen ────────────────────────────────────────────────────────────
 function syncMapScreen() {
   var profile = loadProfile();
-  var meta    = PERSONA_META[profile.persona] || PERSONA_META.jordan;
-
-  // Persona name
+  var meta = PERSONA_META[profile.persona] || PERSONA_META.jordan;
   var nameEl = document.querySelector('#screen-map .persona-context .name');
   if (nameEl) nameEl.textContent = meta.fullName;
-
-  // Wire change-renter (once)
   var changeEl = document.querySelector('#screen-map .persona-context .change:not([data-wired])');
-  if (changeEl) {
-    changeEl.setAttribute('data-wired', '1');
-    changeEl.style.cursor = 'pointer';
-    changeEl.addEventListener('click', function() { RJ.navigate('screen-intro'); });
-  }
-
-  // Apply lock/unlock state to chapter cards
+  if (changeEl) { changeEl.setAttribute('data-wired','1'); changeEl.style.cursor='pointer'; changeEl.addEventListener('click',function(){RJ.navigate('screen-intro');}); }
   var cards = document.querySelectorAll('#screen-map .chapter-card');
   cards.forEach(function(card, idx) {
-    var chNum     = idx + 1;
-    var unlocked  = chNum <= profile.unlockedChapter;
+    var chNum = idx+1; var unlocked = chNum <= profile.unlockedChapter;
     card.classList.toggle('locked', !unlocked);
-    card.setAttribute('aria-disabled', unlocked ? 'false' : 'true');
-
     if (unlocked && !card.getAttribute('data-wired')) {
-      card.setAttribute('data-wired', '1');
-      card.style.cursor = 'pointer';
-      (function(n) {
-        card.addEventListener('click', function(e) {
-          e.preventDefault();
-          if (!card.classList.contains('locked')) RJ.navigate('screen-ch' + n);
-        });
-      })(chNum);
+      card.setAttribute('data-wired','1'); card.style.cursor='pointer';
+      (function(n){ card.addEventListener('click',function(e){ e.preventDefault(); if(!card.classList.contains('locked')) RJ.navigate('screen-ch'+n); }); })(chNum);
     }
   });
 }
 
-// ── Chapter screens ───────────────────────────────────────────────────
+// ── Chapter screens ───────────────────────────────────────────────────────
 function syncChapterScreen(n) {
-  var profile  = loadProfile();
-  var screenEl = document.getElementById('screen-ch' + n);
+  var profile = loadProfile();
+  var screenEl = document.getElementById('screen-ch'+n);
   if (!screenEl) return;
-
   applyPersonaTheme(profile.persona);
-
-  // Wire "change renter" span (once)
   var changeEl = screenEl.querySelector('.persona-context .change:not([data-wired])');
-  if (changeEl) {
-    changeEl.setAttribute('data-wired', '1');
-    changeEl.style.cursor = 'pointer';
-    changeEl.addEventListener('click', function() { RJ.navigate('screen-intro'); });
-  }
-
-  // Gate & wire continue button (once)
+  if (changeEl) { changeEl.setAttribute('data-wired','1'); changeEl.style.cursor='pointer'; changeEl.addEventListener('click',function(){RJ.navigate('screen-intro');}); }
   var continueBtn = screenEl.querySelector('#continueBtn:not([data-wired])');
   if (continueBtn) {
-    continueBtn.setAttribute('data-wired', '1');
-    var textareas = screenEl.querySelectorAll('.reflection-input');
-
+    continueBtn.setAttribute('data-wired','1');
+    var tas = screenEl.querySelectorAll('.reflection-input');
     function checkFilled() {
-      var allFilled = textareas.length > 0;
-      textareas.forEach(function(ta) { if (!ta.value.trim()) allFilled = false; });
-      if (allFilled) {
-        continueBtn.classList.remove('disabled');
-        continueBtn.removeAttribute('aria-disabled');
-      } else {
-        continueBtn.classList.add('disabled');
-        continueBtn.setAttribute('aria-disabled', 'true');
-      }
+      var ok = tas.length > 0;
+      tas.forEach(function(ta){ if(!ta.value.trim()) ok=false; });
+      if(ok){ continueBtn.classList.remove('disabled'); continueBtn.removeAttribute('aria-disabled'); }
+      else  { continueBtn.classList.add('disabled');    continueBtn.setAttribute('aria-disabled','true'); }
     }
-
-    textareas.forEach(function(ta) { ta.addEventListener('input', checkFilled); });
+    tas.forEach(function(ta){ ta.addEventListener('input',checkFilled); });
     checkFilled();
-
-    continueBtn.addEventListener('click', function(e) {
+    continueBtn.addEventListener('click',function(e){
       e.preventDefault();
-      if (continueBtn.classList.contains('disabled')) return;
-      var prof = loadProfile();
-      if (n + 1 <= 7 && n + 1 > prof.unlockedChapter) saveProfile({ unlockedChapter: n + 1 });
-      RJ.navigate(n < 7 ? 'screen-ch' + (n + 1) : 'screen-ultimate');
+      if(continueBtn.classList.contains('disabled')) return;
+      var prof=loadProfile();
+      if(n+1<=7 && n+1>prof.unlockedChapter) saveProfile({unlockedChapter:n+1});
+      RJ.navigate(n<7?'screen-ch'+(n+1):'screen-ultimate');
     });
   }
 }
 
-// ── Ultimate quest screen ─────────────────────────────────────────────
+// ── Ultimate quest ────────────────────────────────────────────────────────
 function syncUltimateScreen() {
   applyPersonaTheme(loadProfile().persona);
-
-  // Wire any navigation links in the ultimate screen
-  ['#screen-intro','#screen-map'].forEach(function(hash) {
-    var sid = hash.replace('#','');
-    document.querySelectorAll('#screen-ultimate a[href="' + hash + '"]:not([data-wired])').forEach(function(el) {
+  ['#screen-intro','#screen-map'].forEach(function(hash){
+    var sid=hash.replace('#','');
+    document.querySelectorAll('#screen-ultimate a[href="'+hash+'"]:not([data-wired])').forEach(function(el){
       el.setAttribute('data-wired','1');
-      el.addEventListener('click', function(e) { e.preventDefault(); RJ.navigate(sid); });
+      el.addEventListener('click',function(e){ e.preventDefault(); RJ.navigate(sid); });
     });
   });
 }
 
-// ── Init ──────────────────────────────────────────────────────────────
+// ── Init ──────────────────────────────────────────────────────────────────
 function init() {
-  var profile = loadProfile();
-  applyPersonaTheme(profile.persona);
-
-  document.querySelectorAll('.screen').forEach(function(s) { s.style.display = 'none'; });
-
-  var hash = window.location.hash.replace('#', '');
-  if (hash && VALID_SCREENS.indexOf(hash) !== -1) {
-    RJ.navigate(hash);
-  } else {
-    RJ.navigate('screen-intro');
-  }
-
+  applyPersonaTheme(loadProfile().persona);
+  document.querySelectorAll('.screen').forEach(function(s){ s.style.display='none'; });
+  var hash = window.location.hash.replace('#','');
+  if (hash && VALID_SCREENS.indexOf(hash)!==-1) { RJ.navigate(hash); }
+  else { RJ.navigate('screen-intro'); }
   initPersonaSelection();
-
-  window.addEventListener('hashchange', function() {
-    var h = window.location.hash.replace('#', '');
-    if (h && VALID_SCREENS.indexOf(h) !== -1) RJ.navigate(h);
+  window.addEventListener('hashchange',function(){
+    var h=window.location.hash.replace('#','');
+    if(h && VALID_SCREENS.indexOf(h)!==-1) RJ.navigate(h);
   });
 }
 
 document.addEventListener('DOMContentLoaded', init);
-
 })();
 </script>"""
 
@@ -484,35 +549,15 @@ output = f"""<!DOCTYPE html>
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=VT323&display=swap" rel="stylesheet">
 
 <style>
-/* Screen management */
+/* Screen management — must come first */
 *, *::before, *::after {{ box-sizing: border-box; }}
 html, body {{ margin: 0; padding: 0; }}
 .screen {{ display: none; }}
 </style>
 
-<style id="css-intro">
-/* Persona Selection */
-{css_intro}
-</style>
-
-<style id="css-avatar">
-/* Avatar Creation */
-{css_avatar}
-</style>
-
-<style id="css-map">
-/* Journey Map */
-{css_map}
-</style>
-
-<style id="css-chapter">
-/* Chapters (shared design system) */
-{css_chapter}
-</style>
-
-<style id="css-ultimate">
-/* Ultimate Quest */
-{css_ultimate}
+<style>
+/* Per-screen styles (scoped to each screen's ID) */
+{combined_css}
 </style>
 
 </head>
@@ -529,7 +574,6 @@ html, body {{ margin: 0; padding: 0; }}
 
 out_path = BASE / "renters-journey.html"
 out_path.write_text(output, encoding="utf-8")
-
 lines = output.count('\n')
 print(f"Written {out_path}")
 print(f"  {len(output):,} bytes / {lines:,} lines")
