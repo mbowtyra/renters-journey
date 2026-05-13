@@ -423,7 +423,7 @@ var VALID_SCREENS = ['screen-intro','screen-avatar','screen-map',
   'screen-ch1','screen-ch2','screen-ch3','screen-ch4',
   'screen-ch5','screen-ch6','screen-ch7','screen-ultimate'];
 
-var RJ = {
+var RJ = window.RJ = {
   navigate: function(screenId) {
     document.querySelectorAll('.screen').forEach(function(s) { s.style.display = 'none'; });
     var target = document.getElementById(screenId);
