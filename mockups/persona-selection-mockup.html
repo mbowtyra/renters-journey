@@ -553,42 +553,73 @@
     color: var(--ink);
   }
 
-  .lookfor {
+  /* Briefing card — must-haves / wants (matches rj-shared.js design) */
+  .card-brief {
     margin-top: 14px;
     padding-top: 12px;
     border-top: 1px dashed var(--ink-soft);
   }
-  .lookfor-label {
+  .card-brief-head {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-brief-head .pixel-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--card-color, var(--indigo));
+  }
+  .brief-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .brief-col {
+    background: rgba(245,242,237,0.55);
+    border: 2px solid var(--ink);
+    padding: 8px 10px;
+  }
+  .brief-col .col-label {
     font-family: 'VT323', monospace;
     font-size: 12px;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--ink-soft);
-    margin-bottom: 6px;
-  }
-  .lookfor-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .lookfor-list li {
-    font-family: 'Source Serif 4', serif;
-    font-size: 13px;
     color: var(--ink);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .brief-col .col-label::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--col-accent, var(--card-color, var(--indigo)));
+  }
+  .brief-col.musts { --col-accent: #FF0029; }
+  .brief-col.wants { --col-accent: #FF974D; }
+  .brief-col ul { list-style: none; margin: 0; padding: 0; }
+  .brief-col li {
+    font-family: 'Source Serif 4', serif;
+    font-size: 12.5px;
     line-height: 1.4;
-    padding-left: 14px;
+    color: var(--ink);
+    padding: 3px 0 3px 13px;
     position: relative;
   }
-  .lookfor-list li::before {
-    content: '▸';
+  .brief-col li + li { border-top: 1px dashed rgba(45,27,14,0.15); }
+  .brief-col li::before {
+    content: '';
     position: absolute;
-    left: 0;
-    color: var(--card-color, var(--indigo));
-    font-size: 11px;
-    top: 2px;
+    left: 0; top: 9px;
+    width: 5px; height: 5px;
+    background: var(--col-accent, var(--card-color, var(--indigo)));
   }
 
   .btn-embark {
@@ -1971,14 +2002,27 @@
               <span class="val">$4,200/mo</span>
             </div>
           </div>
-          <div class="lookfor">
-            <div class="lookfor-label">Looking for</div>
-            <ul class="lookfor-list">
-              <li>Real kitchen with counter space</li>
-              <li>Bedroom door that actually closes</li>
-              <li>Bike storage (not a wall mount)</li>
-              <li>1BR minimum, Hayes Valley if budget allows</li>
-            </ul>
+          <div class="card-brief">
+            <div class="card-brief-head"><span class="pixel-dot"></span>What they're looking for</div>
+            <div class="brief-grid">
+              <div class="brief-col musts">
+                <div class="col-label">Must-haves</div>
+                <ul>
+                  <li>1BR with a door that closes</li>
+                  <li>Real kitchen with counter space</li>
+                  <li>12-min commute to the office</li>
+                  <li>Rent under $4,200/mo</li>
+                </ul>
+              </div>
+              <div class="brief-col wants">
+                <div class="col-label">Wants</div>
+                <ul>
+                  <li>2BR if Hayes Valley fits</li>
+                  <li>Bike storage (not a wall mount)</li>
+                  <li>Building gym worth using</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
         <div class="bio-overlay">
@@ -2022,14 +2066,28 @@
               <span class="val">$2,400/mo</span>
             </div>
           </div>
-          <div class="lookfor">
-            <div class="lookfor-label">Looking for</div>
-            <ul class="lookfor-list">
-              <li>Pet-friendly (Max must be genuinely welcome)</li>
-              <li>Yard or park within walking distance</li>
-              <li>Real home office, not a kitchen table</li>
-              <li>No ghost listings, no slow agents</li>
-            </ul>
+          <div class="card-brief">
+            <div class="card-brief-head"><span class="pixel-dot"></span>What they're looking for</div>
+            <div class="brief-grid">
+              <div class="brief-col musts">
+                <div class="col-label">Must-haves</div>
+                <ul>
+                  <li>Pet-friendly (Max actually welcome)</li>
+                  <li>Move-in within 18 days</li>
+                  <li>Replies within 24 hours</li>
+                  <li>Rent under $2,400/mo</li>
+                </ul>
+              </div>
+              <div class="brief-col wants">
+                <div class="col-label">Wants</div>
+                <ul>
+                  <li>A yard for Max</li>
+                  <li>Park within walking distance</li>
+                  <li>Real home office</li>
+                  <li>Short hybrid-day commute</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
         <div class="bio-overlay">
@@ -2073,14 +2131,28 @@
               <span class="val">$2,500/mo</span>
             </div>
           </div>
-          <div class="lookfor">
-            <div class="lookfor-label">Looking for</div>
-            <ul class="lookfor-list">
-              <li>Neighborhood they can hear from the window</li>
-              <li>Walkable streets, food scene, photography spots</li>
-              <li>A place they both feel without explaining why</li>
-              <li>Unit matters less than what's around it</li>
-            </ul>
+          <div class="card-brief">
+            <div class="card-brief-head"><span class="pixel-dot"></span>What they're looking for</div>
+            <div class="brief-grid">
+              <div class="brief-col musts">
+                <div class="col-label">Must-haves</div>
+                <ul>
+                  <li>Walkable neighborhood</li>
+                  <li>Real local food scene</li>
+                  <li>A street they hear from the window</li>
+                  <li>Combined rent under $2,500</li>
+                </ul>
+              </div>
+              <div class="brief-col wants">
+                <div class="col-label">Wants</div>
+                <ul>
+                  <li>Two-bedroom unit</li>
+                  <li>Natural light Riley can shoot in</li>
+                  <li>Photography scene outside galleries</li>
+                  <li>Tours bookable without a phone call</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
         <div class="bio-overlay">
@@ -2124,14 +2196,29 @@
               <span class="val">$3,200/mo</span>
             </div>
           </div>
-          <div class="lookfor">
-            <div class="lookfor-label">Looking for</div>
-            <ul class="lookfor-list">
-              <li>Good school zone (non-negotiable)</li>
-              <li>Safe streets, walkable park for Emma</li>
-              <li>2BR minimum, in-unit laundry preferred</li>
-              <li>No surprises on cost or timeline</li>
-            </ul>
+          <div class="card-brief">
+            <div class="card-brief-head"><span class="pixel-dot"></span>What they're looking for</div>
+            <div class="brief-grid">
+              <div class="brief-col musts">
+                <div class="col-label">Must-haves</div>
+                <ul>
+                  <li>2BR (Emma's room is non-negotiable)</li>
+                  <li>Strong, verifiable school district</li>
+                  <li>Safe streets and a walkable park</li>
+                  <li>Move-in before kindergarten starts</li>
+                  <li>Rent under $3,200/mo</li>
+                </ul>
+              </div>
+              <div class="brief-col wants">
+                <div class="col-label">Wants</div>
+                <ul>
+                  <li>Pet-friendly (Emma keeps asking)</li>
+                  <li>Transit to family support network</li>
+                  <li>In-unit laundry</li>
+                  <li>A buzzing local park</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
         <div class="bio-overlay">
