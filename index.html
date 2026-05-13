@@ -13642,10 +13642,11 @@ function syncMapScreen() {
   var poss = meta.shortName + (meta.shortName.slice(-1) === 's' ? "'" : "'s");
   var _MAP_NAMES = ['Jordan', 'Alex', 'Taylor', 'Jamie'];
   function _swapMapName(html) {
-    _MAP_NAMES.forEach(function(n) {
-      html = html.replace(new RegExp('\\b' + n + "'s\\b", 'g'), poss);
-      html = html.replace(new RegExp('\\b' + n + '\\b', 'g'), meta.shortName);
-    });
+    // Single-pass replacement avoids cascading substitutions when the target
+    // name itself contains one of the source names (e.g. "Taylor & Riley").
+    var pat = _MAP_NAMES.join('|');
+    html = html.replace(new RegExp('\\b(?:' + pat + ")'s\\b", 'g'), poss);
+    html = html.replace(new RegExp('\\b(?:' + pat + ')\\b', 'g'), meta.shortName);
     return html;
   }
 
@@ -16359,11 +16360,11 @@ function syncChapterScreen(n) {
   // appears regardless of which mockup a chapter was stitched from.
   var _PERSONA_NAMES = ['Jordan', 'Alex', 'Taylor', 'Jamie'];
   function _swapName(html) {
-    _PERSONA_NAMES.forEach(function(n) {
-      var re_poss = new RegExp('\\b' + n + "'s\\b", 'g');
-      var re_bare = new RegExp('\\b' + n + '\\b', 'g');
-      html = html.replace(re_poss, poss).replace(re_bare, meta.shortName);
-    });
+    // Single-pass replacement avoids cascading substitutions when the target
+    // name itself contains one of the source names (e.g. "Taylor & Riley").
+    var pat = _PERSONA_NAMES.join('|');
+    html = html.replace(new RegExp('\\b(?:' + pat + ")'s\\b", 'g'), poss);
+    html = html.replace(new RegExp('\\b(?:' + pat + ')\\b', 'g'), meta.shortName);
     return html;
   }
 
