@@ -553,6 +553,44 @@
     color: var(--ink);
   }
 
+  .lookfor {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--ink-soft);
+  }
+  .lookfor-label {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .lookfor-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .lookfor-list li {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.4;
+    padding-left: 14px;
+    position: relative;
+  }
+  .lookfor-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--card-color, var(--indigo));
+    font-size: 11px;
+    top: 2px;
+  }
+
   .btn-embark {
     margin-top: auto;
     padding: 12px 16px;
@@ -1933,6 +1971,15 @@
               <span class="val">$4,200/mo</span>
             </div>
           </div>
+          <div class="lookfor">
+            <div class="lookfor-label">Looking for</div>
+            <ul class="lookfor-list">
+              <li>Real kitchen with counter space</li>
+              <li>Bedroom door that actually closes</li>
+              <li>Bike storage (not a wall mount)</li>
+              <li>1BR minimum, Hayes Valley if budget allows</li>
+            </ul>
+          </div>
         </div>
         <div class="bio-overlay">
           <p>Alex is a senior engineer in San Francisco. Three years in the same studio apartment, their salary has gone up but the square footage hasn't. The bike lives on the wall because there's nowhere else to put it. The lease non-renewal came last week, and Alex is treating it as permission to finally upgrade.</p>
@@ -1974,6 +2021,15 @@
               <span class="label">Budget</span>
               <span class="val">$2,400/mo</span>
             </div>
+          </div>
+          <div class="lookfor">
+            <div class="lookfor-label">Looking for</div>
+            <ul class="lookfor-list">
+              <li>Pet-friendly (Max must be genuinely welcome)</li>
+              <li>Yard or park within walking distance</li>
+              <li>Real home office, not a kitchen table</li>
+              <li>No ghost listings, no slow agents</li>
+            </ul>
           </div>
         </div>
         <div class="bio-overlay">
@@ -2017,6 +2073,15 @@
               <span class="val">$2,500/mo</span>
             </div>
           </div>
+          <div class="lookfor">
+            <div class="lookfor-label">Looking for</div>
+            <ul class="lookfor-list">
+              <li>Neighborhood they can hear from the window</li>
+              <li>Walkable streets, food scene, photography spots</li>
+              <li>A place they both feel without explaining why</li>
+              <li>Unit matters less than what's around it</li>
+            </ul>
+          </div>
         </div>
         <div class="bio-overlay">
           <p>Taylor and Riley have been in Chicago for three years, the longest they've stayed anywhere. Polaroids from Lisbon are still on the fridge, a zine from Mexico City lives on the counter, and Riley's camera lives next to the toaster. The plan, which has been forming for months, is to leave Chicago for Austin.</p>
@@ -2058,6 +2123,15 @@
               <span class="label">Budget</span>
               <span class="val">$3,200/mo</span>
             </div>
+          </div>
+          <div class="lookfor">
+            <div class="lookfor-label">Looking for</div>
+            <ul class="lookfor-list">
+              <li>Good school zone (non-negotiable)</li>
+              <li>Safe streets, walkable park for Emma</li>
+              <li>2BR minimum, in-unit laundry preferred</li>
+              <li>No surprises on cost or timeline</li>
+            </ul>
           </div>
         </div>
         <div class="bio-overlay">

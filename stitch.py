@@ -341,9 +341,11 @@ SCREEN_CSS_MAP = [
     ("#screen-intro",   "persona-selection-mockup.html"),
     ("#screen-avatar",  "avatar-creation-mockup.html"),
     ("#screen-map",     "journey-map-mockup.html"),
-    # All chapter screens share the same design system CSS
+    # All chapter screens share the same design system CSS.
+    # Use chapter 2 as source: it has the full quest/action-item/checkbox CSS
+    # that chapter 1 lacks (chapter 1 has no quests, so its CSS omits those rules).
     ("#screen-ch1, #screen-ch2, #screen-ch3, #screen-ch4, #screen-ch5, #screen-ch6, #screen-ch7",
-                        "chapter-1-long-night-jordan-mockup.html"),
+                        "chapter-2-first-light-alex-mockup.html"),
     ("#screen-ultimate","ultimate-quest-mockup.html"),
 ]
 

@@ -565,6 +565,44 @@ body {
     color: var(--ink);
   }
 
+  #screen-intro .lookfor {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--ink-soft);
+  }
+  #screen-intro .lookfor-label {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  #screen-intro .lookfor-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  #screen-intro .lookfor-list li {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.4;
+    padding-left: 14px;
+    position: relative;
+  }
+  #screen-intro .lookfor-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--card-color, var(--indigo));
+    font-size: 11px;
+    top: 2px;
+  }
+
   #screen-intro .btn-embark {
     margin-top: auto;
     padding: 12px 16px;
@@ -1859,7 +1897,7 @@ body {
     #screen-map .town-scene { height: 240px; }
   }
 
-/* === chapter-1-long-night-jordan-mockup.html === */
+/* === chapter-2-first-light-alex-mockup.html === */
 :root {
     --indigo: #6105C4;
     --indigo-deep: #46137B;
@@ -1883,9 +1921,9 @@ body {
     --sky-mid: #F5C6D6;
     --sky-low: #D7C6F1;
 
-    /* Jordan's persona accent */
-    --persona-color: var(--orange);
-    --persona-deep: #C46A1F;
+    /* Alex's persona accent */
+    --persona-color: var(--indigo);
+    --persona-deep: var(--indigo-deep);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3729,13 +3767,16 @@ body {
     gap: 12px;
     padding: 4px 2px;
   }
-  #screen-ch1 .action-item .step-check-wrap,
-#screen-ch2 .action-item .step-check-wrap,
-#screen-ch3 .action-item .step-check-wrap,
-#screen-ch4 .action-item .step-check-wrap,
-#screen-ch5 .action-item .step-check-wrap,
-#screen-ch6 .action-item .step-check-wrap,
-#screen-ch7 .action-item .step-check-wrap {
+  #screen-ch1 .action-item label.step-check-wrap,
+#screen-ch2 .action-item label.step-check-wrap,
+#screen-ch3 .action-item label.step-check-wrap,
+#screen-ch4 .action-item label.step-check-wrap,
+#screen-ch5 .action-item label.step-check-wrap,
+#screen-ch6 .action-item label.step-check-wrap,
+#screen-ch7 .action-item label.step-check-wrap {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
     margin-top: 2px;
   }
   #screen-ch1 .action-item label,
@@ -4013,6 +4054,73 @@ body {
     text-decoration-color: var(--ink-soft);
     text-decoration-thickness: 2px;
     color: var(--ink-soft);
+  }
+
+  /* Side quest (optional) styling */
+  #screen-ch1 .quest.optional,
+#screen-ch2 .quest.optional,
+#screen-ch3 .quest.optional,
+#screen-ch4 .quest.optional,
+#screen-ch5 .quest.optional,
+#screen-ch6 .quest.optional,
+#screen-ch7 .quest.optional {
+    border-style: dashed;
+    border-color: var(--ink-soft);
+  }
+  #screen-ch1 .quest.optional .quest-head,
+#screen-ch2 .quest.optional .quest-head,
+#screen-ch3 .quest.optional .quest-head,
+#screen-ch4 .quest.optional .quest-head,
+#screen-ch5 .quest.optional .quest-head,
+#screen-ch6 .quest.optional .quest-head,
+#screen-ch7 .quest.optional .quest-head {
+    background: rgba(213, 198, 241, 0.45);
+    border-bottom-style: dashed;
+  }
+  #screen-ch1 .quest.optional .quest-title-area .label,
+#screen-ch2 .quest.optional .quest-title-area .label,
+#screen-ch3 .quest.optional .quest-title-area .label,
+#screen-ch4 .quest.optional .quest-title-area .label,
+#screen-ch5 .quest.optional .quest-title-area .label,
+#screen-ch6 .quest.optional .quest-title-area .label,
+#screen-ch7 .quest.optional .quest-title-area .label {
+    color: var(--magenta);
+  }
+  #screen-ch1 .quest.optional:has(.quest-check:checked) .quest-head,
+#screen-ch2 .quest.optional:has(.quest-check:checked) .quest-head,
+#screen-ch3 .quest.optional:has(.quest-check:checked) .quest-head,
+#screen-ch4 .quest.optional:has(.quest-check:checked) .quest-head,
+#screen-ch5 .quest.optional:has(.quest-check:checked) .quest-head,
+#screen-ch6 .quest.optional:has(.quest-check:checked) .quest-head,
+#screen-ch7 .quest.optional:has(.quest-check:checked) .quest-head {
+    background: var(--lavender);
+  }
+  #screen-ch1 .sidequest-header,
+#screen-ch2 .sidequest-header,
+#screen-ch3 .sidequest-header,
+#screen-ch4 .sidequest-header,
+#screen-ch5 .sidequest-header,
+#screen-ch6 .sidequest-header,
+#screen-ch7 .sidequest-header {
+    margin-top: 8px;
+  }
+  #screen-ch1 .sidequest-header .eyebrow,
+#screen-ch2 .sidequest-header .eyebrow,
+#screen-ch3 .sidequest-header .eyebrow,
+#screen-ch4 .sidequest-header .eyebrow,
+#screen-ch5 .sidequest-header .eyebrow,
+#screen-ch6 .sidequest-header .eyebrow,
+#screen-ch7 .sidequest-header .eyebrow {
+    color: var(--magenta);
+  }
+  #screen-ch1 .sidequest-header h2,
+#screen-ch2 .sidequest-header h2,
+#screen-ch3 .sidequest-header h2,
+#screen-ch4 .sidequest-header h2,
+#screen-ch5 .sidequest-header h2,
+#screen-ch6 .sidequest-header h2,
+#screen-ch7 .sidequest-header h2 {
+    color: var(--ink);
   }
 
   /* === REFLECTION CARD (required) === */
@@ -7482,6 +7590,15 @@ body {
               <span class="val">$4,200/mo</span>
             </div>
           </div>
+          <div class="lookfor">
+            <div class="lookfor-label">Looking for</div>
+            <ul class="lookfor-list">
+              <li>Real kitchen with counter space</li>
+              <li>Bedroom door that actually closes</li>
+              <li>Bike storage (not a wall mount)</li>
+              <li>1BR minimum, Hayes Valley if budget allows</li>
+            </ul>
+          </div>
         </div>
         <div class="bio-overlay">
           <p>Alex is a senior engineer in San Francisco. Three years in the same studio apartment, their salary has gone up but the square footage hasn't. The bike lives on the wall because there's nowhere else to put it. The lease non-renewal came last week, and Alex is treating it as permission to finally upgrade.</p>
@@ -7523,6 +7640,15 @@ body {
               <span class="label">Budget</span>
               <span class="val">$2,400/mo</span>
             </div>
+          </div>
+          <div class="lookfor">
+            <div class="lookfor-label">Looking for</div>
+            <ul class="lookfor-list">
+              <li>Pet-friendly (Max must be genuinely welcome)</li>
+              <li>Yard or park within walking distance</li>
+              <li>Real home office, not a kitchen table</li>
+              <li>No ghost listings, no slow agents</li>
+            </ul>
           </div>
         </div>
         <div class="bio-overlay">
@@ -7566,6 +7692,15 @@ body {
               <span class="val">$2,500/mo</span>
             </div>
           </div>
+          <div class="lookfor">
+            <div class="lookfor-label">Looking for</div>
+            <ul class="lookfor-list">
+              <li>Neighborhood they can hear from the window</li>
+              <li>Walkable streets, food scene, photography spots</li>
+              <li>A place they both feel without explaining why</li>
+              <li>Unit matters less than what's around it</li>
+            </ul>
+          </div>
         </div>
         <div class="bio-overlay">
           <p>Taylor and Riley have been in Chicago for three years, the longest they've stayed anywhere. Polaroids from Lisbon are still on the fridge, a zine from Mexico City lives on the counter, and Riley's camera lives next to the toaster. The plan, which has been forming for months, is to leave Chicago for Austin.</p>
@@ -7607,6 +7742,15 @@ body {
               <span class="label">Budget</span>
               <span class="val">$3,200/mo</span>
             </div>
+          </div>
+          <div class="lookfor">
+            <div class="lookfor-label">Looking for</div>
+            <ul class="lookfor-list">
+              <li>Good school zone (non-negotiable)</li>
+              <li>Safe streets, walkable park for Emma</li>
+              <li>2BR minimum, in-unit laundry preferred</li>
+              <li>No surprises on cost or timeline</li>
+            </ul>
           </div>
         </div>
         <div class="bio-overlay">
