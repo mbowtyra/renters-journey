@@ -408,10 +408,30 @@ function getPersonaNotes(persona) {
 }
 
 var PERSONA_META = {
-  jordan: { fullName: 'Jordan the Rising Star', shortName: 'Jordan', color: '#FF974D' },
-  alex:   { fullName: 'Alex the Ambitious',     shortName: 'Alex',   color: '#6105C4' },
-  taylor: { fullName: 'Taylor & Riley',         shortName: 'Taylor', color: '#C384F0' },
-  jamie:  { fullName: 'Jamie the Planner',      shortName: 'Jamie',  color: '#5C8841' },
+  jordan: {
+    fullName: 'Jordan the Rising Star', shortName: 'Jordan', color: '#FF974D',
+    from: 'Portland, OR', to: 'Seattle, WA', timeframe: '18 days',
+    currentRent: '$1,650', budget: '$2,400',
+    bio: 'Jordan got the offer last week. New job in Seattle, three weeks to land. Right now they\'re standing in their Portland apartment looking at a corner about to fill with moving boxes, with Max the golden retriever asleep on the dog bed that has to get packed first. Excited about the role, slightly underslept, a little bit panicking.\n\nThe shortlist has shape but not edges. A yard would be ideal, a park within walking distance will do. A real home office matters because the new role is hybrid. Pet-friendly isn\'t a perk for Jordan\u2014Max needs to actually be welcome.\n\nEighteen days isn\'t a lot of time to chase ghost listings or wait three days for a property to respond.'
+  },
+  alex: {
+    fullName: 'Alex the Ambitious', shortName: 'Alex', color: '#6105C4',
+    from: 'San Francisco, CA', to: 'San Francisco, CA', timeframe: '~60 days',
+    currentRent: '$2,500', budget: '$4,200',
+    bio: 'Alex is a senior engineer in San Francisco. Three years in the same studio, the salary has gone up but the square footage hasn\'t. The lease non-renewal came last week, and Alex is treating it as permission to finally upgrade.\n\nThe wishlist is specific: a real kitchen with counter space, a bedroom door that closes, somewhere for the bike that isn\'t a wall mount. One bedroom is the floor. Hayes Valley keeps coming back if the budget can stretch.\n\nAlex hunts with a spreadsheet drafted before the lease notice came. Three platforms, one right monitor. The standards aren\'t flexible, but the budget might be.'
+  },
+  taylor: {
+    fullName: 'Taylor & Riley', shortName: 'Taylor & Riley', color: '#C384F0',
+    from: 'Chicago, IL', to: 'Austin, TX', timeframe: 'Open timeline',
+    currentRent: '$2,200', budget: '$2,500',
+    bio: 'Taylor and Riley have been in Chicago for three years, the longest they\'ve stayed anywhere. Polaroids from Lisbon are still on the fridge, Riley\'s camera lives next to the toaster. The plan\u2014forming for months\u2014is to leave Chicago for Austin.\n\nThey search together. Listings get screenshot-shared between phones. Riley reads Reddit threads about Austin neighborhoods. Taylor texts friends who\'ve lived there. They decide together.\n\nLow urgency, very high preference clarity on neighborhood vibe. The apartment has to feel right for both of them.'
+  },
+  jamie: {
+    fullName: 'Jamie the Planner', shortName: 'Jamie', color: '#5C8841',
+    from: 'Suburban Philadelphia, PA', to: 'Jersey City, NJ', timeframe: '~5 months',
+    currentRent: '$1,500', budget: '$3,200',
+    bio: 'Jamie is a single parent in suburban Philadelphia, but their family support system is in Jersey. Daughter Emma starts kindergarten in five months, which means whatever happens next has to happen fast. The plan is Jersey City. The schools are good, the transit is doable, but the budget is tight.\n\nEvery search filter does double duty. School zone and pet-friendly. Budget cap and laundry in-unit. Jamie hasn\'t fully committed yet because committing means it\'s real.\n\nThe clock is running. There\'s no room for ghost listings or slow agents.'
+  },
 };
 
 function applyPersonaTheme(key) {
@@ -683,6 +703,39 @@ function syncChapterScreen(n) {
   if (!screenEl) return;
   applyPersonaTheme(profile.persona);
 
+  var meta = PERSONA_META[profile.persona] || PERSONA_META.jordan;
+
+  // Top bar: "Now Playing As ___"
+  var topName = screenEl.querySelector('.persona-context .name');
+  if (topName) topName.textContent = meta.fullName;
+
+  // Sidebar HUD: name, class chip, move stats, bio
+  var hudName = screenEl.querySelector('.hud-meta .name');
+  if (hudName) hudName.textContent = meta.shortName;
+
+  var hudChip = screenEl.querySelector('.hud-meta .class-chip');
+  if (hudChip) hudChip.textContent = PERSONA_CHIPS[profile.persona] || '';
+
+  var moveInfo = screenEl.querySelector('.move-info');
+  if (moveInfo && meta.from) {
+    moveInfo.innerHTML =
+      '<dt>From</dt><dd>' + meta.from + '</dd>' +
+      '<dt>To</dt><dd>' + meta.to + '</dd>' +
+      '<dt>In</dt><dd>' + meta.timeframe + '</dd>' +
+      '<dt>Current rent</dt><dd>' + meta.currentRent + '</dd>' +
+      '<dt>Budget</dt><dd>' + meta.budget + '</dd>';
+  }
+
+  var bioSummaryName = screenEl.querySelector('.hud-bio-summary span:first-child');
+  if (bioSummaryName) bioSummaryName.textContent = 'About ' + meta.shortName;
+
+  var bioBody = screenEl.querySelector('.hud-bio-body');
+  if (bioBody && meta.bio) {
+    bioBody.innerHTML = meta.bio.split('\n\n').map(function(p) {
+      return '<p>' + p + '</p>';
+    }).join('');
+  }
+
   // Apply saved avatar CSS vars to chapter HUD sprite
   Object.keys(AVATAR_VARS).forEach(function(k) {
     if (profile[k]) document.documentElement.style.setProperty(AVATAR_VARS[k], profile[k]);
@@ -898,8 +951,9 @@ html, body {{ margin: 0; padding: 0; }}
 </html>
 """
 
-out_path = BASE / "renters-journey.html"
-out_path.write_text(output, encoding="utf-8")
+for out_name in ["renters-journey.html", "index.html"]:
+    out_path = BASE / out_name
+    out_path.write_text(output, encoding="utf-8")
+    print(f"Written {out_path}")
 lines = output.count('\n')
-print(f"Written {out_path}")
 print(f"  {len(output):,} bytes / {lines:,} lines")
