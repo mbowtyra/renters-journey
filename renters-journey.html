@@ -13372,6 +13372,171 @@ function escHtml(s) {
 
 var CH_NAMES = ['','The Long Night','First Light','The Search Begins','The Crossroads','The First Hello','The Key','The Welcome Mat'];
 
+// Persona-specific tonight-cards and reflection text for each chapter.
+// Sourced verbatim from memory/content-{persona}.md.
+var PERSONA_CHAPTERS = {
+  alex: {
+    1: {
+      eyebrow: 'Where Alex is tonight',
+      blurb: "Alex got the lease non-renewal today and they're at their studio desk, already running the numbers. Here's what was running through their head.",
+      q1: "What stood out to you about the start of Alex's renter journey?",
+      q2: 'What is Alex looking for in an apartment?',
+      q2hint: "What's negotiable, and what's not?",
+      reflectionIntro: 'Scan Alex\'s journal entry again and reread their "About Alex" bio in the upper right corner. When you\'re ready, reflect below.',
+    },
+    2: {
+      eyebrow: 'Where Alex starts',
+      blurb: 'After last night\u2019s spreadsheet session, Alex sits down with the laptop after work. Three browser tabs open: Apartment List, Zillow, Apartments.com. The spreadsheet is on the right monitor. Apartment List has about sixty seconds to make a first impression.',
+      reflectionIntro: 'After the homepage, the Renter Tools, and the content, sit with one last question. Alex has a spreadsheet and standards.',
+    },
+    3: {
+      eyebrow: 'Where Alex starts',
+      blurb: 'Alex has cleared Sunday afternoon for the quiz. The spreadsheet is on the second monitor. Apartment List gets five minutes to prove it understands what \u201cone bedroom, Hayes Valley, $4,200 hard cap\u201d actually means.',
+      reflectionIntro: 'After the quiz, the signup, and the first scroll through the matches, sit with one last question. Alex answered fourteen steps. Apartment List made its bets.',
+    },
+    4: {
+      eyebrow: 'Where Alex starts',
+      blurb: 'The cycling has been running in the background for two days. The shortlist has eight properties. Alex opens the spreadsheet, adds a comparison column, and starts reading LDPs slowly. Tonight eight becomes three.',
+      reflectionIntro: 'After the shortlist, the deep read, and the outside research pass, sit with one last question.',
+    },
+    5: {
+      eyebrow: 'Where Alex starts',
+      blurb: 'Three contenders, three messages queued. Alex has one list of questions for all three leasing offices: smart home features, exact monthly cost, earliest move-in date. The 24-hour rule applies. Tonight they hit send.',
+      reflectionIntro: "After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Alex's 24-hour rule is doing real work now.",
+    },
+    6: {
+      eyebrow: 'Where Alex starts',
+      blurb: 'The Hayes Valley place said yes. The Docusign link arrived at 6pm. Alex is reading the lease.',
+      reflectionIntro: 'After the pick, the lease read, and the Renter Hub walk, sit with one last question.',
+    },
+    7: {
+      eyebrow: 'Where Alex starts',
+      blurb: 'Six months in. The Hayes Valley place feels like home now. The bike is on the wall mount, the kitchen has real counter space, the bedroom door closes. Alex hasn\u2019t opened the Apartment List app in three months, but they never deleted it. Today an email landed from Apartment List, and somewhere on Alex\u2019s phone there\u2019s a notification asking for a review.',
+      reflectionIntro: 'After the stray email, the review moment, and the blog stroll, sit with one last question.',
+    },
+  },
+  jordan: {
+    1: {
+      eyebrow: 'Where Jordan is tonight',
+      blurb: "Jordan got a new job, and they're up late journaling and thinking about the move. Here's what was running through their head.",
+      q1: "What stood out to you about the start of Jordan's renter journey?",
+      q2: 'What is Jordan looking for in an apartment?',
+      q2hint: "What's negotiable, and what's not?",
+      reflectionIntro: 'Scan Jordan\'s journal entry again and reread their "About Jordan" bio in the upper right corner. When you\'re ready, reflect below.',
+    },
+    2: {
+      eyebrow: 'Where Jordan starts',
+      blurb: "The job starts in sixteen days. Jordan is on the couch in Portland with Max asleep at their feet, phone out, searching for Seattle apartments. Apartment List came up. They click in. They haven't taken the quiz and aren't sure they have time for it.",
+      reflectionIntro: 'After the homepage, the Renter Tools, and the content, sit with one last question. Jordan has sixteen days.',
+    },
+    3: {
+      eyebrow: 'Where Jordan starts',
+      blurb: "Thirteen days. Jordan takes the quiz on their phone. Max is on the couch next to them. The quiz wants to know about Jordan's personality type. Jordan clicks through it.",
+      reflectionIntro: 'After the quiz, the signup, and the first scroll through the matches, sit with one last question. Thirteen days is a short window.',
+    },
+    4: {
+      eyebrow: 'Where Jordan starts',
+      blurb: 'Ten days left. Jordan has eight properties in their shortlist, all in Seattle. They search each one on Reddit. Two have management complaints. One has a dog park within a quarter mile. Jordan moves that one to the top.',
+      reflectionIntro: 'After the shortlist, the pet clause deep-read, and the outside research, sit with one last question.',
+    },
+    5: {
+      eyebrow: 'Where Jordan starts',
+      blurb: "Jordan has two live remote tours scheduled. The first is Tuesday morning. There's no time to wait three days for a property to respond. The eighteen-day window closes next Monday.",
+      reflectionIntro: 'After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Jordan has eighteen days. One of these contenders has to start feeling like a place to land.',
+    },
+    6: {
+      eyebrow: 'Where Jordan starts',
+      blurb: 'The live remote tour was Tuesday morning. The agent walked through every closet and showed the back yard for Max. Jordan has been thinking about it since. The pet rent is $75 a month. The lease is due back by tomorrow.',
+      reflectionIntro: 'After the pick, the lease read, and the Renter Hub walk, sit with one last question.',
+    },
+    7: {
+      eyebrow: 'Where Jordan starts',
+      blurb: "Three weeks in Seattle. Max has claimed a corner of the back yard. Jordan's new colleagues keep asking where they found their place. The five-star review went up the morning after signing. The app is still on the phone.",
+      reflectionIntro: 'After the stray email, the review moment, and the blog stroll, sit with one last question.',
+    },
+  },
+  taylor: {
+    1: {
+      eyebrow: 'Where Taylor & Riley are tonight',
+      blurb: 'Riley said \u201cwhere next\u201d again last night. Taylor knew it was coming before they said it. Three years in Chicago, the Polaroids from Lisbon still on the fridge. Austin is winning. Here\'s what was running through Taylor\'s head.',
+      q1: "What stood out to you about the start of Taylor & Riley's renter journey?",
+      q2: 'What is Taylor & Riley looking for in an apartment?',
+      q2hint: "What's negotiable, and what's not?",
+      reflectionIntro: 'Scan Taylor\'s journal entry again and reread the "About Taylor & Riley" bio in the upper right corner. When you\'re ready, reflect below.',
+    },
+    2: {
+      eyebrow: 'Where Taylor & Riley start',
+      blurb: 'Taylor and Riley have been sending each other Google Maps links to Austin neighborhoods for two weeks. Tonight they sit down together with the laptop and open Apartment List for the first time. Riley is already asking about the map view.',
+      reflectionIntro: 'After the homepage, the Renter Tools, and the content, sit with one last question. Two people, one city, no commitments yet.',
+    },
+    3: {
+      eyebrow: 'Where Taylor & Riley start',
+      blurb: "Taylor and Riley are on the laptop together. The quiz is open. The budget step is coming and they're already arguing about the number. $2,500 is where they've landed, but Riley keeps looking at $2,800 options in East Austin.",
+      reflectionIntro: 'After the quiz, the welcome screen, and the first scroll through the matches, sit with one last question. Two people, one search, no commitments yet.',
+    },
+    4: {
+      eyebrow: 'Where Taylor & Riley start',
+      blurb: "Taylor and Riley have twelve properties in their shortlist. They review it over a shared screen on Sunday afternoon. Riley pulls up Street View on each one. They settle on six. Three feel like them. Three don't, but they're still arguing about which is which.",
+      reflectionIntro: 'After the shortlist, the deep read, and the outside research, sit with one last question.',
+    },
+    5: {
+      eyebrow: 'Where Taylor & Riley start',
+      blurb: "One property on top. Taylor wants to schedule a Sunday morning tour. The in-app scheduler doesn't have Sunday slots. They call the leasing office. The agent picks up. The tour is booked for this weekend.",
+      reflectionIntro: 'After the first message, the tour booking, and the walkthrough through a screen, sit with one last question.',
+    },
+    6: {
+      eyebrow: 'Where Taylor & Riley start',
+      blurb: 'Taylor and Riley spent two days on the lease. Riley pushed on the move-in date. Taylor pushed on the deposit. They got the move-in date. They accepted the deposit. Both of them sign on a Saturday morning, with coffee.',
+      reflectionIntro: 'After the pick, the lease read, and the Renter Hub walk, sit with one last question.',
+    },
+    7: {
+      eyebrow: 'Where Taylor & Riley start',
+      blurb: "Six months in East Austin. Taylor's notebook is full. Riley has a wall of prints from the neighborhood. The Apartment List newsletter arrives most Tuesdays. They've told three people to use the app.",
+      reflectionIntro: 'After the stray email, the review moment, and the blog stroll, sit with one last question.',
+    },
+  },
+  jamie: {
+    1: {
+      eyebrow: 'Where Jamie is tonight',
+      blurb: "Emma asked again where they're moving. Jamie hasn't said Jersey City yet, partly because they haven't said it to themselves yet. Here's what was running through their head.",
+      q1: "What stood out to you about the start of Jamie's renter journey?",
+      q2: 'What is Jamie looking for in an apartment?',
+      q2hint: "What's negotiable, and what's not?",
+      reflectionIntro: 'Scan Jamie\'s journal entry again and reread their "About Jamie" bio in the upper right corner. When you\'re ready, reflect below.',
+    },
+    2: {
+      eyebrow: 'Where Jamie starts',
+      blurb: 'Emma is asleep. Jamie is at the kitchen table with the laptop, GreatSchools open in one tab, Apartment List in another. The Rent Calculator is open too. The numbers have to work.',
+      reflectionIntro: 'After the homepage, the Renter Tools, and the content, sit with one last question. Emma starts kindergarten in five months.',
+    },
+    3: {
+      eyebrow: 'Where Jamie starts',
+      blurb: 'Late Tuesday. Emma is in bed. Jamie takes the quiz on the laptop. The budget step is careful. The bedroom step is not flexible. The Personality step is confusing. Jamie clicks through it and hopes the matches surface something in the right school zone.',
+      reflectionIntro: 'After the quiz, the signup, and the first scroll through the matches, sit with one last question. Emma starts kindergarten in five months.',
+    },
+    4: {
+      eyebrow: 'Where Jamie starts',
+      blurb: "It's 11pm. Emma's asleep, and the six properties Jamie has been chewing on are open in six tabs. They have a school-zone spreadsheet on the side. Three listings are in the right zone. The Google reviews for one have a complaint about water pressure.",
+      reflectionIntro: 'After the shortlist, the deep read, and the outside research, sit with one last question.',
+    },
+    5: {
+      eyebrow: 'Where Jamie starts',
+      blurb: 'Jamie has three serious contenders. Each message to a leasing office asks the same three things: school zone, parking, playground within walking distance. The first reply came in four hours with specific answers. The second replied with a marketing pitch. The third said "come tour." Jamie books a tour at the first.',
+      reflectionIntro: 'After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Emma starts kindergarten in five months.',
+    },
+    6: {
+      eyebrow: 'Where Jamie starts',
+      blurb: "Emma's school list is on the fridge. The deposit is counted. Jamie has been reading the same two listings for three days. Tonight they pick one. The lease is due by the end of the week.",
+      reflectionIntro: 'After the pick, the lease read, and the Renter Hub walk, sit with one last question.',
+    },
+    7: {
+      eyebrow: 'Where Jamie starts',
+      blurb: "Emma has been in school for four months. They have a Tuesday evening routine: the park, then dinner. Jamie reads Apartment Living articles sometimes \u2014 the ones about decorating small spaces, budgeting after a move, setting up a home for two. Some are useful. Some aren't written for a single parent.",
+      reflectionIntro: 'After the stray email, the review moment, and the blog stroll, sit with one last question.',
+    },
+  },
+};
+
 function refreshNotesCard(chNum) {
   var screenEl = document.getElementById('screen-ch' + chNum);
   if (!screenEl) return;
@@ -13464,6 +13629,63 @@ function syncChapterScreen(n) {
     bioBody.innerHTML = meta.bio.split('\n\n').map(function(p) {
       return '<p>' + p + '</p>';
     }).join('');
+  }
+
+  // ── Persona-specific tonight-card & reflection content ──────────────────
+  var pChapters = PERSONA_CHAPTERS[profile.persona] || PERSONA_CHAPTERS.jordan;
+  var chData = pChapters[n];
+  var poss = meta.shortName + (meta.shortName.slice(-1) === 's' ? "'" : "'s"); // possessive
+
+  if (chData) {
+    // Tonight eyebrow
+    var tonightEyebrow = screenEl.querySelector('.tonight-eyebrow');
+    if (tonightEyebrow && chData.eyebrow) tonightEyebrow.textContent = '\u25b8 ' + chData.eyebrow;
+
+    // Tonight blurb
+    var tonightBlurb = screenEl.querySelector('.tonight-blurb');
+    if (tonightBlurb && chData.blurb) tonightBlurb.textContent = chData.blurb;
+
+    // Reflection intro
+    var reflIntroEl = screenEl.querySelector('.reflection-intro');
+    if (reflIntroEl && chData.reflectionIntro) reflIntroEl.textContent = chData.reflectionIntro;
+
+    // Per-chapter reflection questions (ch1 has persona-specific labels)
+    if (chData.q1 || chData.q2) {
+      var prompts = screenEl.querySelectorAll('.reflection-prompt');
+      if (prompts[0] && chData.q1) {
+        var lbl1 = prompts[0].querySelector('label');
+        if (lbl1) lbl1.textContent = chData.q1;
+      }
+      if (prompts[1] && chData.q2) {
+        var lbl2 = prompts[1].querySelector('label');
+        if (lbl2) lbl2.textContent = chData.q2;
+        var hint2 = prompts[1].querySelector('.prompt-hint');
+        if (hint2 && chData.q2hint) hint2.textContent = chData.q2hint;
+      }
+    }
+  }
+
+  // Persona name substitution in static chapter copy
+  // hero lede
+  var heroLede = screenEl.querySelector('.lede');
+  if (heroLede) {
+    heroLede.innerHTML = heroLede.innerHTML
+      .replace(/Jordan's/g, poss)
+      .replace(/\bJordan\b/g, meta.shortName);
+  }
+  // framing list (how to walk this chapter)
+  var framingItems = screenEl.querySelectorAll('.framing-list li');
+  framingItems.forEach(function(li) {
+    li.innerHTML = li.innerHTML
+      .replace(/Jordan's/g, poss)
+      .replace(/\bJordan\b/g, meta.shortName);
+  });
+  // journal meta ("Jordan's journal · Tuesday, late")
+  var journalMeta = screenEl.querySelector('.journal-meta');
+  if (journalMeta) {
+    journalMeta.innerHTML = journalMeta.innerHTML
+      .replace(/Jordan's/g, poss)
+      .replace(/\bJordan\b/g, meta.shortName);
   }
 
   // Apply saved avatar CSS vars to chapter HUD sprite
