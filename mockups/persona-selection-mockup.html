@@ -521,67 +521,58 @@
     line-height: 1.4;
   }
 
-  .stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin-bottom: 0;
-  }
-
-  .stat {
-    background: var(--oat);
-    border: 2px solid var(--ink);
-    padding: 6px 10px;
-    font-family: 'VT323', monospace;
-    font-size: 16px;
-    color: var(--ink);
-    line-height: 1.2;
-  }
-
-  .stat .label {
-    display: block;
-    font-size: 11px;
-    color: var(--ink-soft);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-  }
-
-  .stat .val {
-    display: block;
-    font-weight: 700;
-    color: var(--ink);
-  }
-
-  /* Briefing card — must-haves / wants (matches rj-shared.js design) */
+  /* Brief accordion — replaces stats grid */
   .card-brief {
-    margin-top: 14px;
-    padding-top: 12px;
-    border-top: 1px dashed var(--ink-soft);
+    margin-top: 12px;
+    border: 2px solid var(--ink);
+    background: var(--oat);
   }
-  .card-brief-head {
+  .card-brief summary {
     font-family: 'VT323', monospace;
-    font-size: 13px;
-    letter-spacing: 2px;
+    font-size: 14px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     color: var(--ink);
-    margin-bottom: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: space-between;
+    gap: 8px;
+    list-style: none;
+    user-select: none;
   }
-  .card-brief-head .pixel-dot {
+  .card-brief summary::-webkit-details-marker { display: none; }
+  .card-brief summary .brief-arrow {
+    font-size: 10px;
+    color: var(--card-color, var(--indigo));
+    transition: transform 0.15s;
+    flex-shrink: 0;
+  }
+  .card-brief[open] summary .brief-arrow { transform: rotate(90deg); }
+  .card-brief summary .brief-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .card-brief summary .pixel-dot {
     display: inline-block;
-    width: 6px; height: 6px;
+    width: 7px; height: 7px;
     background: var(--card-color, var(--indigo));
+    flex-shrink: 0;
+  }
+  .brief-body {
+    padding: 0 10px 10px;
+    border-top: 1px dashed var(--ink-soft);
   }
   .brief-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
+    margin-top: 10px;
   }
   .brief-col {
-    background: rgba(245,242,237,0.55);
+    background: var(--paper);
     border: 2px solid var(--ink);
     padding: 8px 10px;
   }
@@ -600,6 +591,7 @@
     content: '';
     display: inline-block;
     width: 8px; height: 8px;
+    flex-shrink: 0;
     background: var(--col-accent, var(--card-color, var(--indigo)));
   }
   .brief-col.musts { --col-accent: #FF0029; }
@@ -1984,46 +1976,30 @@
       <div class="info-area">
         <div class="default-info">
           <blockquote class="mantra">"I've earned this. Show me the upgrade."</blockquote>
-          <div class="stats">
-            <div class="stat">
-              <span class="label">Urgency</span>
-              <span class="val">Moderate</span>
-            </div>
-            <div class="stat">
-              <span class="label">Clarity</span>
-              <span class="val">Very High</span>
-            </div>
-            <div class="stat">
-              <span class="label">Route</span>
-              <span class="val">SF → SF</span>
-            </div>
-            <div class="stat">
-              <span class="label">Budget</span>
-              <span class="val">$4,200/mo</span>
-            </div>
-          </div>
-          <div class="card-brief">
-            <div class="card-brief-head"><span class="pixel-dot"></span>What they're looking for</div>
-            <div class="brief-grid">
-              <div class="brief-col musts">
-                <div class="col-label">Must-haves</div>
-                <ul>
-                  <li>1BR with a door that closes</li>
-                  <li>Real kitchen with counter space</li>
-                  <li>12-min commute to the office</li>
-                  <li>Rent under $4,200/mo</li>
-                </ul>
-              </div>
-              <div class="brief-col wants">
-                <div class="col-label">Wants</div>
-                <ul>
-                  <li>2BR if Hayes Valley fits</li>
-                  <li>Bike storage (not a wall mount)</li>
-                  <li>Building gym worth using</li>
-                </ul>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
+            <div class="brief-body">
+              <div class="brief-grid">
+                <div class="brief-col musts">
+                  <div class="col-label">Must-haves</div>
+                  <ul>
+                    <li>1BR with a door that closes</li>
+                    <li>Real kitchen with counter space</li>
+                    <li>12-min commute to the office</li>
+                    <li>Rent under $4,200/mo</li>
+                  </ul>
+                </div>
+                <div class="brief-col wants">
+                  <div class="col-label">Wants</div>
+                  <ul>
+                    <li>2BR if Hayes Valley fits</li>
+                    <li>Bike storage (not a wall mount)</li>
+                    <li>Building gym worth using</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
+          </details>
         </div>
         <div class="bio-overlay">
           <p>Alex is a senior engineer in San Francisco. Three years in the same studio apartment, their salary has gone up but the square footage hasn't. The bike lives on the wall because there's nowhere else to put it. The lease non-renewal came last week, and Alex is treating it as permission to finally upgrade.</p>
@@ -2048,47 +2024,31 @@
       <div class="info-area">
         <div class="default-info">
           <blockquote class="mantra">"Three real options. One that works for Max. Before Monday."</blockquote>
-          <div class="stats">
-            <div class="stat">
-              <span class="label">Urgency</span>
-              <span class="val">High</span>
-            </div>
-            <div class="stat">
-              <span class="label">Clarity</span>
-              <span class="val">Moderate</span>
-            </div>
-            <div class="stat">
-              <span class="label">Route</span>
-              <span class="val">PDX → SEA</span>
-            </div>
-            <div class="stat">
-              <span class="label">Budget</span>
-              <span class="val">$2,400/mo</span>
-            </div>
-          </div>
-          <div class="card-brief">
-            <div class="card-brief-head"><span class="pixel-dot"></span>What they're looking for</div>
-            <div class="brief-grid">
-              <div class="brief-col musts">
-                <div class="col-label">Must-haves</div>
-                <ul>
-                  <li>Pet-friendly (Max actually welcome)</li>
-                  <li>Move-in within 18 days</li>
-                  <li>Replies within 24 hours</li>
-                  <li>Rent under $2,400/mo</li>
-                </ul>
-              </div>
-              <div class="brief-col wants">
-                <div class="col-label">Wants</div>
-                <ul>
-                  <li>A yard for Max</li>
-                  <li>Park within walking distance</li>
-                  <li>Real home office</li>
-                  <li>Short hybrid-day commute</li>
-                </ul>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
+            <div class="brief-body">
+              <div class="brief-grid">
+                <div class="brief-col musts">
+                  <div class="col-label">Must-haves</div>
+                  <ul>
+                    <li>Pet-friendly (Max actually welcome)</li>
+                    <li>Move-in within 18 days</li>
+                    <li>Replies within 24 hours</li>
+                    <li>Rent under $2,400/mo</li>
+                  </ul>
+                </div>
+                <div class="brief-col wants">
+                  <div class="col-label">Wants</div>
+                  <ul>
+                    <li>A yard for Max</li>
+                    <li>Park within walking distance</li>
+                    <li>Real home office</li>
+                    <li>Short hybrid-day commute</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
+          </details>
         </div>
         <div class="bio-overlay">
           <p>Jordan got the offer last week. New job in Seattle, three weeks to land. Right now they're standing in their Portland apartment looking at a corner that's about to fill up with moving boxes, with Max the golden retriever asleep on the dog bed that has to get packed first. Excited about the role, but slightly underslept and a little bit panicking.</p>
@@ -2113,47 +2073,31 @@
       <div class="info-area">
         <div class="default-info">
           <blockquote class="mantra">"We'll know the place when we both feel it. A street, a sunset, a coffee shop on the corner."</blockquote>
-          <div class="stats">
-            <div class="stat">
-              <span class="label">Urgency</span>
-              <span class="val">Low</span>
-            </div>
-            <div class="stat">
-              <span class="label">Clarity</span>
-              <span class="val">Vibe-led</span>
-            </div>
-            <div class="stat">
-              <span class="label">Route</span>
-              <span class="val">CHI → AUS</span>
-            </div>
-            <div class="stat">
-              <span class="label">Budget</span>
-              <span class="val">$2,500/mo</span>
-            </div>
-          </div>
-          <div class="card-brief">
-            <div class="card-brief-head"><span class="pixel-dot"></span>What they're looking for</div>
-            <div class="brief-grid">
-              <div class="brief-col musts">
-                <div class="col-label">Must-haves</div>
-                <ul>
-                  <li>Walkable neighborhood</li>
-                  <li>Real local food scene</li>
-                  <li>A street they hear from the window</li>
-                  <li>Combined rent under $2,500</li>
-                </ul>
-              </div>
-              <div class="brief-col wants">
-                <div class="col-label">Wants</div>
-                <ul>
-                  <li>Two-bedroom unit</li>
-                  <li>Natural light Riley can shoot in</li>
-                  <li>Photography scene outside galleries</li>
-                  <li>Tours bookable without a phone call</li>
-                </ul>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
+            <div class="brief-body">
+              <div class="brief-grid">
+                <div class="brief-col musts">
+                  <div class="col-label">Must-haves</div>
+                  <ul>
+                    <li>Walkable neighborhood</li>
+                    <li>Real local food scene</li>
+                    <li>A street they hear from the window</li>
+                    <li>Combined rent under $2,500</li>
+                  </ul>
+                </div>
+                <div class="brief-col wants">
+                  <div class="col-label">Wants</div>
+                  <ul>
+                    <li>Two-bedroom unit</li>
+                    <li>Natural light Riley can shoot in</li>
+                    <li>Photography scene outside galleries</li>
+                    <li>Tours bookable without a phone call</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
+          </details>
         </div>
         <div class="bio-overlay">
           <p>Taylor and Riley have been in Chicago for three years, the longest they've stayed anywhere. Polaroids from Lisbon are still on the fridge, a zine from Mexico City lives on the counter, and Riley's camera lives next to the toaster. The plan, which has been forming for months, is to leave Chicago for Austin.</p>
@@ -2178,48 +2122,32 @@
       <div class="info-area">
         <div class="default-info">
           <blockquote class="mantra">"The numbers, the school, the safety. No surprises."</blockquote>
-          <div class="stats">
-            <div class="stat">
-              <span class="label">Urgency</span>
-              <span class="val">High</span>
-            </div>
-            <div class="stat">
-              <span class="label">Clarity</span>
-              <span class="val">Schools first</span>
-            </div>
-            <div class="stat">
-              <span class="label">Route</span>
-              <span class="val">PHL → JC</span>
-            </div>
-            <div class="stat">
-              <span class="label">Budget</span>
-              <span class="val">$3,200/mo</span>
-            </div>
-          </div>
-          <div class="card-brief">
-            <div class="card-brief-head"><span class="pixel-dot"></span>What they're looking for</div>
-            <div class="brief-grid">
-              <div class="brief-col musts">
-                <div class="col-label">Must-haves</div>
-                <ul>
-                  <li>2BR (Emma's room is non-negotiable)</li>
-                  <li>Strong, verifiable school district</li>
-                  <li>Safe streets and a walkable park</li>
-                  <li>Move-in before kindergarten starts</li>
-                  <li>Rent under $3,200/mo</li>
-                </ul>
-              </div>
-              <div class="brief-col wants">
-                <div class="col-label">Wants</div>
-                <ul>
-                  <li>Pet-friendly (Emma keeps asking)</li>
-                  <li>Transit to family support network</li>
-                  <li>In-unit laundry</li>
-                  <li>A buzzing local park</li>
-                </ul>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
+            <div class="brief-body">
+              <div class="brief-grid">
+                <div class="brief-col musts">
+                  <div class="col-label">Must-haves</div>
+                  <ul>
+                    <li>2BR (Emma's room is non-negotiable)</li>
+                    <li>Strong, verifiable school district</li>
+                    <li>Safe streets and a walkable park</li>
+                    <li>Move-in before kindergarten starts</li>
+                    <li>Rent under $3,200/mo</li>
+                  </ul>
+                </div>
+                <div class="brief-col wants">
+                  <div class="col-label">Wants</div>
+                  <ul>
+                    <li>Pet-friendly (Emma keeps asking)</li>
+                    <li>Transit to family support network</li>
+                    <li>In-unit laundry</li>
+                    <li>A buzzing local park</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
+          </details>
         </div>
         <div class="bio-overlay">
           <p>Jamie is a single parent in suburban Philadelphia, but the family support system is in Jersey. Their daughter Emma is starting kindergarten in five months, which means whatever happens next has to happen fast. The plan is Jersey City. The schools are good, the transit is doable, but the budget is tight, and Jamie hasn't fully committed yet because committing means it's real.</p>
