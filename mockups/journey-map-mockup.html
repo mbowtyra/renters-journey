@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Renter's Journey · Your Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Caveat:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #6105C4;
+    --indigo-deep: #46137B;
+    --indigo-darker: #2D0856;
+    --oat: #F5F2ED;
+    --oat-warm: #EFE6D6;
+    --paper: #FFFCF0;
+    --light-purple: #C384F0;
+    --lavender: #D7C6F1;
+    --magenta: #C5377F;
+    --coral: #FF6B7A;
+    --pink: #FF9CC1;
+    --peach: #FFB37A;
+    --orange: #FF974D;
+    --red: #FF0029;
+    --ink: #2D1B0E;
+    --ink-soft: #5D4037;
+    --grass: #7AAB58;
+    --grass-dark: #5C8841;
+    --sky-top: #FFE4C7;
+    --sky-mid: #F5C6D6;
+    --sky-low: #D7C6F1;
+
+    /* Jordan's persona accent (will swap when other personas are picked) */
+    --persona-color: var(--orange);
+    --persona-deep: #C46A1F;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 25%, var(--sky-low) 55%, var(--oat) 100%);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.55;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* === TOP BAR === */
+  .top-bar {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+    background: var(--paper);
+    border-bottom: 3px solid var(--ink);
+    box-shadow: 0 4px 0 var(--ink-soft);
+  }
+  .persona-context {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--oat);
+    border: 2px solid var(--ink);
+    padding: 6px 14px;
+    box-shadow: 3px 3px 0 var(--ink-soft);
+  }
+  .persona-context .label {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .persona-context .name {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 16px;
+    color: var(--persona-color);
+    font-weight: 600;
+  }
+  .persona-context .change {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-left: 2px dotted var(--ink-soft);
+    padding-left: 10px;
+    margin-left: 4px;
+    cursor: pointer;
+  }
+  .persona-context .change:hover { color: var(--indigo); }
+
+  .progress-strip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'VT323', monospace;
+    color: var(--ink-soft);
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .progress-strip .dots { display: flex; gap: 6px; }
+  .progress-strip .dot {
+    width: 12px; height: 12px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  .progress-strip .dot.current { background: var(--persona-color); }
+  .progress-strip .dot.complete { background: var(--grass-dark); }
+
+  .top-actions { display: flex; gap: 10px; align-items: center; }
+  .pill-btn {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 14px;
+    padding: 8px 14px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink-soft);
+    cursor: pointer;
+    color: var(--ink);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pill-btn:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--ink-soft); }
+  .pill-btn .pixel-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--persona-color);
+  }
+
+  /* === STAGE === */
+  .stage {
+    position: relative;
+    z-index: 2;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 36px 28px 420px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* === FOOTER TOWN SCENE === */
+  .town-scene {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 360px;
+    z-index: 0;
+    pointer-events: none;
+    display: block;
+    user-select: none;
+  }
+
+  /* === HERO === */
+  .hero {
+    grid-column: 1 / -1;
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 28px 32px;
+    position: relative;
+  }
+  .hero::before {
+    content: ""; display: block; height: 8px;
+    background: linear-gradient(90deg, var(--indigo) 0%, var(--light-purple) 18%, var(--magenta) 38%, var(--coral) 58%, var(--peach) 78%, var(--orange) 100%);
+    margin: -28px -32px 22px;
+  }
+  .hero .eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 17px;
+    letter-spacing: 4px;
+    color: var(--indigo);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .hero .eyebrow .pixel-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--indigo); margin-right: 12px; vertical-align: 2px;
+  }
+  .hero h1 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: clamp(34px, 4.5vw, 48px);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+    text-shadow: 3px 3px 0 rgba(45, 27, 14, 0.06);
+  }
+  .hero h1 .accent { color: var(--persona-color); }
+  .hero .lede {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 720px;
+    line-height: 1.55;
+  }
+
+  .hero-meta {
+    margin-top: 20px;
+    display: flex; flex-wrap: wrap; gap: 10px;
+    border-top: 2px dashed var(--ink-soft);
+    padding-top: 16px;
+  }
+  .hero-meta .chip {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    background: var(--oat);
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink-soft);
+  }
+  .hero-meta .chip strong { color: var(--ink); font-weight: 700; }
+  .hero-meta .chip .dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--persona-color); margin-right: 6px; vertical-align: 1px;
+  }
+
+  /* === GRID HEAD === */
+  .grid-head {
+    grid-column: 1 / 2;
+    margin-bottom: -8px;
+  }
+  .grid-head .eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 16px; letter-spacing: 3px;
+    color: var(--magenta); text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .grid-head .eyebrow .pixel-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--magenta); margin-right: 10px; vertical-align: 1px;
+  }
+  .grid-head h2 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 28px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .grid-head .sub {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+
+  /* === CHAPTER GRID === */
+  .chapters {
+    grid-column: 1 / 2;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .chapter-card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 18px 20px 20px;
+    text-decoration: none;
+    color: var(--ink);
+    display: flex; flex-direction: column;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 220px;
+  }
+  .chapter-card::before {
+    content: ""; display: block; height: 6px;
+    background: var(--card-accent, var(--indigo));
+    margin: -18px -20px 14px;
+  }
+  .chapter-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 var(--ink-soft);
+  }
+  .chapter-card .ch-num {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+    flex-wrap: wrap;
+  }
+  .chapter-card .status-pill {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    padding: 2px 8px;
+    background: var(--persona-color);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    letter-spacing: 1.5px;
+  }
+  .chapter-card .ch-title {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .chapter-card .teaser {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .chapter-card .open {
+    margin-top: 14px;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--card-accent, var(--indigo));
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .chapter-card .open::after { content: "→"; }
+
+  /* current chapter — Jordan is here */
+  .chapter-card.current {
+    --card-accent: var(--persona-color);
+    border-color: var(--ink);
+    box-shadow: 6px 6px 0 var(--persona-deep);
+  }
+  .chapter-card.current::after {
+    content: "";
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 14px; height: 14px;
+    background: var(--persona-color);
+    border: 2px solid var(--ink);
+    box-shadow: 0 0 0 4px rgba(255,151,77,0.25);
+    animation: blink 1.4s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* completed (none yet, but supported) */
+  .chapter-card.complete { --card-accent: var(--grass-dark); }
+  .chapter-card.complete .status-pill { background: var(--grass); color: var(--ink); }
+
+  /* locked — greyed out */
+  .chapter-card.locked {
+    --card-accent: var(--lavender);
+    cursor: not-allowed;
+    opacity: 0.62;
+    filter: grayscale(0.45);
+    background: var(--oat-warm);
+    box-shadow: 4px 4px 0 var(--ink-soft);
+  }
+  .chapter-card.locked:hover {
+    transform: none;
+    box-shadow: 4px 4px 0 var(--ink-soft);
+  }
+  .chapter-card.locked .ch-title { color: var(--ink-soft); }
+  .chapter-card.locked .status-pill {
+    background: var(--lavender);
+    color: var(--ink-soft);
+    border-color: var(--ink-soft);
+  }
+  .chapter-card.locked .open { color: var(--ink-soft); opacity: 0.7; }
+  .chapter-card.locked .open::after { content: "·"; }
+  .chapter-card.locked::before {
+    background: repeating-linear-gradient(
+      45deg,
+      var(--lavender),
+      var(--lavender) 8px,
+      var(--oat-warm) 8px,
+      var(--oat-warm) 16px
+    );
+  }
+
+  /* tiny lock pixel icon */
+  .lock-icon {
+    display: inline-block;
+    width: 11px; height: 13px;
+    position: relative;
+    margin-right: 4px;
+    vertical-align: -1px;
+  }
+  .lock-icon::before {
+    content: ""; position: absolute;
+    inset: 5px 0 0 0;
+    background: var(--ink-soft);
+  }
+  .lock-icon::after {
+    content: ""; position: absolute;
+    top: 0; left: 2px; right: 2px;
+    height: 7px;
+    border: 2px solid var(--ink-soft);
+    border-bottom: none;
+    background: transparent;
+  }
+
+  /* === RIGHT SIDEBAR === */
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: sticky;
+    top: 24px;
+    grid-column: 2 / 3;
+    grid-row: 2 / span 2;
+  }
+
+  .hud-card, .notes-card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 18px;
+  }
+  .hud-card::before {
+    content: ""; display: block;
+    height: 6px;
+    background: var(--persona-color);
+    margin: -18px -18px 14px;
+  }
+  .hud-row { display: flex; align-items: center; gap: 14px; }
+  .avatar-frame {
+    width: 76px; height: 96px;
+    background: linear-gradient(180deg, #FFE4C7 0%, #F5C6D6 70%, #D7C6F1 100%);
+    border: 3px solid var(--ink);
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .avatar-frame::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+    height: 8px; background: var(--grass);
+    border-top: 2px solid var(--grass-dark);
+  }
+  .avatar-frame svg {
+    width: 70%; height: auto;
+    position: absolute; left: 50%; bottom: 8px;
+    transform: translateX(-50%);
+    image-rendering: pixelated;
+    filter: drop-shadow(2px 2px 0 rgba(45,27,14,0.25));
+  }
+
+  .hud-meta { flex: 1; }
+  .hud-meta .label {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .hud-meta .name {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .hud-meta .stats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .hud-meta .stat-chip {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    padding: 2px 8px;
+    background: var(--oat);
+    border: 1px solid var(--ink-soft);
+    color: var(--ink-soft);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* === CANONICAL HUD (matches chapter mockups) === */
+  .hud-meta .class-chip {
+    display: inline-block;
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    padding: 2px 10px;
+    background: var(--persona-color);
+    border: 2px solid var(--ink);
+    color: var(--paper);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .hud-meta .move-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    row-gap: 3px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--ink-soft);
+  }
+  .hud-meta .move-info dt {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .hud-meta .move-info dd {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--ink);
+    text-align: right;
+  }
+
+  /* Bio accordion (sidebar HUD, under the avatar) */
+  .hud-bio {
+    margin-top: 14px;
+    border: 2px dashed var(--ink-soft);
+    background: var(--oat);
+    transition: background-color 0.15s ease;
+  }
+  .hud-bio[open] {
+    background: var(--paper);
+    border-style: solid;
+    border-color: var(--ink);
+  }
+  .hud-bio-summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .hud-bio-summary::-webkit-details-marker { display: none; }
+  .hud-bio-summary::marker { content: ""; }
+  .hud-bio-summary:hover { color: var(--ink); }
+  .hud-bio[open] .hud-bio-summary {
+    color: var(--ink);
+    border-bottom: 1px dashed var(--ink-soft);
+  }
+  .hud-bio-summary:focus-visible {
+    outline: 2px solid var(--indigo);
+    outline-offset: -3px;
+  }
+  .hud-bio-toggle {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--ink-soft);
+    background: var(--paper);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--ink-soft);
+  }
+  .hud-bio-toggle::after { content: "+"; }
+  .hud-bio[open] .hud-bio-toggle {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .hud-bio[open] .hud-bio-toggle::after { content: "−"; }
+  .hud-bio-body {
+    padding: 12px 14px 14px;
+  }
+  .hud-bio-body p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0 0 10px;
+  }
+  .hud-bio-body p:last-child { margin-bottom: 0; }
+
+  /* Field Notes journal */
+  .notes-card h3 {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+    justify-content: space-between;
+  }
+  .notes-card h3::before {
+    content: ""; display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--magenta);
+  }
+  .notes-card .meta {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .notes-list .note {
+    background: var(--paper);
+    border: 2px dashed var(--ink-soft);
+    padding: 12px 14px;
+  }
+  .notes-list .note .note-text {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .info-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+    margin-top: 12px;
+    padding: 6px 10px;
+    background: var(--oat);
+    border: 1px dashed var(--ink-soft);
+  }
+  .info-pill .ico {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 16px; height: 16px;
+    background: var(--indigo); color: var(--paper);
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  @media (max-width: 980px) {
+    .stage {
+      grid-template-columns: 1fr;
+      padding: 24px 16px 280px;
+    }
+    .side {
+      position: relative; top: 0;
+      grid-column: 1 / -1; grid-row: auto;
+    }
+    .top-bar { flex-wrap: wrap; gap: 10px; padding: 14px 16px; }
+    .progress-strip { display: none; }
+    .town-scene { height: 240px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     TOP BAR
+============================================================ -->
+<header class="top-bar">
+  <div class="persona-context">
+    <span class="label">Now Playing As</span>
+    <span class="name">Jordan the Rising Star</span>
+    <span class="change">← Pick a different renter</span>
+  </div>
+
+  <div class="progress-strip">
+    <span>Chapter 1 of 7</span>
+    <div class="dots">
+      <span class="dot current" title="Chapter 1: The Long Night"></span>
+      <span class="dot" title="Chapter 2: First Light"></span>
+      <span class="dot" title="Chapter 3: The Search Begins"></span>
+      <span class="dot" title="Chapter 4: The Crossroads"></span>
+      <span class="dot" title="Chapter 5: The First Hello"></span>
+      <span class="dot" title="Chapter 6: The Key"></span>
+      <span class="dot" title="Chapter 7: The Welcome Mat"></span>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <button class="pill-btn"><span class="pixel-dot"></span> Field Notes (0)</button>
+  </div>
+</header>
+
+<!-- ============================================================
+     STAGE
+============================================================ -->
+<main class="stage">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="eyebrow"><span class="pixel-dot"></span>Your Map · seven chapters, one quiet path</div>
+    <h1>The Renter's <span class="accent">Journey.</span></h1>
+    <p class="lede">Welcome back, Jordan. The renter's journey path winds from a later night spent thinking about moving all the way to finding an apartment, signing the lease, and beyond.</p> <p><p></p>Step into whatever journey chapter's open, explore apartmentlist.com through Jordan's eyes, and come back whenever you like. Your work saves itself.</p>
+
+    <div class="hero-meta">
+      <span class="chip"><span class="dot"></span><strong>You're at:</strong> Chapter 1 · The Long Night</span>
+      <span class="chip"><strong>Field Notes:</strong> 0 saved</span>
+      <span class="chip"><strong>Side quests open:</strong> 0 (the first ones light up in Chapter 2)</span>
+    </div>
+  </section>
+
+  <!-- ===== GRID HEAD ===== -->
+  <div class="grid-head">
+    <div class="eyebrow"><span class="pixel-dot"></span>Choose your chapter</div>
+    <h2>The seven chapters</h2>
+    <p class="sub">Chapters open in order. The lantern's lit on the one you're ready for.</p>
+  </div>
+
+  <!-- ===== CHAPTER CARDS ===== -->
+  <div class="chapters">
+
+    <a class="chapter-card current" href="chapter-1-long-night-jordan-mockup.html">
+      <div class="ch-num">Chapter 01 <span class="status-pill">You're here</span></div>
+      <div class="ch-title">The Long Night</div>
+      <p class="teaser">The triggering event: a lease ends, a job lands, a kid grows. Jordan's at the kitchen counter with Max, excited and anxious about their next chapter.</p>
+      <div class="open">Step in</div>
+    </a>
+
+    <div class="chapter-card locked" aria-disabled="true">
+      <div class="ch-num"><span class="lock-icon"></span>Chapter 02 <span class="status-pill">Still down the path</span></div>
+      <div class="ch-title">First Light</div>
+      <p class="teaser">Sixty seconds with Apartment List. Just looking, not committing Zillow's one tab over. Apartment List has to earn the next click.</p>
+      <div class="open">Locked · finish Chapter 1 to unlock</div>
+    </div>
+
+    <div class="chapter-card locked" aria-disabled="true">
+      <div class="ch-num"><span class="lock-icon"></span>Chapter 03 <span class="status-pill">Still down the path</span></div>
+      <div class="ch-title">The Search Begins</div>
+      <p class="teaser">The quiz, the signup, the cycling. Jordan stops browsing and starts searching.</p>
+      <div class="open">Locked · light the lantern in Chapter 2 first</div>
+    </div>
+
+    <div class="chapter-card locked" aria-disabled="true">
+      <div class="ch-num"><span class="lock-icon"></span>Chapter 04 <span class="status-pill">Still down the path</span></div>
+      <div class="ch-title">The Crossroads</div>
+      <p class="teaser">The shortlist gets serious. A spreadsheet emerges. One bad Google review ends a contender's life. Jordan's no longer searching:they're choosing.</p>
+      <div class="open">Locked · reach this clearing later</div>
+    </div>
+
+    <div class="chapter-card locked" aria-disabled="true">
+      <div class="ch-num"><span class="lock-icon"></span>Chapter 05 <span class="status-pill">Still down the path</span></div>
+      <div class="ch-title">The First Hello</div>
+      <p class="teaser">Now the messages go out, the tours get booked, and some properties go quiet. The Quiet Hour side quest opens here.</p>
+      <div class="open">Locked · keep walking</div>
+    </div>
+
+    <div class="chapter-card locked" aria-disabled="true">
+      <div class="ch-num"><span class="lock-icon"></span>Chapter 06 <span class="status-pill">Still down the path</span></div>
+      <div class="ch-title">The Key</div>
+      <p class="teaser">Lease is signed, deposit on its way. The Renter Hub side quest opens: split rent, deposit alts, insurance, moving help, utilities.</p>
+      <div class="open">Locked · the door's not yours yet</div>
+    </div>
+
+    <div class="chapter-card locked" aria-disabled="true">
+      <div class="ch-num"><span class="lock-icon"></span>Chapter 07 <span class="status-pill">Still down the path</span></div>
+      <div class="ch-title">The Welcome Mat</div>
+      <p class="teaser">Six months in. The boxes are mostly unpacked. The reactivation emails arrive. Would Jordan come back to Apartment List for the next move? That's the closing question.</p>
+      <div class="open">Locked · you'll find this when you're settled in</div>
+    </div>
+
+  </div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="side">
+
+    <!-- Avatar HUD: Jordan (accessories worn directly on the sprite — none yet in Ch 1) -->
+    <div class="hud-card">
+      <div class="hud-row">
+        <div class="avatar-frame">
+          <!-- Jordan sprite (matches chapter-1 mockup) -->
+          <svg viewBox="0 0 32 48" shape-rendering="crispEdges">
+            <rect x="9" y="3" width="14" height="2" fill="#A06940"/>
+            <rect x="8" y="5" width="16" height="3" fill="#A06940"/>
+            <rect x="9" y="8" width="14" height="2" fill="#A06940"/>
+            <rect x="8" y="8" width="2" height="11" fill="#A06940"/>
+            <rect x="22" y="8" width="2" height="11" fill="#A06940"/>
+            <rect x="9" y="18" width="1" height="2" fill="#A06940"/>
+            <rect x="22" y="18" width="1" height="2" fill="#A06940"/>
+            <rect x="10" y="6" width="12" height="11" fill="#E8C5A4"/>
+            <rect x="9" y="7" width="1" height="9" fill="#E8C5A4"/>
+            <rect x="22" y="7" width="1" height="9" fill="#E8C5A4"/>
+            <rect x="9" y="8" width="14" height="2" fill="#A06940"/>
+            <rect x="12" y="10" width="1" height="3" fill="#1A0E2E"/>
+            <rect x="19" y="10" width="1" height="3" fill="#1A0E2E"/>
+            <rect x="14" y="14" width="1" height="1" fill="#C8576B"/>
+            <rect x="17" y="14" width="1" height="1" fill="#C8576B"/>
+            <rect x="15" y="15" width="2" height="1" fill="#C8576B"/>
+            <rect x="14" y="17" width="4" height="2" fill="#E8C5A4"/>
+            <rect x="8" y="19" width="16" height="9" fill="#FF974D"/>
+            <rect x="6" y="19" width="2" height="9" fill="#FF974D"/>
+            <rect x="24" y="19" width="2" height="9" fill="#FF974D"/>
+            <rect x="6" y="28" width="2" height="2" fill="#E8C5A4"/>
+            <rect x="24" y="28" width="2" height="2" fill="#E8C5A4"/>
+            <rect x="8" y="28" width="16" height="11" fill="#46137B"/>
+            <rect x="15" y="32" width="2" height="7" fill="#46137B"/>
+            <rect x="15" y="34" width="2" height="5" fill="rgba(0,0,0,0.15)"/>
+            <rect x="8" y="39" width="7" height="3" fill="#1A0E2E"/>
+            <rect x="17" y="39" width="7" height="3" fill="#1A0E2E"/>
+          </svg>
+        </div>
+        <div class="hud-meta">
+          <div class="label">Your Renter</div>
+          <div class="name">Jordan</div>
+          <span class="class-chip">Achiever</span>
+          <dl class="move-info">
+            <dt>From</dt><dd>Portland, OR</dd>
+            <dt>To</dt><dd>Seattle, WA</dd>
+            <dt>In</dt><dd>18 days</dd>
+            <dt>Current rent</dt><dd>$1,650</dd>
+            <dt>Budget</dt><dd>$2,400</dd>
+          </dl>
+        </div>
+      </div>
+
+
+      <details class="hud-bio">
+        <summary class="hud-bio-summary">
+          <span>About Jordan</span>
+          <span class="hud-bio-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="hud-bio-body">
+          <p>Jordan got the offer last week. New job in Seattle, three weeks to land. Right now they're standing in their Portland apartment looking at a corner that's about to fill up with moving boxes, with Max the golden retriever asleep on the dog bed that has to get packed first. Excited about the role, but slightly underslept and a little bit panicking.</p>
+          <p>The shortlist has shape but not edges. A yard would be ideal, a park within walking distance will do. A real home office matters because the new role is hybrid and the kitchen table can't keep doing double duty. Pet-friendly isn't a perk for Jordan. Max needs to actually be welcome.</p>
+          <p>Eighteen days isn't a lot of time to chase ghost listings or wait three days for a property to respond. Jordan wants the map view first. They'll come back to the quiz later, maybe.</p>
+        </div>
+      </details>
+    </div>
+
+    <!-- Field Notes journal — empty until Jordan starts writing -->
+    <div class="notes-card">
+      <h3>Field Notes <span style="font-family:'VT323',monospace;font-size:13px;color:var(--ink-soft);letter-spacing:1px;">0 saved</span></h3>
+      <p class="meta">Anything Jordan jots inside a chapter shows up here. Edit anytime, copy to Slack when ready.</p>
+      <div class="notes-list">
+        <div class="note">
+          <p class="note-text">No notes yet. Step into Chapter 1 and the first one will land here.</p>
+        </div>
+      </div>
+      <span class="info-pill"><span class="ico">i</span>Field Notes are dogfooding takeaways. Copy to Slack to share with the team.</span>
+    </div>
+
+  </aside>
+
+</main>
+
+<!-- Footer town scene (shared illustration) -->
+<img class="town-scene" src="footer-town-scene.svg" alt="" aria-hidden="true">
+
+<script src="rj-shared.js" defer></script>
+</body>
+</html>

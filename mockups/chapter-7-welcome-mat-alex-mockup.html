@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 7 · The Welcome Mat · Alex the Ambitious</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Caveat:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #6105C4;
+    --indigo-deep: #46137B;
+    --indigo-darker: #2D0856;
+    --oat: #F5F2ED;
+    --oat-warm: #EFE6D6;
+    --paper: #FFFCF0;
+    --light-purple: #C384F0;
+    --lavender: #D7C6F1;
+    --magenta: #C5377F;
+    --coral: #FF6B7A;
+    --pink: #FF9CC1;
+    --peach: #FFB37A;
+    --orange: #FF974D;
+    --red: #FF0029;
+    --ink: #2D1B0E;
+    --ink-soft: #5D4037;
+    --grass: #7AAB58;
+    --grass-dark: #5C8841;
+    --sky-top: #FFE4C7;
+    --sky-mid: #F5C6D6;
+    --sky-low: #D7C6F1;
+
+    /* Alex's persona accent (Level Upper class color) */
+    --persona-color: var(--indigo);
+    --persona-deep: var(--indigo-deep);
+  }
+
+  /* Heads-up callout inside a Quest (used for the +test signup note). */
+  .quest-section.heads-up {
+    background: #FFF7E6;
+    border-color: var(--orange);
+    border-left: 6px solid var(--orange);
+  }
+  .quest-section.heads-up .section-label {
+    color: var(--orange);
+    border-bottom-color: rgba(255, 151, 77, 0.35);
+  }
+  .quest-section.heads-up .section-label::before {
+    background: var(--orange);
+  }
+  .quest-section.heads-up .surface-text {
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+  .quest-section.heads-up code {
+    font-family: 'VT323', monospace;
+    background: var(--lavender);
+    padding: 1px 6px;
+    color: var(--indigo-deep);
+    font-size: 15px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 25%, var(--sky-low) 55%, var(--oat) 100%);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* === TOP BAR (matches map) === */
+  .top-bar {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+    background: var(--paper);
+    border-bottom: 3px solid var(--ink);
+    box-shadow: 0 4px 0 var(--ink-soft);
+  }
+
+  .persona-context {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--oat);
+    border: 2px solid var(--ink);
+    padding: 6px 14px;
+    box-shadow: 3px 3px 0 var(--ink-soft);
+  }
+  .persona-context .label {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .persona-context .name {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 16px;
+    color: var(--persona-color);
+    font-weight: 600;
+  }
+  .persona-context .change {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-left: 2px dotted var(--ink-soft);
+    padding-left: 10px;
+    margin-left: 4px;
+    cursor: pointer;
+  }
+  .progress-strip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'VT323', monospace;
+    color: var(--ink-soft);
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .progress-strip .dots { display: flex; gap: 6px; }
+  .progress-strip .dot {
+    width: 12px; height: 12px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  .progress-strip .dot.current { background: var(--persona-color); }
+  .top-actions { display: flex; gap: 10px; align-items: center; }
+  .pill-btn {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 14px;
+    padding: 8px 14px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink-soft);
+    cursor: pointer;
+    color: var(--ink);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pill-btn:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--ink-soft); }
+  .pill-btn .pixel-dot { display: inline-block; width: 8px; height: 8px; background: var(--persona-color); }
+
+  /* === STAGE === */
+  .stage {
+    position: relative;
+    z-index: 2;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 36px 28px 420px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 32px;
+    align-items: start;
+  }
+
+  /* Footer town scene (shared illustration) */
+  .town-scene {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 360px;
+    z-index: 0;
+    pointer-events: none;
+    display: block;
+    user-select: none;
+  }
+
+  /* === HERO HEADER === */
+  .hero {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .breadcrumb {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--ink-soft);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .breadcrumb a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--ink-soft);
+  }
+  .breadcrumb a:hover { color: var(--indigo); border-color: var(--indigo); }
+  .eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    letter-spacing: 4px;
+    color: var(--persona-color);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .eyebrow .pixel-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--persona-color); margin: 0 12px; transform: translateY(-3px);
+  }
+  /* Stage-term tooltip (hover defines the journey stage) */
+  .stage-term {
+    position: relative;
+    border-bottom: 1px dotted currentColor;
+    cursor: help;
+    outline: none;
+  }
+  .stage-term::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 14px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    text-transform: none;
+    line-height: 1.45;
+    width: max-content;
+    max-width: 320px;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink-soft);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 20;
+    text-align: left;
+  }
+  .stage-term:hover::after,
+  .stage-term:focus::after {
+    opacity: 1;
+  }
+  h1.title {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -1px;
+    text-shadow: 4px 4px 0 rgba(45, 27, 14, 0.08);
+    margin-bottom: 12px;
+  }
+  h1.title .accent { color: var(--persona-color); }
+  .lede {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: clamp(17px, 1.4vw, 20px);
+    color: var(--ink-soft);
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+  .pixel-divider {
+    display: flex; justify-content: center; gap: 6px; margin: 22px 0 0;
+  }
+  .pixel-divider span { width: 8px; height: 8px; background: var(--indigo); }
+  .pixel-divider span:nth-child(2) { background: var(--light-purple); }
+  .pixel-divider span:nth-child(3) { background: var(--persona-color); }
+  .pixel-divider span:nth-child(4) { background: var(--magenta); }
+  .pixel-divider span:nth-child(5) { background: var(--ink); }
+
+  /* === MAIN COLUMN === */
+  .main { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+
+  /* Section card, used for opening + path + side quests etc. */
+  .section-card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .section-card::before {
+    content: ""; display: block; height: 6px;
+    background: var(--persona-color);
+    margin: -28px -32px 18px;
+  }
+  .section-card.subtle::before { display: none; }
+  .section-card .section-eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--persona-color);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .section-card h2 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: clamp(24px, 2.4vw, 32px);
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 14px;
+    letter-spacing: -0.5px;
+  }
+  .section-card p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .section-card p:last-child { margin-bottom: 0; }
+
+  /* === JOURNAL ENTRY (stylized as paper pulled from a pocket) === */
+  .journal {
+    background: #FFF7E6;
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft), inset 0 0 0 6px rgba(45,27,14,0.04);
+    padding: 32px 36px;
+    position: relative;
+    transform: rotate(-0.4deg);
+  }
+  .journal::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 1px dashed rgba(45,27,14,0.15);
+    pointer-events: none;
+  }
+  .journal::after {
+    /* tape on corner */
+    content: "";
+    position: absolute;
+    top: -6px; right: 30px;
+    width: 60px; height: 18px;
+    background: rgba(255,243,180,0.8);
+    border: 1px solid rgba(45,27,14,0.15);
+    transform: rotate(-6deg);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+  .journal-meta {
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    color: var(--persona-deep);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .journal-meta .pixel-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--persona-color);
+  }
+  .journal h3 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 24px;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .journal .entry {
+    font-family: 'Caveat', 'Source Serif 4', cursive;
+    font-size: 22px;
+    line-height: 1.5;
+    color: #3B2A1F;
+  }
+  .journal .entry p { margin-bottom: 14px; font-family: inherit; font-size: inherit; }
+  .journal .entry p:last-child { margin-bottom: 0; }
+  .journal-footer {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--ink-soft);
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* === CORE QUEST CARDS === */
+  .quests-block { display: flex; flex-direction: column; gap: 20px; }
+  .quests-header {
+    text-align: center;
+    margin-top: 8px;
+  }
+  .quests-header .eyebrow {
+    color: var(--indigo);
+    font-size: 16px;
+  }
+  .quests-header h2 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: clamp(28px, 3vw, 40px);
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .quests-header p {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 16px;
+    margin-top: 4px;
+  }
+
+  .quest {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 0;
+    overflow: hidden;
+  }
+  .quest-head {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 2px solid var(--ink);
+  }
+  .quest-num {
+    width: 80px;
+    flex-shrink: 0;
+    background: var(--persona-color);
+    color: var(--paper);
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid var(--ink);
+    line-height: 1;
+  }
+  .quest-title-area {
+    flex: 1;
+    padding: 16px 20px;
+    background: var(--oat-warm);
+  }
+  .quest-title-area .label {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .quest-title-area h3 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .quest-body { padding: 22px 24px; }
+  .quest-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--lavender);
+  }
+  .quest-row:last-of-type { border-bottom: none; padding-bottom: 4px; }
+  .quest-row .row-label {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-top: 4px;
+  }
+  .quest-row .row-value {
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .quest-row .row-value code {
+    font-family: 'VT323', monospace;
+    background: var(--lavender);
+    padding: 1px 8px;
+    color: var(--indigo-deep);
+    font-size: 17px;
+    letter-spacing: 0.5px;
+  }
+  .field-note-block {
+    margin-top: 16px;
+    padding: 16px 18px;
+    background: var(--lavender);
+    border: 2px dashed var(--indigo);
+    position: relative;
+  }
+  .field-note-block .fn-eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--indigo-deep);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .field-note-block .fn-eyebrow::before {
+    content: ""; display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--magenta);
+  }
+  .field-note-block .fn-template {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .field-note-block .fn-blank {
+    display: inline-block;
+    min-width: 80px;
+    border-bottom: 2px solid var(--indigo);
+    margin: 0 3px;
+    padding: 0 4px;
+    background: rgba(255,255,255,0.5);
+    font-family: 'Caveat', cursive;
+    color: var(--indigo-deep);
+    font-style: normal;
+    font-weight: 600;
+  }
+  .fn-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .fn-btn {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 13px;
+    padding: 6px 12px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    cursor: pointer;
+    color: var(--ink);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .fn-btn:hover { background: var(--magenta); color: var(--paper); }
+  .fn-btn.primary {
+    background: var(--indigo);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* === SIDE QUEST EMPTY STATE === */
+  .sidequest-empty {
+    background: var(--paper);
+    border: 3px dashed var(--ink-soft);
+    box-shadow: none;
+    padding: 24px 28px;
+    text-align: center;
+  }
+  .sidequest-empty .label {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--ink-soft);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .sidequest-empty h3 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .sidequest-empty p {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  /* === Pain / Delight tags === */
+  .observation-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .obs {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    padding: 16px 18px;
+  }
+  .obs.pain { border-color: var(--coral); border-left-width: 6px; }
+  .obs.delight { border-color: var(--grass-dark); border-left-width: 6px; }
+  .obs h4 {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .obs.pain h4 { color: var(--coral); }
+  .obs.delight h4 { color: var(--grass-dark); }
+  .obs ul { list-style: none; padding: 0; margin: 0; }
+  .obs li {
+    font-family: 'Source Serif 4', serif;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink);
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .obs li:last-child { margin-bottom: 0; }
+  .obs li::before {
+    content: ""; position: absolute; left: 0; top: 8px;
+    width: 6px; height: 6px;
+    background: currentColor;
+    opacity: 0.4;
+  }
+  .obs.pain li::before { background: var(--coral); opacity: 0.7; }
+  .obs.delight li::before { background: var(--grass-dark); opacity: 0.7; }
+
+  /* === CHAPTER NAV (footer) === */
+  .ch-nav {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .ch-nav .nav-side {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .nav-link {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 18px;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 14px 22px;
+    border: 3px solid var(--ink);
+    background: var(--paper);
+    box-shadow: 5px 5px 0 var(--ink-soft);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .nav-link:hover { transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--ink-soft); }
+  .nav-link.next { background: var(--persona-color); color: var(--paper); }
+  .nav-link.disabled { opacity: 0.5; cursor: not-allowed; }
+  .nav-side .hint {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+  }
+
+  /* === FRAMING CARD (how to engage) === */
+  .framing-card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    border-left-width: 8px;
+    border-left-color: var(--persona-color);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 22px 28px;
+  }
+  .framing-eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--persona-color);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .framing-list { list-style: none; margin: 0; padding: 0; }
+  .framing-list li {
+    font-family: 'Source Serif 4', serif;
+    font-size: 16.5px;
+    line-height: 1.5;
+    color: var(--ink);
+    padding: 6px 0 6px 24px;
+    position: relative;
+  }
+  .framing-list li::before {
+    content: ""; position: absolute;
+    left: 0; top: 13px;
+    width: 8px; height: 8px;
+    background: var(--persona-color);
+  }
+
+  /* === TONIGHT CARD (blurb + journal combined) === */
+  .tonight-card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 28px 32px;
+    overflow: hidden;
+  }
+  .tonight-card::before {
+    content: ""; display: block;
+    height: 6px;
+    background: var(--persona-color);
+    margin: -28px -32px 18px;
+  }
+  .tonight-eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--persona-color);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .tonight-blurb {
+    font-family: 'Source Serif 4', serif;
+    font-size: 16.5px;
+    font-style: italic;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+    border-left: 3px solid var(--persona-color);
+    padding: 4px 0 4px 14px;
+  }
+  /* Override standalone .journal styles when nested inside tonight-card */
+  .tonight-card .journal {
+    transform: none;
+    background: #FFF7E6;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink-soft);
+    padding: 22px 26px;
+    margin: 0;
+  }
+  .tonight-card .journal::before { display: none; }
+  .tonight-card .journal::after { display: none; }
+
+  /* === BIO ACCORDION (sidebar HUD, under the avatar) === */
+  .hud-bio {
+    margin-top: 14px;
+    border: 2px dashed var(--ink-soft);
+    background: var(--oat);
+    transition: background-color 0.15s ease;
+  }
+  .hud-bio[open] {
+    background: var(--paper);
+    border-style: solid;
+    border-color: var(--ink);
+  }
+  .hud-bio-summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .hud-bio-summary::-webkit-details-marker { display: none; }
+  .hud-bio-summary::marker { content: ""; }
+  .hud-bio-summary:hover { color: var(--ink); }
+  .hud-bio[open] .hud-bio-summary {
+    color: var(--ink);
+    border-bottom: 1px dashed var(--ink-soft);
+  }
+  .hud-bio-summary:focus-visible {
+    outline: 2px solid var(--indigo);
+    outline-offset: -3px;
+  }
+  .hud-bio-toggle {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--ink-soft);
+    background: var(--paper);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--ink-soft);
+  }
+  .hud-bio-toggle::after { content: "+"; }
+  .hud-bio[open] .hud-bio-toggle {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .hud-bio[open] .hud-bio-toggle::after { content: "−"; }
+  .hud-bio-body {
+    padding: 12px 14px 14px;
+  }
+  .hud-bio-body p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0 0 10px;
+  }
+  .hud-bio-body p:last-child { margin-bottom: 0; }
+
+  /* === CORE QUESTS — checkbox + flat sections === */
+  .quest .quest-num { display: none; }
+  .quest-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 2px solid var(--ink);
+    padding: 14px 18px;
+    background: var(--oat-warm);
+  }
+  .quest-check-wrap {
+    position: relative;
+    width: 28px; height: 28px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .quest-check-wrap input,
+  .step-check-wrap input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    margin: 0;
+  }
+  .checkbox-pixel {
+    display: block;
+    width: 100%; height: 100%;
+    border: 3px solid var(--ink);
+    background: var(--paper);
+    position: relative;
+    transition: background-color 0.15s ease;
+  }
+  .quest-check-wrap input:checked + .checkbox-pixel,
+  .step-check-wrap input:checked + .checkbox-pixel {
+    background: var(--persona-color);
+  }
+  .quest-check-wrap input:checked + .checkbox-pixel::after {
+    content: "";
+    position: absolute;
+    left: 6px; top: 2px;
+    width: 8px; height: 16px;
+    border-right: 3px solid var(--paper);
+    border-bottom: 3px solid var(--paper);
+    transform: rotate(45deg);
+  }
+  .step-check-wrap input:checked + .checkbox-pixel::after {
+    content: "";
+    position: absolute;
+    left: 3px; top: 0px;
+    width: 5px; height: 10px;
+    border-right: 2px solid var(--paper);
+    border-bottom: 2px solid var(--paper);
+    transform: rotate(45deg);
+  }
+  .quest-check-wrap:hover .checkbox-pixel,
+  .step-check-wrap:hover .checkbox-pixel {
+    box-shadow: 2px 2px 0 var(--ink-soft);
+  }
+  .quest .quest-title-area {
+    flex: 1;
+    background: transparent;
+    padding: 0;
+  }
+  .quest .quest-title-area .label {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .quest .quest-title-area h3 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .quest-body {
+    padding: 16px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Quest sections — Surface, Action, Look for (flat, no accordion) */
+  .quest-section {
+    background: var(--paper);
+    border: 2px solid var(--lavender);
+    padding: 12px 16px 14px;
+  }
+  .quest-section + .quest-section { margin-top: 0; }
+  .section-label {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--lavender);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::before {
+    content: ""; display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--persona-color);
+  }
+
+  /* Surface: simple text/list */
+  .surface-text {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .surface-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .surface-list li {
+    padding: 3px 0;
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .surface-list li::before {
+    content: "▸ ";
+    color: var(--persona-color);
+    font-weight: 700;
+    margin-right: 4px;
+  }
+
+  /* Action checkbox list */
+  .action-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 4px 2px;
+  }
+  .action-item label.step-check-wrap {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+  }
+  .action-item label {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.5;
+    cursor: pointer;
+    flex: 1;
+  }
+  .action-item input:checked + .checkbox-pixel + label,
+  .action-item:has(input:checked) label {
+    text-decoration: line-through;
+    text-decoration-color: var(--ink-soft);
+    color: var(--ink-soft);
+  }
+  .step-check-wrap {
+    position: relative;
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .step-check-wrap .checkbox-pixel { border-width: 2px; }
+
+  /* Look-for bullets */
+  .lookfor-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .lookfor-list li {
+    position: relative;
+    padding: 4px 0 4px 18px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .lookfor-list li::before {
+    content: "";
+    position: absolute;
+    left: 4px; top: 11px;
+    width: 6px; height: 6px;
+    background: var(--persona-color);
+  }
+
+  /* Field Note composer (the "Your Note" replacement) */
+  .fieldnote-compose {
+    margin-top: 14px;
+    background: #FFF7E6;
+    border: 2px solid var(--ink);
+    padding: 18px 16px 14px;
+    position: relative;
+  }
+  .fieldnote-eyebrow {
+    position: absolute;
+    top: -10px;
+    left: 14px;
+    background: var(--paper);
+    padding: 0 8px;
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--persona-deep);
+    text-transform: uppercase;
+  }
+  .fieldnote-template {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 16px;
+    line-height: 2;
+    color: var(--ink);
+  }
+  .fieldnote-template input.blank {
+    display: inline-block;
+    font-family: 'Caveat', cursive;
+    font-style: normal;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--indigo-deep);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--persona-color);
+    padding: 0 6px 1px;
+    min-width: 110px;
+    margin: 0 2px;
+    outline: none;
+    vertical-align: -1px;
+  }
+  .fieldnote-template input.blank.long { min-width: 200px; }
+  .fieldnote-template input.blank:focus {
+    border-bottom-color: var(--indigo);
+    background: rgba(195, 132, 240, 0.18);
+  }
+  .fieldnote-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--ink-soft);
+    flex-wrap: wrap;
+  }
+  .fieldnote-actions .save-hint {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .fieldnote-actions .save-btn {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    padding: 5px 12px;
+    background: var(--persona-color);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink-soft);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .fieldnote-actions .save-btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink-soft);
+  }
+
+  /* Reflection textarea (still used by single-prompt reflection at bottom) */
+  .reflection-prompt textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 12px 14px;
+    background: #FFF7E6;
+    border: 2px solid var(--ink);
+    box-shadow: inset 2px 2px 0 rgba(45,27,14,0.05);
+    font-family: 'Caveat', 'Source Serif 4', cursive;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink);
+    resize: vertical;
+  }
+
+  /* Quest fully complete visual cue */
+  .quest:has(.quest-check:checked) .quest-head { background: var(--lavender); }
+  .quest:has(.quest-check:checked) .quest-title-area h3 {
+    text-decoration: line-through;
+    text-decoration-color: var(--ink-soft);
+    text-decoration-thickness: 2px;
+    color: var(--ink-soft);
+  }
+
+  /* Side quest (optional) styling */
+  .quest.optional {
+    border-style: dashed;
+    border-color: var(--ink-soft);
+  }
+  .quest.optional .quest-head {
+    background: rgba(213, 198, 241, 0.45);
+    border-bottom-style: dashed;
+  }
+  .quest.optional .quest-title-area .label {
+    color: var(--magenta);
+  }
+  .quest.optional:has(.quest-check:checked) .quest-head {
+    background: var(--lavender);
+  }
+  .sidequest-header {
+    margin-top: 8px;
+  }
+  .sidequest-header .eyebrow {
+    color: var(--magenta);
+  }
+  .sidequest-header h2 {
+    color: var(--ink);
+  }
+
+  /* === REFLECTION CARD (required) === */
+  .reflection-card {
+    background: var(--paper);
+    border: 4px solid var(--indigo);
+    box-shadow: 8px 8px 0 var(--indigo-deep);
+    padding: 28px 32px;
+    position: relative;
+  }
+  .reflection-card::before {
+    content: ""; display: block; height: 8px;
+    background: var(--magenta);
+    margin: -28px -32px 18px;
+  }
+  .reflection-eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--magenta);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .reflection-card h2 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: clamp(26px, 2.6vw, 34px);
+    color: var(--ink);
+    margin-bottom: 12px;
+    line-height: 1.1;
+  }
+  .reflection-intro {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 2px dashed var(--lavender);
+  }
+  .reflection-prompts {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .reflection-prompt label {
+    display: block;
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .reflection-prompt .prompt-hint {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .reflection-prompt textarea { min-height: 96px; }
+  .reflection-prompt textarea:focus {
+    outline: none;
+    border-color: var(--indigo);
+    box-shadow: inset 2px 2px 0 rgba(45,27,14,0.05), 0 0 0 3px rgba(97,5,196,0.2);
+  }
+
+  .reflection-status {
+    margin-top: 22px;
+    padding: 12px 16px;
+    background: var(--oat);
+    border: 2px dashed var(--ink-soft);
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    color: var(--ink-soft);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .reflection-status.complete {
+    background: var(--lavender);
+    border: 2px solid var(--indigo);
+    color: var(--indigo-deep);
+    font-weight: 600;
+  }
+
+  /* Disabled continue button until reflection is complete */
+  .nav-link.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+    background: var(--oat);
+    color: var(--ink-soft);
+  }
+
+  /* === RIGHT SIDEBAR === */
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: sticky;
+    top: 24px;
+  }
+  /* Avatar HUD */
+  .hud-card, .drawer-card, .notes-card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 18px;
+  }
+  .hud-card::before {
+    content: ""; display: block;
+    height: 6px;
+    background: var(--persona-color);
+    margin: -18px -18px 14px;
+  }
+  .hud-row { display: flex; align-items: center; gap: 14px; }
+  .avatar-frame {
+    width: 76px; height: 96px;
+    background: linear-gradient(180deg, #FFE4C7 0%, #F5C6D6 70%, #D7C6F1 100%);
+    border: 3px solid var(--ink);
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .avatar-frame::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+    height: 8px; background: var(--grass);
+    border-top: 2px solid var(--grass-dark);
+  }
+  .avatar-frame svg { width: 70%; height: auto; position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); image-rendering: pixelated; filter: drop-shadow(2px 2px 0 rgba(45,27,14,0.25)); }
+
+  .hud-meta { flex: 1; }
+  .hud-meta .label {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .hud-meta .name {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .hud-meta .stats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .hud-meta .stat-chip {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    padding: 2px 8px;
+    background: var(--oat);
+    border: 1px solid var(--ink-soft);
+    color: var(--ink-soft);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .hud-meta .class-chip {
+    display: inline-block;
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    padding: 2px 10px;
+    background: var(--persona-color);
+    border: 2px solid var(--ink);
+    color: var(--paper);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .hud-meta .move-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    row-gap: 3px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--ink-soft);
+  }
+  .hud-meta .move-info dt {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .hud-meta .move-info dd {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--ink);
+    text-align: right;
+  }
+
+  /* Drawer */
+  .drawer-card h3, .notes-card h3 {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  .drawer-card h3::before, .notes-card h3::before {
+    content: ""; display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--persona-color);
+  }
+  .notes-card h3::before { background: var(--magenta); }
+  .drawer-card .progress {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .drawer-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .acc {
+    aspect-ratio: 1;
+    border: 2px solid var(--ink-soft);
+    background: var(--oat);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: var(--ink-soft);
+    font-size: 18px;
+    opacity: 0.45;
+    cursor: help;
+  }
+  .acc.companion { background: var(--paper); }
+  .acc::after {
+    content: ""; position: absolute;
+    bottom: 2px; right: 2px;
+    width: 6px; height: 6px;
+    background: var(--ink-soft);
+  }
+  .acc svg { width: 70%; height: 70%; image-rendering: pixelated; }
+
+  /* Field Notes journal (open with example fills) */
+  .notes-card .meta {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .notes-list { display: flex; flex-direction: column; gap: 12px; }
+  .note {
+    background: #FFF7E6;
+    border: 2px solid var(--ink);
+    border-left-width: 5px;
+    border-left-color: var(--persona-color);
+    padding: 12px 14px;
+    position: relative;
+  }
+  .note .note-meta {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    color: var(--persona-deep);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .note .note-text {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .note .note-text .fill {
+    font-family: 'Caveat', cursive;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--indigo-deep);
+    background: var(--lavender);
+    padding: 0 4px;
+    border-bottom: 1px solid var(--indigo);
+  }
+  .note .note-actions {
+    display: flex; gap: 6px;
+    margin-top: 8px;
+  }
+  .note .copy-btn {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    padding: 2px 8px;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .note .copy-btn:hover { background: var(--indigo); color: var(--paper); }
+  .note.empty {
+    background: var(--paper);
+    border-style: dashed;
+    border-left-style: dashed;
+    border-color: var(--ink-soft);
+    border-left-color: var(--ink-soft);
+  }
+  .note.empty .note-text {
+    color: var(--ink-soft);
+  }
+
+  /* Field-notes info pill */
+  .notes-card .info-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+    margin-top: 12px;
+    padding: 6px 10px;
+    background: var(--oat);
+    border: 1px dashed var(--ink-soft);
+  }
+  .notes-card .info-pill .ico {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 16px; height: 16px;
+    background: var(--indigo); color: var(--paper);
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  @media (max-width: 980px) {
+    .stage { grid-template-columns: 1fr; padding: 24px 16px 280px; }
+    .side { position: relative; top: 0; }
+    .top-bar { flex-wrap: wrap; gap: 10px; padding: 14px 16px; }
+    .progress-strip { display: none; }
+    .observation-block { grid-template-columns: 1fr; }
+    .quest-num { width: 64px; font-size: 26px; }
+    .town-scene { height: 240px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     TOP BAR
+============================================================ -->
+<header class="top-bar">
+  <div class="persona-context">
+    <span class="label">Now Playing As</span>
+    <span class="name">Alex the Ambitious</span>
+    <span class="change">← Change renter</span>
+  </div>
+
+  <div class="progress-strip">
+    <span>Chapter 7 of 7</span>
+    <div class="dots">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="dot current"></span>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <button class="pill-btn"><span class="pixel-dot"></span> Field Notes (0)</button>
+  </div>
+</header>
+
+<main class="stage">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="breadcrumb"><a href="journey-map-mockup.html">← Map</a> ▸ Chapter 7</div>
+    <div class="eyebrow"><span class="pixel-dot"></span><span class="stage-term" data-tip="Post-lease. Reviews, repeat usage, referral behavior. The phase that reveals true platform loyalty and the gap between satisfaction and advocacy. The renter sees blog articles, the occasional email, and the calculator they used months ago when rent comes up again." tabindex="0">Return</span><span class="pixel-dot"></span></div>
+    <h1 class="title">The <span class="accent"> Welcome Mat.</span></h1>
+    <p class="lede">This chapter is based on "return," the renter journey stage where a renter is settled in their new home and may or may not choose to stay.</p>
+    <div class="pixel-divider"><span></span><span></span><span></span><span></span><span></span></div>
+  </section>
+
+  <!-- ===== MAIN COLUMN ===== -->
+  <div class="main">
+    <!-- ===== FRAMING (how to engage) ===== -->
+    <article class="framing-card">
+      <div class="framing-eyebrow">▸ How to walk this chapter</div>
+      <ul class="framing-list">
+        <li>Walk Alex through the experience of being a settled renter and the ways Apartment List may or may not still be a part of their life.</li>
+        <li>Write a quick reflection for each Core Quest before walking on to the journey's last question.</li>
+      </ul>
+    </article>
+
+    <!-- ===== TAYLOR & RILEY'S STARTING POINT ===== -->
+    <article class="tonight-card">
+      <div class="tonight-eyebrow">▸ Where Alex starts</div>
+      <p class="tonight-blurb">Six months in. The Hayes Valley place feels like home now. The bike is on the wall mount, the kitchen has real counter space, the bedroom door closes. Alex hasn't opened the Apartment List app in three months, but they never deleted the app from their phone. Today an email landed from Apartment List, and somewhere on Alex's phone there's a notification asking for a review.</p>
+    </article>
+
+    <!-- ===== CORE QUESTS (3 quests, each with its own field note) ===== -->
+    <div class="quests-header">
+      <div class="eyebrow"><span class="pixel-dot" style="background:var(--indigo)"></span>Core Quests · 3 of 3<span class="pixel-dot" style="background:var(--indigo)"></span></div>
+      <h2>Three quests, three field notes.</h2>
+      <p>Open each quest, do the action, write a quick reflection.</p>
+    </div>
+
+    <div class="quests-block">
+
+      <!-- Quest 7.1 -->
+      <article class="quest" data-quest="7.1">
+        <header class="quest-head">
+          <label class="quest-check-wrap" aria-label="Mark A Letter from Apartment List complete">
+            <input type="checkbox" class="quest-check"/>
+            <span class="checkbox-pixel"></span>
+          </label>
+          <div class="quest-title-area">
+            <div class="label">Core Quest 7.1 · A Scenario</div>
+            <h3>A Letter from Apartment List</h3>
+          </div>
+        </header>
+        <div class="quest-body">
+
+          <div class="journal">
+            <div class="journal-meta"><span class="pixel-dot"></span>Scenario · the email three months in</div>
+            <div class="entry">
+              <p>Three months after Alex signed in Hayes Valley, an email lands in their inbox from Apartment List. The subject reads: <em>"Explore your new match in San Francisco."</em> Inside, a handful of fresh listings that meet Alex's old search criteria. Two of them are in the exact neighborhood Alex just rented in.</p>
+            </div>
+          </div>
+
+          <section class="quest-section">
+            <div class="section-label">Sit with it</div>
+            <ul class="action-list">
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>Picture Alex seeing the subject line. What do they think before they open it?</label>
+              </li>
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>Picture them opening it. Two of the new matches are on the same block they just signed on. How does that land?</label>
+              </li>
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>What does the email say about whether Apartment List knows Alex signed?</label>
+              </li>
+            </ul>
+          </section>
+
+          <div class="reflection-prompt quest-reflection">
+            <label>Does this email feel like a useful pulse in the background, neutral noise, or something quietly off? What would Alex want Apartment List to do differently three months after they signed?</label>
+            <textarea class="reflection-input" placeholder="Type here..."></textarea>
+          </div>
+
+        </div>
+      </article>
+
+      <!-- Quest 7.2 -->
+      <article class="quest" data-quest="7.2">
+        <header class="quest-head">
+          <label class="quest-check-wrap" aria-label="Mark The Review Moment complete">
+            <input type="checkbox" class="quest-check"/>
+            <span class="checkbox-pixel"></span>
+          </label>
+          <div class="quest-title-area">
+            <div class="label">Core Quest 7.2 · A Scenario</div>
+            <h3>The Review Moment</h3>
+          </div>
+        </header>
+        <div class="quest-body">
+
+          <div class="journal">
+            <div class="journal-meta"><span class="pixel-dot"></span>Scenario · the push at six months</div>
+            <div class="entry">
+              <p>Six months in. Alex is sitting on the couch on a Sunday afternoon when an app store push notification slides down: <em>"How was your experience with Apartment List?"</em> The app wants a star rating and a couple of sentences. Alex hasn't opened it in three months. They could write something. They could swipe the notification away.</p>
+            </div>
+          </div>
+
+          <section class="quest-section">
+            <div class="section-label">Sit with it</div>
+            <ul class="action-list">
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>Does Alex tap the notification, swipe it away, or save it for later (and forget)?</label>
+              </li>
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>If they wrote a review, what would the star rating actually be?</label>
+              </li>
+            </ul>
+          </section>
+
+          <div class="reflection-prompt quest-reflection">
+            <label>Draft the two sentences Alex would actually write. What lands first: what worked, or what didn't?</label>
+            <textarea class="reflection-input" placeholder="Type here..."></textarea>
+          </div>
+
+        </div>
+      </article>
+
+      <!-- Quest 7.3 -->
+      <article class="quest" data-quest="7.3">
+        <header class="quest-head">
+          <label class="quest-check-wrap" aria-label="Mark The Apartment Living Stroll complete">
+            <input type="checkbox" class="quest-check"/>
+            <span class="checkbox-pixel"></span>
+          </label>
+          <div class="quest-title-area">
+            <div class="label">Core Quest 7.3 · The Apartment Living Blog</div>
+            <h3>The Apartment Living Stroll</h3>
+          </div>
+        </header>
+        <div class="quest-body">
+
+          <section class="quest-section">
+            <div class="section-label">Surface</div>
+            <ul class="surface-list">
+              <li><a href="https://www.apartmentlist.com/renter-life/category/apartment-living" target="_blank" rel="noopener">https://www.apartmentlist.com/renter-life/category/apartment-living</a> (Apartment Living category)</li>
+            </ul>
+          </section>
+
+          <section class="quest-section">
+            <div class="section-label">Action</div>
+            <ul class="action-list">
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>Browse the Apartment Living blog as Alex would, six months after move-in.</label>
+              </li>
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>Find one article that would actually catch Alex's eye. Read it. Notice what lands and what doesn't.</label>
+              </li>
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>Look for the gap: does the blog speak to a settled renter, or is it still written for someone in the search?</label>
+              </li>
+            </ul>
+          </section>
+
+          <div class="reflection-prompt quest-reflection">
+            <label>What did Alex actually read, and what would they have read more of? Where does the Apartment Living blog feel useful for a settled renter, and where does it feel like content written for the search?</label>
+            <textarea class="reflection-input" placeholder="Type here..."></textarea>
+          </div>
+
+        </div>
+      </article>
+
+    </div>
+
+    <!-- ===== SIDE QUEST (optional) ===== -->
+    <div class="quests-header sidequest-header">
+      <div class="eyebrow"><span class="pixel-dot" style="background:var(--magenta)"></span>Side Quest · Optional<span class="pixel-dot" style="background:var(--magenta)"></span></div>
+      <h2>For the curious.</h2>
+      <p>Optional. Step into the moment a coworker asks Alex where they found their place, and see whether Apartment List comes up.</p>
+    </div>
+
+    <div class="quests-block">
+      <article class="quest optional" data-quest="side-1">
+        <header class="quest-head">
+          <label class="quest-check-wrap" aria-label="Mark The Recommendation Moment complete">
+            <input type="checkbox" class="quest-check"/>
+            <span class="checkbox-pixel"></span>
+          </label>
+          <div class="quest-title-area">
+            <div class="label">Side Quest · When Someone Asks</div>
+            <h3>The Recommendation Moment</h3>
+          </div>
+        </header>
+        <div class="quest-body">
+
+          <div class="journal">
+            <div class="journal-meta"><span class="pixel-dot"></span>Scenario · the question at lunch</div>
+            <div class="entry">
+              <p>Tuesday lunch. A coworker mentions over their salad that their lease is up and they're starting to look. They ask Alex where they found their place and whether they'd recommend it.</p>
+            </div>
+          </div>
+
+          <section class="quest-section">
+            <div class="section-label">Sit with it</div>
+            <ul class="action-list">
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>What does Alex actually say? Apartment List by name, or "I tried a few sites"?</label>
+              </li>
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>If they mention Apartment List, what specific thing do they cite? The matchmaking, a feature, a moment that worked?</label>
+              </li>
+              <li class="action-item">
+                <label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label>
+                <label>What would have to be true about the search for Alex to actively recommend it instead of just naming it?</label>
+              </li>
+            </ul>
+          </section>
+
+          <div class="reflection-prompt quest-reflection">
+            <label>What's the threshold for Alex actually recommending Apartment List, versus naming it as one of the three platforms they tried? Where does satisfaction become advocacy, and where does Apartment List leave that on the table?</label>
+            <textarea class="sidequest-input" placeholder="Type here..."></textarea>
+          </div>
+
+        </div>
+      </article>
+
+    </div>
+
+    <!-- ===== FINAL REFLECTION (synthesis) ===== -->
+    <article class="reflection-card" id="finalReflection">
+      <div class="reflection-eyebrow">◆ Final Reflection</div>
+      <h2>Six months in, what stayed?</h2>
+      <p class="reflection-intro">After the stray email, the review prompt, and the blog stroll, sit with one last question before the journey's final reflection.</p>
+
+      <div class="reflection-prompts">
+        <div class="reflection-prompt">
+          <label>What kind of presence does Apartment List have in Alex's life six months after move-in: a useful background pulse, neutral noise, or an annoying reminder of the apartment search?</label>
+          <textarea class="reflection-input" placeholder="Type here..."></textarea>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== STATUS GATE ===== -->
+    <div class="reflection-status" id="reflectionStatus">
+      Quests checked: 0/3 · Reflections written: 0/4
+    </div>
+
+    <!-- ===== CHAPTER NAV ===== -->
+    <nav class="ch-nav">
+      <div class="nav-side">
+        <a class="nav-link" href="journey-map-mockup.html">← Back to the Map</a>
+        <span class="hint">Pop home anytime. Your work saves itself.</span>
+      </div>
+      <div class="nav-side" style="text-align:right; align-items:flex-end;">
+        <a class="nav-link next disabled" href="ultimate-quest-mockup.html" id="continueBtn" aria-disabled="true">Walk on to the Ultimate Quest →</a>
+        <span class="hint">Answer every reflection to walk on.</span>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ===== RIGHT SIDEBAR (Avatar HUD + Drawer + Field Notes journal) ===== -->
+  <aside class="side">
+
+    <!-- Avatar HUD -->
+    <div class="hud-card">
+      <div class="hud-row">
+        <div class="avatar-frame">
+          <svg viewBox="0 0 32 48" shape-rendering="crispEdges">
+            <!-- Alex figure -->
+            <rect x="9" y="3" width="14" height="2" fill="#A06940"/>
+            <rect x="8" y="5" width="16" height="3" fill="#A06940"/>
+            <rect x="9" y="8" width="14" height="2" fill="#A06940"/>
+            <rect x="8" y="8" width="2" height="11" fill="#A06940"/>
+            <rect x="22" y="8" width="2" height="11" fill="#A06940"/>
+            <rect x="9" y="18" width="1" height="2" fill="#A06940"/>
+            <rect x="22" y="18" width="1" height="2" fill="#A06940"/>
+            <rect x="10" y="6" width="12" height="11" fill="#E8C5A4"/>
+            <rect x="9" y="7" width="1" height="9" fill="#E8C5A4"/>
+            <rect x="22" y="7" width="1" height="9" fill="#E8C5A4"/>
+            <rect x="9" y="8" width="14" height="2" fill="#A06940"/>
+            <rect x="12" y="10" width="1" height="3" fill="#1A0E2E"/>
+            <rect x="19" y="10" width="1" height="3" fill="#1A0E2E"/>
+            <rect x="14" y="14" width="1" height="1" fill="#C8576B"/>
+            <rect x="17" y="14" width="1" height="1" fill="#C8576B"/>
+            <rect x="15" y="15" width="2" height="1" fill="#C8576B"/>
+            <rect x="14" y="17" width="4" height="2" fill="#E8C5A4"/>
+            <rect x="8" y="19" width="16" height="9" fill="#FF974D"/>
+            <rect x="6" y="19" width="2" height="9" fill="#FF974D"/>
+            <rect x="24" y="19" width="2" height="9" fill="#FF974D"/>
+            <rect x="6" y="28" width="2" height="2" fill="#E8C5A4"/>
+            <rect x="24" y="28" width="2" height="2" fill="#E8C5A4"/>
+            <rect x="8" y="28" width="16" height="11" fill="#46137B"/>
+            <rect x="15" y="32" width="2" height="7" fill="#46137B"/>
+            <rect x="15" y="34" width="2" height="5" fill="rgba(0,0,0,0.15)"/>
+            <rect x="8" y="39" width="7" height="3" fill="#1A0E2E"/>
+            <rect x="17" y="39" width="7" height="3" fill="#1A0E2E"/>
+          </svg>
+        </div>
+        <div class="hud-meta">
+          <div class="label">Your Renter</div>
+          <div class="name">Alex</div>
+          <span class="class-chip">Level Upper</span>
+          <dl class="move-info">
+            <dt>From</dt><dd>San Francisco, CA</dd>
+            <dt>To</dt><dd>San Francisco, CA</dd>
+            <dt>Signed</dt><dd>6 months ago</dd>
+            <dt>Bedrooms</dt><dd>1 BR (Hayes Valley)</dd>
+            <dt>Income</dt><dd>$185K</dd>
+            <dt>Old rent</dt><dd>$2,500</dd>
+            <dt>New rent</dt><dd>$3,950</dd>
+          </dl>
+        </div>
+      </div>
+
+      <details class="hud-bio">
+        <summary class="hud-bio-summary">
+          <span>About Alex</span>
+          <span class="hud-bio-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="hud-bio-body">
+          <p>Six months ago, Alex signed a one-bedroom in Hayes Valley. The bike is on the wall mount, the kitchen has counter space, the bedroom door closes. The upgrade landed.</p>
+          <p>Alex doesn't think much about the search anymore. The Apartment List app is still installed but hasn't been opened in three months. Once in a while an email arrives that they barely read.</p>
+          <p>The next move is years out, probably. But the question of whether Alex defaults back to Apartment List when it comes is being quietly answered every week, in small moments they barely notice.</p>
+        </div>
+      </details>
+    </div>
+
+    <!-- Field Notes journal — populates as you write notes in the chapter -->
+    <div class="notes-card">
+      <h3>Field Notes <span style="font-family:'VT323',monospace;font-size:13px;color:var(--ink-soft);letter-spacing:1px;">0 saved</span></h3>
+      <p class="meta">Your observations appear here as you save them.</p>
+      <div class="notes-list">
+        <div class="note empty">
+          <p class="note-text">Nothing yet. Start typing in the Core Quests below.</p>
+        </div>
+      </div>
+      
+    </div>
+
+  </aside>
+
+</main>
+
+<script>
+  // === Action checkboxes auto-check parent quest when all are checked ===
+  document.querySelectorAll('.quest').forEach(quest => {
+    const stepChecks = quest.querySelectorAll('.step-check');
+    const masterCheck = quest.querySelector('.quest-check');
+    if (!stepChecks.length || !masterCheck) return;
+    stepChecks.forEach(s => {
+      s.addEventListener('change', () => {
+        masterCheck.checked = Array.from(stepChecks).every(c => c.checked);
+        updateGate();
+      });
+    });
+    masterCheck.addEventListener('change', () => {
+      if (masterCheck.checked) stepChecks.forEach(s => s.checked = true);
+      updateGate();
+    });
+  });
+
+  // === Gate the Continue button on Core Quest completion + reflections ===
+  // Side quest (.quest.optional) is excluded — its checkbox doesn't count
+  // and its textarea uses .sidequest-input instead of .reflection-input.
+  const allReflectionInputs = document.querySelectorAll('.reflection-input');
+  const coreQuestChecks = document.querySelectorAll('.quest:not(.optional) .quest-check');
+  const continueBtn = document.getElementById('continueBtn');
+  const statusEl = document.getElementById('reflectionStatus');
+
+  function updateGate() {
+    const reflectionsFilled = Array.from(allReflectionInputs).filter(t => t.value.trim().length >= 4).length;
+    const totalReflections = allReflectionInputs.length;
+    const questsChecked = Array.from(coreQuestChecks).filter(c => c.checked).length;
+    const totalQuests = coreQuestChecks.length;
+
+    const allDone = (reflectionsFilled >= totalReflections) && (questsChecked >= totalQuests);
+
+    statusEl.textContent = allDone
+      ? `All quests complete · ready to walk on`
+      : `Quests checked: ${questsChecked}/${totalQuests} · Reflections written: ${reflectionsFilled}/${totalReflections}`;
+
+    if (allDone) {
+      statusEl.classList.add('complete');
+      continueBtn.classList.remove('disabled');
+      continueBtn.removeAttribute('aria-disabled');
+    } else {
+      statusEl.classList.remove('complete');
+      continueBtn.classList.add('disabled');
+      continueBtn.setAttribute('aria-disabled', 'true');
+    }
+  }
+  allReflectionInputs.forEach(t => t.addEventListener('input', updateGate));
+
+  // Set initial state so the counter reflects "0/3 · 0/4" rather than the static fallback.
+  updateGate();
+
+  // Decorative continue handler (mockup only)
+  continueBtn.addEventListener('click', e => {
+    if (continueBtn.classList.contains('disabled')) {
+      e.preventDefault();
+      statusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    e.preventDefault();
+    window.location.href = 'ultimate-quest-mockup.html';
+  });
+</script>
+
+<!-- Footer town scene (shared illustration) -->
+<img class="town-scene" src="footer-town-scene.svg" alt="" aria-hidden="true">
+
+<script src="rj-shared.js" defer></script>
+</body>
+</html>

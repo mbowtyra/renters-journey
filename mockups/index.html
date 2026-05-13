@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Renter's Journey · Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #6105C4;
+    --indigo-deep: #46137B;
+    --oat: #F5F2ED;
+    --paper: #FFFCF0;
+    --light-purple: #C384F0;
+    --lavender: #D7C6F1;
+    --magenta: #C5377F;
+    --orange: #FF974D;
+    --red: #FF0029;
+    --ink: #2D1B0E;
+    --ink-soft: #5D4037;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--oat);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.55;
+    padding: 48px 24px 80px;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+
+  .hero {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .hero::before {
+    content: ""; display: block; height: 8px;
+    background: linear-gradient(90deg, var(--indigo) 0%, var(--light-purple) 25%, var(--magenta) 50%, var(--orange) 75%, var(--red) 100%);
+    margin: -28px -32px 22px;
+  }
+  .eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 16px; letter-spacing: 3px;
+    color: var(--indigo); text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .eyebrow .pixel-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--indigo); margin-right: 10px; vertical-align: middle;
+  }
+  h1 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 40px; font-weight: 600;
+    color: var(--ink); line-height: 1;
+    margin-bottom: 10px; letter-spacing: -0.5px;
+  }
+  h1 .accent { color: var(--orange); }
+  .lede {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 640px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+  }
+  .card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 20px 22px;
+    text-decoration: none;
+    color: var(--ink);
+    display: flex; flex-direction: column;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: ""; display: block; height: 6px;
+    background: var(--accent, var(--indigo));
+    margin: -20px -22px 14px;
+  }
+  .card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 var(--ink-soft);
+  }
+  .card .num {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .card .title {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.1;
+  }
+  .card .desc {
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    flex: 1;
+  }
+  .card .open {
+    margin-top: 12px;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--accent, var(--indigo));
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .card .open::after { content: "→"; }
+
+  /* per-card accents */
+  .card.persona       { --accent: var(--indigo); }
+  .card.avatar        { --accent: var(--magenta); }
+  .card.journey       { --accent: var(--orange); }
+  .card.chapter       { --accent: var(--orange); }
+  .card.footer-asset  { --accent: var(--light-purple); }
+
+  .meta {
+    margin-top: 28px;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-top: 2px dashed var(--ink-soft);
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow"><span class="pixel-dot"></span>Mockups · dev preview</div>
+    <h1>The Renter's <span class="accent">Journey</span></h1>
+    <p class="lede">Pull up a stool. This is a side door for poking at any mockup directly. The real flow goes <em>persona</em> → <em>avatar</em> → <em>map</em> → <em>chapter</em>, but you can open whichever one you need.</p>
+  </div>
+
+  <div class="grid">
+    <a class="card persona" href="persona-selection-mockup.html">
+      <div class="num">01 · Entry</div>
+      <div class="title">Persona Selection</div>
+      <div class="desc">Pick one. Four very different renters, each with their own kettle going.</div>
+      <div class="open">Open mockup</div>
+    </a>
+
+    <a class="card avatar" href="avatar-creation-mockup.html">
+      <div class="num">02 · Setup</div>
+      <div class="title">Avatar Creation</div>
+      <div class="desc">Customize your sprite and name. Accessories appear here as you earn them later.</div>
+      <div class="open">Open mockup</div>
+    </a>
+
+    <a class="card journey" href="journey-map-mockup.html">
+      <div class="num">03 · Your Map</div>
+      <div class="title">Journey Map</div>
+      <div class="desc">The seven chapters laid out as a card grid. Locked chapters wait quietly down the path. Doubles as the navigator.</div>
+      <div class="open">Open mockup</div>
+    </a>
+
+    <a class="card chapter" href="chapter-1-long-night-jordan-mockup.html">
+      <div class="num">04 · Chapter 1</div>
+      <div class="title">The Long Night · Jordan</div>
+      <div class="desc">First playable chapter. Three quiet quests, three field-note composers, one reflection question at the end.</div>
+      <div class="open">Open mockup</div>
+    </a>
+  </div>
+
+  <div class="meta">Served locally · the journey map is the player-facing navigator</div>
+
+</div>
+</body>
+</html>

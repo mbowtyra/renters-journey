@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Renter's Journey · Choose Your Traveler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #6105C4;
+    --indigo-deep: #46137B;
+    --oat: #F5F2ED;
+    --oat-warm: #EFE6D6;
+    --paper: #FFFCF0;
+    --light-purple: #C384F0;
+    --lavender: #D7C6F1;
+    --orange: #FF974D;
+    --red: #FF0029;
+    --ink: #2D1B0E;
+    --ink-soft: #5D4037;
+    --grass: #7AAB58;
+    --grass-dark: #5C8841;
+    --tree: #3D5A3D;
+    --tree-light: #6B9E67;
+    --bark: #5D4037;
+    --sky-top: #FFE4C7;
+    --sky-mid: #F5C6D6;
+    --sky-low: #D7C6F1;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 35%, var(--sky-low) 65%, var(--oat) 100%);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.5;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  /* Background fade overlay: cozy sunset stays at the top,
+     gently dims as the reader scrolls into the content for legibility */
+  .bg-fade {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(180deg,
+      rgba(245, 242, 237, 0) 0%,
+      rgba(245, 242, 237, 0.78) 35%,
+      rgba(245, 242, 237, 0.92) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+    will-change: opacity;
+  }
+  .bg-fade.in { opacity: 1; }
+
+  /* === Landing intro sections === */
+  .intro {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 32px 380px;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+  .intro .content { max-width: 780px; margin: 0 auto; }
+
+  .intro-welcome h1 {
+    font-family: 'Pixelify Sans', 'Press Start 2P', monospace;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: 0;
+    margin: 16px 0 20px;
+    text-shadow: 3px 3px 0 rgba(45, 27, 14, 0.1);
+  }
+  .intro-welcome h1 .accent { color: var(--indigo); display: block; }
+  .intro-welcome .lede {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: clamp(17px, 1.6vw, 22px);
+    color: var(--ink-soft);
+    margin-top: 12px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .intro h2 {
+    font-family: 'Pixelify Sans', 'Press Start 2P', monospace;
+    font-size: clamp(30px, 4vw, 52px);
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: 0;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 0 rgba(45, 27, 14, 0.1);
+  }
+  .intro h2 em { font-style: italic; color: var(--indigo); }
+
+  .intro p {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(17px, 1.5vw, 21px);
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .intro p.quote {
+    font-style: italic;
+    color: var(--ink-soft);
+    border-left: 4px solid var(--indigo);
+    padding: 12px 18px;
+    margin: 32px auto;
+    max-width: 600px;
+    text-align: left;
+    background: var(--paper);
+    box-shadow: 3px 3px 0 var(--ink-soft);
+  }
+
+  /* Steps */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+    text-align: left;
+  }
+  .step {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink-soft);
+    padding: 22px 20px 20px;
+    position: relative;
+  }
+  .step .step-num {
+    position: absolute;
+    top: -18px;
+    left: -18px;
+    width: 38px;
+    height: 38px;
+    background: var(--indigo);
+    color: var(--paper);
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink-soft);
+  }
+  .step h3 {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 19px;
+    margin-bottom: 8px;
+    color: var(--indigo);
+  }
+  .step p { font-size: 15px; margin-bottom: 0; line-height: 1.5; }
+
+  /* Questions */
+  .questions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    max-width: 620px;
+    margin: 36px auto 28px;
+  }
+  .q {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink-soft);
+    padding: 18px 14px;
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .q em { font-style: italic; color: var(--indigo); }
+
+  /* Observation chips */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .chip {
+    font-family: 'VT323', monospace;
+    font-size: 17px;
+    padding: 6px 14px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    color: var(--ink);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .chip.bug    { border-color: var(--red);          color: var(--red); }
+  .chip.pain   { border-color: var(--orange);       color: var(--orange); }
+  .chip.design { border-color: var(--indigo);       color: var(--indigo); }
+  .chip.praise { border-color: var(--grass-dark);   color: var(--grass-dark); }
+  .chip.idea   { border-color: var(--light-purple); color: var(--indigo-deep); }
+
+  .example-email {
+    display: inline-block;
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    background: var(--paper);
+    border: 2px dashed var(--indigo);
+    padding: 14px 26px;
+    color: var(--indigo);
+    margin: 24px 0 12px;
+    word-break: break-all;
+  }
+  .intro p.small {
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  .btn-explore {
+    margin-top: 28px;
+    padding: 16px 38px;
+    background: var(--indigo);
+    color: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: inline-block;
+    text-decoration: none;
+  }
+  .btn-explore:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink); }
+  .btn-explore:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 340px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--ink-soft);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    animation: scroll-bounce 2.5s infinite ease-in-out;
+    z-index: 3;
+  }
+  @keyframes scroll-bounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50%      { transform: translate(-50%, -10px); }
+  }
+
+  @media (max-width: 720px) {
+    .intro { padding: 40px 16px 260px; min-height: 90vh; }
+    .questions { grid-template-columns: 1fr; }
+    .step .step-num { width: 32px; height: 32px; font-size: 18px; top: -16px; left: -16px; }
+    .scroll-hint { bottom: 240px; }
+  }
+
+  /* Town scene SVG anchored to bottom of viewport */
+  .town-scene {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 360px;
+    z-index: 0;
+    pointer-events: none;
+    display: block;
+  }
+
+  /* Drifting clouds in sky */
+  .clouds {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 0;
+    animation: float 60s linear infinite;
+  }
+
+  .cloud::before, .cloud::after {
+    content: "";
+    position: absolute;
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .cloud.c1 { width: 80px; height: 16px; top: 20px; left: 10%; animation-duration: 220s; }
+  .cloud.c1::before { width: 50px; height: 12px; top: -10px; left: 18px; }
+  .cloud.c1::after { width: 30px; height: 8px; top: -16px; left: 35px; }
+
+  .cloud.c2 { width: 60px; height: 14px; top: 80px; left: 50%; animation-duration: 280s; animation-delay: -60s; }
+  .cloud.c2::before { width: 40px; height: 10px; top: -8px; left: 14px; }
+
+  .cloud.c3 { width: 100px; height: 18px; top: 40px; left: 80%; animation-duration: 250s; animation-delay: -120s; }
+  .cloud.c3::before { width: 70px; height: 14px; top: -12px; left: 20px; }
+  .cloud.c3::after { width: 40px; height: 10px; top: -20px; left: 45px; }
+
+  @keyframes float {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(120vw); }
+  }
+
+  /* Birds occasionally crossing the sky */
+  .bird {
+    position: fixed;
+    top: 120px;
+    left: -40px;
+    z-index: 2;
+    pointer-events: none;
+    animation: fly 35s linear infinite;
+    animation-delay: 3s;
+  }
+
+  @keyframes fly {
+    0%   { transform: translate(0, 0); opacity: 0; }
+    3%   { opacity: 1; }
+    25%  { transform: translate(30vw, -25px); }
+    50%  { transform: translate(60vw, 5px); }
+    75%  { transform: translate(90vw, -15px); }
+    97%  { opacity: 1; }
+    100% { transform: translate(115vw, 0); opacity: 0; }
+  }
+
+  /* Stage layout */
+  .stage {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    padding: 64px 32px 420px;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    letter-spacing: 4px;
+    color: var(--indigo);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .eyebrow .pixel-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--indigo);
+    margin: 0 12px;
+    transform: translateY(-3px);
+  }
+
+  h1.title {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: clamp(48px, 7vw, 88px);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    text-shadow: 4px 4px 0 rgba(45, 27, 14, 0.08);
+  }
+
+  h1.title .accent { color: var(--indigo); }
+
+  .subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: clamp(18px, 1.6vw, 22px);
+    color: var(--ink-soft);
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  .pixel-divider {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 32px 0;
+  }
+  .pixel-divider span {
+    width: 8px; height: 8px;
+    background: var(--indigo);
+  }
+  .pixel-divider span:nth-child(2) { background: var(--light-purple); }
+  .pixel-divider span:nth-child(3) { background: var(--orange); }
+  .pixel-divider span:nth-child(4) { background: var(--red); }
+  .pixel-divider span:nth-child(5) { background: var(--ink); }
+
+  /* Card grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+  }
+
+  /* Card */
+  .card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: var(--card-color, var(--indigo));
+  }
+
+  .card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 10px 10px 0 var(--ink-soft);
+  }
+
+  /* Item portrait */
+  .item-frame {
+    aspect-ratio: 1;
+    margin-bottom: 18px;
+    border: 3px solid var(--ink);
+    background: var(--portrait-bg, var(--lavender));
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .item-frame svg {
+    width: 75%;
+    height: 75%;
+    display: block;
+    filter: drop-shadow(2px 2px 0 rgba(45, 27, 14, 0.18));
+  }
+
+  /* Class badge */
+  .badge {
+    display: inline-block;
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 12px;
+    color: var(--paper);
+    background: var(--card-color, var(--indigo));
+    border: 2px solid var(--ink);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    align-self: flex-start;
+    text-transform: uppercase;
+  }
+
+  h2.name {
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .tagline {
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  blockquote.mantra {
+    border-left: 4px solid var(--card-color, var(--indigo));
+    padding: 6px 0 6px 14px;
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 18px;
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .stat {
+    background: var(--oat);
+    border: 2px solid var(--ink);
+    padding: 6px 10px;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .stat .label {
+    display: block;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+
+  .stat .val {
+    display: block;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .btn-embark {
+    margin-top: auto;
+    padding: 12px 16px;
+    background: var(--card-color, var(--indigo));
+    color: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    font-family: 'Pixelify Sans', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .btn-embark:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .btn-embark:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 var(--ink);
+  }
+
+  /* Card variants */
+  .card.alex { --card-color: var(--indigo); --portrait-bg: #F0E4FF; }
+  .card.jordan { --card-color: var(--orange); --portrait-bg: #FFEED9; }
+  .card.taylor-riley { --card-color: var(--light-purple); --portrait-bg: #ECE0F7; }
+  .card.jamie { --card-color: var(--red); --portrait-bg: #FFE6E9; }
+
+  /* Info area: holds default content (mantra + stats) AND hover bio overlay */
+  .info-area {
+    position: relative;
+    margin-bottom: 18px;
+    min-height: 180px;
+  }
+
+  .default-info, .bio-overlay {
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .default-info { opacity: 1; }
+
+  .bio-overlay {
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    background: var(--paper);
+    border-left: 4px solid var(--card-color, var(--indigo));
+    padding: 12px 14px;
+    overflow-y: auto;
+  }
+
+  .bio-overlay p {
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .card:hover .default-info { opacity: 0; pointer-events: none; }
+  .card:hover .bio-overlay { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+  /* Touch devices: tap to flip */
+  @media (hover: none) {
+    .card:active .default-info { opacity: 0; }
+    .card:active .bio-overlay { opacity: 1; }
+  }
+
+  /* Sparkles on hover */
+  .sparkle {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: var(--card-color, var(--indigo));
+    opacity: 0;
+    animation: twinkle 4s infinite;
+  }
+  .card:hover .sparkle { opacity: 0.8; }
+  .sparkle.s1 { top: 14px; right: 18px; animation-delay: 0s; }
+  .sparkle.s2 { top: 60px; right: 38px; animation-delay: 1.2s; }
+  .sparkle.s3 { top: 100px; right: 14px; animation-delay: 2.4s; }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.4); }
+  }
+
+  /* Footer */
+  footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-top: 48px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-style: italic;
+    padding-bottom: 16px;
+  }
+
+  footer .field-note-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper);
+    border: 2px dashed var(--ink-soft);
+    padding: 10px 16px;
+    margin-top: 8px;
+  }
+
+  footer .info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px; height: 18px;
+    background: var(--indigo);
+    color: var(--paper);
+    border-radius: 50%;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  /* Lantern glow animation */
+  @keyframes flicker {
+    0%, 100% { opacity: 0.7; }
+    50%      { opacity: 1; }
+  }
+
+  /* Mobile */
+  @media (max-width: 720px) {
+    .stage { padding: 40px 16px 320px; }
+    .grid { grid-template-columns: 1fr; }
+    .card { box-shadow: 5px 5px 0 var(--ink-soft); }
+    .town-scene { height: 240px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background fade overlay (smoothly hides the sunset behind content) -->
+<div class="bg-fade" aria-hidden="true"></div>
+
+<!-- Drifting clouds -->
+<div class="clouds" aria-hidden="true">
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+</div>
+
+<!-- Bird flying across -->
+<svg class="bird" width="20" height="12" viewBox="0 0 20 12" aria-hidden="true">
+  <path d="M 2 6 Q 6 2 10 6 Q 14 2 18 6" stroke="#2D1B0E" stroke-width="2" fill="none" stroke-linecap="round" />
+</svg>
+
+<!-- Town scene at bottom -->
+<svg class="town-scene" viewBox="0 0 1920 360" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+  <!-- Distant rolling hills for depth -->
+  <g opacity="0.45">
+    <ellipse cx="200" cy="320" rx="280" ry="60" fill="#7A9E7A"/>
+    <ellipse cx="700" cy="325" rx="320" ry="55" fill="#7A9E7A"/>
+    <ellipse cx="1300" cy="320" rx="300" ry="60" fill="#7A9E7A"/>
+    <ellipse cx="1820" cy="325" rx="240" ry="50" fill="#7A9E7A"/>
+  </g>
+
+  <!-- Distant rounded tree silhouettes for depth -->
+  <g opacity="0.55">
+    <ellipse cx="60" cy="240" rx="32" ry="38" fill="#6A8A6A"/>
+    <ellipse cx="220" cy="245" rx="30" ry="36" fill="#6A8A6A"/>
+    <ellipse cx="640" cy="248" rx="34" ry="38" fill="#6A8A6A"/>
+    <ellipse cx="980" cy="246" rx="32" ry="36" fill="#6A8A6A"/>
+    <ellipse cx="1280" cy="248" rx="30" ry="36" fill="#6A8A6A"/>
+    <ellipse cx="1620" cy="246" rx="34" ry="38" fill="#6A8A6A"/>
+    <ellipse cx="1820" cy="244" rx="32" ry="38" fill="#6A8A6A"/>
+  </g>
+
+  <!-- ========== Warm horizon glow behind the buildings ========== -->
+  <rect x="0" y="180" width="1920" height="160" fill="url(#horizonGlow)" opacity="0.55"/>
+  <defs>
+    <linearGradient id="horizonGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFB985" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#FF9460" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#E07F5C" stop-opacity="0.7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ========== Picket fence section (left) ========== -->
+  <g transform="translate(20, 280)">
+    <rect x="0" y="22" width="80" height="2" fill="#7A4F2E"/>
+    <rect x="0" y="32" width="80" height="2" fill="#7A4F2E"/>
+    <g fill="#A0683E">
+      <path d="M 0 24 L 0 42 L 6 42 L 6 24 L 3 18 Z"/>
+      <path d="M 14 24 L 14 42 L 20 42 L 20 24 L 17 18 Z"/>
+      <path d="M 28 24 L 28 42 L 34 42 L 34 24 L 31 18 Z"/>
+      <path d="M 42 24 L 42 42 L 48 42 L 48 24 L 45 18 Z"/>
+      <path d="M 56 24 L 56 42 L 62 42 L 62 24 L 59 18 Z"/>
+      <path d="M 70 24 L 70 42 L 76 42 L 76 24 L 73 18 Z"/>
+    </g>
+  </g>
+
+  <!-- ========== Building 1: STOREFRONT CAFE (matches reference vibe) ========== -->
+  <g transform="translate(120, 60)">
+
+    <!-- main cream walls -->
+    <rect x="0" y="40" width="220" height="240" fill="#FFE8C4"/>
+    <!-- subtle wall highlight (warm light from sunset) -->
+    <rect x="0" y="40" width="220" height="6" fill="#FFF1D4"/>
+
+    <!-- BRICK CORNER QUOINS (terracotta blocks at corners, like reference) -->
+    <g fill="#C66A47">
+      <!-- left-side quoins -->
+      <rect x="0" y="40" width="14" height="14"/>
+      <rect x="0" y="68" width="14" height="14"/>
+      <rect x="0" y="96" width="14" height="14"/>
+      <rect x="0" y="124" width="14" height="14"/>
+      <rect x="0" y="152" width="14" height="14"/>
+      <rect x="0" y="180" width="14" height="14"/>
+      <rect x="0" y="208" width="14" height="14"/>
+      <rect x="0" y="236" width="14" height="14"/>
+      <rect x="0" y="264" width="14" height="14"/>
+      <!-- right-side quoins -->
+      <rect x="206" y="40" width="14" height="14"/>
+      <rect x="206" y="68" width="14" height="14"/>
+      <rect x="206" y="96" width="14" height="14"/>
+      <rect x="206" y="124" width="14" height="14"/>
+      <rect x="206" y="152" width="14" height="14"/>
+      <rect x="206" y="180" width="14" height="14"/>
+      <rect x="206" y="208" width="14" height="14"/>
+      <rect x="206" y="236" width="14" height="14"/>
+      <rect x="206" y="264" width="14" height="14"/>
+    </g>
+    <!-- mortar between quoins -->
+    <g fill="#46137B" opacity="0.6">
+      <rect x="0" y="54" width="14" height="2"/>
+      <rect x="0" y="82" width="14" height="2"/>
+      <rect x="0" y="110" width="14" height="2"/>
+      <rect x="0" y="138" width="14" height="2"/>
+      <rect x="0" y="166" width="14" height="2"/>
+      <rect x="0" y="194" width="14" height="2"/>
+      <rect x="0" y="222" width="14" height="2"/>
+      <rect x="0" y="250" width="14" height="2"/>
+      <rect x="206" y="54" width="14" height="2"/>
+      <rect x="206" y="82" width="14" height="2"/>
+      <rect x="206" y="110" width="14" height="2"/>
+      <rect x="206" y="138" width="14" height="2"/>
+      <rect x="206" y="166" width="14" height="2"/>
+      <rect x="206" y="194" width="14" height="2"/>
+      <rect x="206" y="222" width="14" height="2"/>
+      <rect x="206" y="250" width="14" height="2"/>
+    </g>
+
+    <!-- TOP CORNICE (brick band, with stepped trim, NO spike) -->
+    <rect x="-6" y="30" width="232" height="14" fill="#C66A47"/>
+    <rect x="-6" y="30" width="232" height="3" fill="#46137B"/>
+    <rect x="-6" y="42" width="232" height="2" fill="#46137B"/>
+    <!-- decorative dentils -->
+    <g fill="#46137B">
+      <rect x="0" y="34" width="3" height="6"/>
+      <rect x="10" y="34" width="3" height="6"/>
+      <rect x="20" y="34" width="3" height="6"/>
+      <rect x="30" y="34" width="3" height="6"/>
+      <rect x="40" y="34" width="3" height="6"/>
+      <rect x="50" y="34" width="3" height="6"/>
+      <rect x="60" y="34" width="3" height="6"/>
+      <rect x="70" y="34" width="3" height="6"/>
+      <rect x="80" y="34" width="3" height="6"/>
+      <rect x="90" y="34" width="3" height="6"/>
+      <rect x="100" y="34" width="3" height="6"/>
+      <rect x="110" y="34" width="3" height="6"/>
+      <rect x="120" y="34" width="3" height="6"/>
+      <rect x="130" y="34" width="3" height="6"/>
+      <rect x="140" y="34" width="3" height="6"/>
+      <rect x="150" y="34" width="3" height="6"/>
+      <rect x="160" y="34" width="3" height="6"/>
+      <rect x="170" y="34" width="3" height="6"/>
+      <rect x="180" y="34" width="3" height="6"/>
+      <rect x="190" y="34" width="3" height="6"/>
+      <rect x="200" y="34" width="3" height="6"/>
+      <rect x="210" y="34" width="3" height="6"/>
+    </g>
+
+    <!-- CHIMNEY (brick, rounded cap, no spike) -->
+    <rect x="155" y="0" width="22" height="40" fill="#C66A47"/>
+    <rect x="155" y="0" width="22" height="3" fill="#FFD485"/>
+    <rect x="151" y="-4" width="30" height="6" fill="#46137B"/>
+    <rect x="159" y="6" width="14" height="2" fill="#46137B"/>
+    <rect x="159" y="14" width="14" height="2" fill="#46137B"/>
+    <rect x="159" y="22" width="14" height="2" fill="#46137B"/>
+
+    <!-- ========== UPPER FLOOR (3 windows) ========== -->
+    <!-- Window 1 (left) - lit, with curtains -->
+    <g transform="translate(28, 60)">
+      <!-- window frame (brick surround) -->
+      <rect x="-4" y="-4" width="44" height="46" fill="#C66A47"/>
+      <rect x="-2" y="-2" width="40" height="42" fill="#7A4F2E"/>
+      <!-- glass -->
+      <rect x="2" y="2" width="32" height="34" fill="#FFE19E"/>
+      <!-- horizontal sash bar -->
+      <rect x="2" y="18" width="32" height="2" fill="#7A4F2E"/>
+      <!-- vertical sash bar -->
+      <rect x="17" y="2" width="2" height="34" fill="#7A4F2E"/>
+      <!-- curtains (indigo, drawn open at sides) -->
+      <rect x="2" y="2" width="6" height="34" fill="#46137B"/>
+      <rect x="28" y="2" width="6" height="34" fill="#46137B"/>
+      <!-- silhouette of bird in window -->
+      <circle cx="14" cy="13" r="2" fill="#9F2236"/>
+      <ellipse cx="16" cy="14" rx="3" ry="2" fill="#9F2236"/>
+      <!-- sill -->
+      <rect x="-6" y="42" width="48" height="4" fill="#46137B"/>
+    </g>
+
+    <!-- Window 2 (center) - lit -->
+    <g transform="translate(90, 60)">
+      <rect x="-4" y="-4" width="44" height="46" fill="#C66A47"/>
+      <rect x="-2" y="-2" width="40" height="42" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="34" fill="#FFE19E"/>
+      <rect x="2" y="18" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="34" fill="#7A4F2E"/>
+      <!-- curtains (red) -->
+      <rect x="2" y="2" width="5" height="34" fill="#9F2236"/>
+      <rect x="29" y="2" width="5" height="34" fill="#9F2236"/>
+      <rect x="-6" y="42" width="48" height="4" fill="#46137B"/>
+    </g>
+
+    <!-- Window 3 (right) - with flower box -->
+    <g transform="translate(152, 60)">
+      <rect x="-4" y="-4" width="44" height="46" fill="#C66A47"/>
+      <rect x="-2" y="-2" width="40" height="42" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="34" fill="#FFE19E"/>
+      <rect x="2" y="18" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="34" fill="#7A4F2E"/>
+      <rect x="-6" y="42" width="48" height="4" fill="#46137B"/>
+      <!-- flower box -->
+      <rect x="-8" y="44" width="52" height="10" fill="#5D4037"/>
+      <rect x="-8" y="44" width="52" height="2" fill="#3B2A1F"/>
+      <!-- flowers -->
+      <circle cx="-2" cy="42" r="3" fill="#FF0029"/>
+      <circle cx="6" cy="40" r="2.5" fill="#FF974D"/>
+      <circle cx="14" cy="42" r="3" fill="#C384F0"/>
+      <circle cx="22" cy="40" r="2.5" fill="#FF974D"/>
+      <circle cx="30" cy="42" r="3" fill="#FF0029"/>
+      <circle cx="38" cy="40" r="2.5" fill="#FFD485"/>
+      <!-- stems/leaves -->
+      <line x1="-2" y1="42" x2="-2" y2="46" stroke="#588157" stroke-width="1.5"/>
+      <line x1="14" y1="42" x2="14" y2="46" stroke="#588157" stroke-width="1.5"/>
+      <line x1="30" y1="42" x2="30" y2="46" stroke="#588157" stroke-width="1.5"/>
+    </g>
+
+    <!-- ========== STOREFRONT (ground floor) ========== -->
+
+    <!-- Awning above storefront (red+cream stripes, scalloped bottom) -->
+    <rect x="-10" y="142" width="240" height="22" fill="#C8323A"/>
+    <rect x="-10" y="142" width="240" height="3" fill="#9F2236"/>
+    <!-- vertical white stripes -->
+    <rect x="6" y="142" width="14" height="22" fill="#F5F2ED"/>
+    <rect x="36" y="142" width="14" height="22" fill="#F5F2ED"/>
+    <rect x="66" y="142" width="14" height="22" fill="#F5F2ED"/>
+    <rect x="96" y="142" width="14" height="22" fill="#F5F2ED"/>
+    <rect x="126" y="142" width="14" height="22" fill="#F5F2ED"/>
+    <rect x="156" y="142" width="14" height="22" fill="#F5F2ED"/>
+    <rect x="186" y="142" width="14" height="22" fill="#F5F2ED"/>
+    <rect x="216" y="142" width="14" height="22" fill="#F5F2ED"/>
+    <!-- scalloped bottom of awning -->
+    <path d="M -10 164 Q 0 174 10 164 Q 20 174 30 164 Q 40 174 50 164 Q 60 174 70 164 Q 80 174 90 164 Q 100 174 110 164 Q 120 174 130 164 Q 140 174 150 164 Q 160 174 170 164 Q 180 174 190 164 Q 200 174 210 164 Q 220 174 230 164" stroke="#9F2236" stroke-width="2" fill="none"/>
+    <!-- awning support bar -->
+    <rect x="-10" y="138" width="240" height="3" fill="#7A4F2E"/>
+
+    <!-- Big arched window (left of door) -->
+    <g transform="translate(20, 178)">
+      <!-- arched glass background -->
+      <path d="M 0 102 L 0 24 Q 0 0 30 0 Q 60 0 60 24 L 60 102 Z" fill="#7AAFC9"/>
+      <!-- frame -->
+      <path d="M 0 102 L 0 24 Q 0 0 30 0 Q 60 0 60 24 L 60 102" stroke="#7A4F2E" stroke-width="3" fill="none"/>
+      <!-- inner sash bars -->
+      <line x1="30" y1="0" x2="30" y2="102" stroke="#7A4F2E" stroke-width="2"/>
+      <line x1="0" y1="50" x2="60" y2="50" stroke="#7A4F2E" stroke-width="2"/>
+      <!-- glass highlight -->
+      <rect x="3" y="26" width="14" height="22" fill="#A2C6D9" opacity="0.6"/>
+      <!-- sill -->
+      <rect x="-4" y="100" width="68" height="4" fill="#7A4F2E"/>
+    </g>
+
+    <!-- Front door -->
+    <g transform="translate(95, 168)">
+      <rect x="0" y="0" width="30" height="112" fill="#7A4F2E"/>
+      <rect x="0" y="0" width="30" height="4" fill="#5D4037"/>
+      <!-- door panels -->
+      <rect x="3" y="6" width="24" height="44" fill="#5D4037"/>
+      <rect x="5" y="8" width="20" height="20" fill="#FFD485"/>
+      <rect x="5" y="30" width="20" height="18" fill="#C384F0"/>
+      <line x1="15" y1="8" x2="15" y2="48" stroke="#7A4F2E" stroke-width="1"/>
+      <line x1="5" y1="18" x2="25" y2="18" stroke="#7A4F2E" stroke-width="1"/>
+      <!-- bottom panels -->
+      <rect x="3" y="56" width="24" height="48" fill="#5D4037"/>
+      <rect x="5" y="58" width="20" height="20" fill="#C384F0"/>
+      <rect x="5" y="80" width="20" height="22" fill="#C384F0"/>
+      <!-- doorknob -->
+      <circle cx="24" cy="68" r="1.8" fill="#FFD485"/>
+    </g>
+
+    <!-- Big arched window (right of door) -->
+    <g transform="translate(140, 178)">
+      <path d="M 0 102 L 0 24 Q 0 0 30 0 Q 60 0 60 24 L 60 102 Z" fill="#7AAFC9"/>
+      <path d="M 0 102 L 0 24 Q 0 0 30 0 Q 60 0 60 24 L 60 102" stroke="#7A4F2E" stroke-width="3" fill="none"/>
+      <line x1="30" y1="0" x2="30" y2="102" stroke="#7A4F2E" stroke-width="2"/>
+      <line x1="0" y1="50" x2="60" y2="50" stroke="#7A4F2E" stroke-width="2"/>
+      <rect x="3" y="26" width="14" height="22" fill="#A2C6D9" opacity="0.6"/>
+      <rect x="-4" y="100" width="68" height="4" fill="#7A4F2E"/>
+    </g>
+
+    <!-- ========== Stoop / Entry steps ========== -->
+    <rect x="92" y="280" width="36" height="6" fill="#A89070"/>
+
+    <!-- ========== Storefront chalkboard sign on sidewalk ========== -->
+    <g transform="translate(60, 274)">
+      <rect x="0" y="0" width="22" height="28" fill="#3B2A1F"/>
+      <rect x="2" y="2" width="18" height="24" fill="#1A0E2E"/>
+      <text x="11" y="10" font-family="serif" font-size="5" fill="#FFD485" text-anchor="middle">Today</text>
+      <text x="11" y="17" font-family="serif" font-size="5" fill="#FFE8C4" text-anchor="middle">latte</text>
+      <text x="11" y="24" font-family="serif" font-size="5" fill="#FFD485" text-anchor="middle">$4</text>
+      <!-- easel legs -->
+      <line x1="3" y1="28" x2="-2" y2="34" stroke="#5D4037" stroke-width="1.5"/>
+      <line x1="19" y1="28" x2="24" y2="34" stroke="#5D4037" stroke-width="1.5"/>
+    </g>
+
+    <!-- ========== Potted plant by door ========== -->
+    <g transform="translate(132, 264)">
+      <!-- pot -->
+      <path d="M 0 0 L 18 0 L 16 18 L 2 18 Z" fill="#9F2236"/>
+      <rect x="0" y="0" width="18" height="3" fill="#7A1B2A"/>
+      <!-- foliage (round leaves) -->
+      <ellipse cx="9" cy="-4" rx="14" ry="8" fill="#3D5A3D"/>
+      <ellipse cx="4" cy="-8" rx="8" ry="6" fill="#588157"/>
+      <ellipse cx="14" cy="-7" rx="9" ry="6" fill="#588157"/>
+      <ellipse cx="9" cy="-12" rx="6" ry="4" fill="#6B9E67"/>
+    </g>
+
+    <!-- ========== Small picket fence to the side ========== -->
+    <g transform="translate(-30, 250)">
+      <rect x="0" y="22" width="34" height="2" fill="#7A4F2E"/>
+      <rect x="0" y="32" width="34" height="2" fill="#7A4F2E"/>
+      <g fill="#A0683E">
+        <path d="M 0 24 L 0 42 L 6 42 L 6 24 L 3 18 Z"/>
+        <path d="M 14 24 L 14 42 L 20 42 L 20 24 L 17 18 Z"/>
+        <path d="M 28 24 L 28 42 L 34 42 L 34 24 L 31 18 Z"/>
+      </g>
+    </g>
+
+    <!-- ========== Small foundation strip ========== -->
+    <rect x="-10" y="280" width="240" height="6" fill="#8E7860"/>
+    <g fill="#5D4037" opacity="0.6">
+      <rect x="-6" y="282" width="6" height="2"/>
+      <rect x="6" y="282" width="6" height="2"/>
+      <rect x="20" y="282" width="6" height="2"/>
+      <rect x="34" y="282" width="6" height="2"/>
+      <rect x="50" y="282" width="6" height="2"/>
+      <rect x="190" y="282" width="6" height="2"/>
+      <rect x="206" y="282" width="6" height="2"/>
+      <rect x="220" y="282" width="6" height="2"/>
+    </g>
+  </g>
+
+  <!-- Tree between cafe and Painted Lady -->
+  <g transform="translate(370, 175)">
+    <rect x="22" y="80" width="14" height="50" fill="#5D4037"/>
+    <ellipse cx="29" cy="60" rx="38" ry="36" fill="#3D5A3D"/>
+    <ellipse cx="29" cy="52" rx="32" ry="28" fill="#588157"/>
+    <ellipse cx="22" cy="46" rx="22" ry="18" fill="#6B9E67"/>
+    <ellipse cx="40" cy="56" rx="18" ry="16" fill="#6B9E67"/>
+    <ellipse cx="20" cy="40" rx="10" ry="8" fill="#8FB880" opacity="0.6"/>
+    <circle cx="42" cy="60" r="2" fill="#FFD485"/>
+    <circle cx="14" cy="64" r="2" fill="#FF974D"/>
+  </g>
+
+  <!-- ========== Building 2: PAINTED LADY VICTORIAN ========== -->
+  <g transform="translate(440, 60)">
+    <!-- main lavender walls -->
+    <rect x="0" y="90" width="220" height="190" fill="#B89BD0"/>
+    <rect x="0" y="90" width="220" height="5" fill="#C8B2DC"/>
+
+    <!-- mansard roof (trapezoidal stepped, no spike) -->
+    <rect x="-10" y="78" width="240" height="14" fill="#46137B"/>
+    <rect x="-6" y="68" width="232" height="10" fill="#46137B"/>
+    <rect x="2" y="58" width="216" height="10" fill="#46137B"/>
+    <rect x="14" y="48" width="192" height="10" fill="#46137B"/>
+    <rect x="30" y="40" width="160" height="8" fill="#46137B"/>
+    <rect x="30" y="40" width="160" height="3" fill="#7A4F8C"/>
+
+    <!-- mansard dormer windows -->
+    <rect x="38" y="60" width="22" height="20" fill="#C66A47"/>
+    <rect x="40" y="62" width="18" height="16" fill="#FFE19E"/>
+    <line x1="49" y1="62" x2="49" y2="78" stroke="#7A4F2E" stroke-width="1"/>
+    <rect x="98" y="60" width="22" height="20" fill="#C66A47"/>
+    <rect x="100" y="62" width="18" height="16" fill="#46137B"/>
+    <rect x="160" y="60" width="22" height="20" fill="#C66A47"/>
+    <rect x="162" y="62" width="18" height="16" fill="#FFE19E"/>
+    <line x1="171" y1="62" x2="171" y2="78" stroke="#7A4F2E" stroke-width="1"/>
+
+    <!-- decorative trim under mansard -->
+    <rect x="-4" y="92" width="228" height="3" fill="#7A4F8C"/>
+    <rect x="-4" y="98" width="228" height="2" fill="#7A4F8C"/>
+
+    <!-- BRICK CORNER QUOINS (deep purple) -->
+    <g fill="#46137B">
+      <rect x="0" y="100" width="14" height="14"/>
+      <rect x="0" y="128" width="14" height="14"/>
+      <rect x="0" y="156" width="14" height="14"/>
+      <rect x="0" y="184" width="14" height="14"/>
+      <rect x="0" y="212" width="14" height="14"/>
+      <rect x="0" y="240" width="14" height="14"/>
+      <rect x="0" y="268" width="14" height="12"/>
+      <rect x="206" y="100" width="14" height="14"/>
+      <rect x="206" y="128" width="14" height="14"/>
+      <rect x="206" y="156" width="14" height="14"/>
+      <rect x="206" y="184" width="14" height="14"/>
+      <rect x="206" y="212" width="14" height="14"/>
+      <rect x="206" y="240" width="14" height="14"/>
+      <rect x="206" y="268" width="14" height="12"/>
+    </g>
+
+    <!-- floor 3 windows: left -->
+    <g transform="translate(30, 110)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#C66A47"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="32" fill="#FFE19E"/>
+      <rect x="2" y="16" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="32" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="6" height="32" fill="#9F2236"/>
+      <rect x="28" y="2" width="6" height="32" fill="#9F2236"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#46137B"/>
+    </g>
+    <!-- floor 3 bay window center -->
+    <g transform="translate(86, 105)">
+      <rect x="0" y="0" width="48" height="50" fill="#A07BBF"/>
+      <rect x="0" y="0" width="48" height="4" fill="#7A4F8C"/>
+      <rect x="0" y="46" width="48" height="4" fill="#7A4F8C"/>
+      <rect x="4" y="8" width="40" height="34" fill="#FFE19E"/>
+      <rect x="4" y="22" width="40" height="2" fill="#7A4F2E"/>
+      <line x1="24" y1="8" x2="24" y2="42" stroke="#7A4F2E" stroke-width="1.5"/>
+      <rect x="4" y="8" width="40" height="3" fill="#FFC059"/>
+    </g>
+    <!-- floor 3 right -->
+    <g transform="translate(146, 110)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#C66A47"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="32" fill="#46137B"/>
+      <rect x="2" y="16" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="32" fill="#7A4F2E"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#46137B"/>
+    </g>
+
+    <!-- floor 2 windows -->
+    <g transform="translate(30, 170)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#C66A47"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="32" fill="#FFE19E"/>
+      <rect x="2" y="16" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="32" fill="#7A4F2E"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#46137B"/>
+      <!-- flower box -->
+      <rect x="-8" y="44" width="52" height="8" fill="#5D4037"/>
+      <circle cx="-2" cy="42" r="2.5" fill="#FF0029"/>
+      <circle cx="6" cy="40" r="2" fill="#FF974D"/>
+      <circle cx="14" cy="42" r="2.5" fill="#C384F0"/>
+      <circle cx="22" cy="40" r="2" fill="#FFD485"/>
+      <circle cx="30" cy="42" r="2.5" fill="#FF0029"/>
+      <circle cx="38" cy="40" r="2" fill="#FF974D"/>
+    </g>
+    <g transform="translate(96, 170)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#C66A47"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="32" fill="#FFE19E"/>
+      <rect x="2" y="16" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="32" fill="#7A4F2E"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#46137B"/>
+    </g>
+    <g transform="translate(146, 170)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#C66A47"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="32" fill="#FFE19E"/>
+      <rect x="2" y="16" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="32" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="6" height="32" fill="#46137B"/>
+      <rect x="28" y="2" width="6" height="32" fill="#46137B"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#46137B"/>
+    </g>
+
+    <!-- floor 1 + ornate door -->
+    <g transform="translate(30, 232)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#C66A47"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="32" fill="#FFE19E"/>
+      <rect x="2" y="16" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="32" fill="#7A4F2E"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#46137B"/>
+    </g>
+    <g transform="translate(86, 230)">
+      <path d="M 0 50 L 0 14 Q 0 0 24 0 Q 48 0 48 14 L 48 50 Z" fill="#7A4F2E"/>
+      <path d="M 6 20 L 6 14 Q 6 6 24 6 Q 42 6 42 14 L 42 20 Z" fill="#FFE19E"/>
+      <rect x="6" y="20" width="36" height="28" fill="#5D4037"/>
+      <rect x="8" y="22" width="32" height="14" fill="#C384F0"/>
+      <line x1="24" y1="22" x2="24" y2="36" stroke="#7A4F2E" stroke-width="1"/>
+      <line x1="8" y1="29" x2="40" y2="29" stroke="#7A4F2E" stroke-width="1"/>
+      <circle cx="40" cy="42" r="1.8" fill="#FFD485"/>
+    </g>
+    <g transform="translate(146, 232)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#C66A47"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="32" fill="#FFE19E"/>
+      <rect x="2" y="16" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="32" fill="#7A4F2E"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#46137B"/>
+    </g>
+
+    <!-- foundation -->
+    <rect x="-10" y="280" width="240" height="6" fill="#8E7860"/>
+  </g>
+
+  <!-- Picket fence between buildings 2 and 3 -->
+  <g transform="translate(680, 305)">
+    <rect x="0" y="0" width="120" height="2" fill="#7A4F2E"/>
+    <rect x="0" y="10" width="120" height="2" fill="#7A4F2E"/>
+    <g fill="#A0683E">
+      <path d="M 0 2 L 0 22 L 6 22 L 6 2 L 3 -4 Z"/>
+      <path d="M 14 2 L 14 22 L 20 22 L 20 2 L 17 -4 Z"/>
+      <path d="M 28 2 L 28 22 L 34 22 L 34 2 L 31 -4 Z"/>
+      <path d="M 42 2 L 42 22 L 48 22 L 48 2 L 45 -4 Z"/>
+      <path d="M 56 2 L 56 22 L 62 22 L 62 2 L 59 -4 Z"/>
+      <path d="M 70 2 L 70 22 L 76 22 L 76 2 L 73 -4 Z"/>
+      <path d="M 84 2 L 84 22 L 90 22 L 90 2 L 87 -4 Z"/>
+      <path d="M 98 2 L 98 22 L 104 22 L 104 2 L 101 -4 Z"/>
+      <path d="M 112 2 L 112 22 L 118 22 L 118 2 L 115 -4 Z"/>
+    </g>
+  </g>
+
+  <!-- Tree between buildings 2 and 3 -->
+  <g transform="translate(740, 200)">
+    <rect x="22" y="60" width="14" height="40" fill="#5D4037"/>
+    <ellipse cx="29" cy="50" rx="40" ry="36" fill="#3D5A3D"/>
+    <ellipse cx="29" cy="42" rx="34" ry="30" fill="#588157"/>
+    <ellipse cx="22" cy="36" rx="22" ry="18" fill="#6B9E67"/>
+    <ellipse cx="40" cy="46" rx="16" ry="14" fill="#6B9E67"/>
+    <ellipse cx="20" cy="30" rx="10" ry="8" fill="#8FB880" opacity="0.6"/>
+    <circle cx="42" cy="50" r="2" fill="#FF974D"/>
+    <circle cx="14" cy="56" r="2" fill="#FFD485"/>
+  </g>
+
+  <!-- ========== Building 3: BRICK BROWNSTONE with stoop ========== -->
+  <g transform="translate(820, 50)">
+    <!-- main brick body -->
+    <rect x="0" y="40" width="180" height="240" fill="#9F2236"/>
+    <!-- mortar rows -->
+    <rect x="0" y="80" width="180" height="2" fill="#7A1B2A"/>
+    <rect x="0" y="124" width="180" height="2" fill="#7A1B2A"/>
+    <rect x="0" y="168" width="180" height="2" fill="#7A1B2A"/>
+    <rect x="0" y="212" width="180" height="2" fill="#7A1B2A"/>
+    <!-- brick cross-joints -->
+    <g fill="#7A1B2A" opacity="0.5">
+      <rect x="30" y="56" width="2" height="22"/>
+      <rect x="60" y="56" width="2" height="22"/>
+      <rect x="90" y="56" width="2" height="22"/>
+      <rect x="120" y="56" width="2" height="22"/>
+      <rect x="150" y="56" width="2" height="22"/>
+      <rect x="20" y="84" width="2" height="38"/>
+      <rect x="80" y="84" width="2" height="38"/>
+      <rect x="140" y="84" width="2" height="38"/>
+      <rect x="40" y="128" width="2" height="38"/>
+      <rect x="100" y="128" width="2" height="38"/>
+      <rect x="160" y="128" width="2" height="38"/>
+      <rect x="20" y="172" width="2" height="38"/>
+      <rect x="80" y="172" width="2" height="38"/>
+      <rect x="140" y="172" width="2" height="38"/>
+    </g>
+
+    <!-- stepped cornice (stone trim, no spike) -->
+    <rect x="-10" y="32" width="200" height="10" fill="#7A1B2A"/>
+    <rect x="-6" y="26" width="192" height="6" fill="#7A1B2A"/>
+    <rect x="-2" y="22" width="184" height="4" fill="#7A1B2A"/>
+    <rect x="-10" y="40" width="200" height="2" fill="#5A1320"/>
+    <!-- dentils trim -->
+    <g fill="#5A1320">
+      <rect x="0" y="34" width="3" height="6"/>
+      <rect x="14" y="34" width="3" height="6"/>
+      <rect x="28" y="34" width="3" height="6"/>
+      <rect x="42" y="34" width="3" height="6"/>
+      <rect x="56" y="34" width="3" height="6"/>
+      <rect x="70" y="34" width="3" height="6"/>
+      <rect x="84" y="34" width="3" height="6"/>
+      <rect x="98" y="34" width="3" height="6"/>
+      <rect x="112" y="34" width="3" height="6"/>
+      <rect x="126" y="34" width="3" height="6"/>
+      <rect x="140" y="34" width="3" height="6"/>
+      <rect x="154" y="34" width="3" height="6"/>
+      <rect x="168" y="34" width="3" height="6"/>
+    </g>
+
+    <!-- 4 floors of windows (3 columns) -->
+    <g>
+      <!-- floor 4 -->
+      <g transform="translate(20, 52)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#FFE19E"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="6" height="24" fill="#46137B"/>
+        <rect x="24" y="0" width="6" height="24" fill="#46137B"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+      <g transform="translate(75, 52)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#46137B"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+      <g transform="translate(130, 52)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#FFE19E"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="6" height="24" fill="#9F2236"/>
+        <rect x="24" y="0" width="6" height="24" fill="#9F2236"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+      <!-- floor 3 -->
+      <g transform="translate(20, 96)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#FFE19E"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+      <g transform="translate(75, 96)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#FFE19E"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="6" height="24" fill="#46137B"/>
+        <rect x="24" y="0" width="6" height="24" fill="#46137B"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+      <g transform="translate(130, 96)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#FFE19E"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+      <!-- floor 2 -->
+      <g transform="translate(20, 140)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#FFE19E"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+      <g transform="translate(75, 140)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#46137B"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+      <g transform="translate(130, 140)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#FFE19E"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+      <!-- floor 1 -->
+      <g transform="translate(20, 184)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#FFE19E"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+      <g transform="translate(130, 184)">
+        <rect x="-3" y="-3" width="36" height="30" fill="#7A4F2E"/>
+        <rect x="0" y="0" width="30" height="24" fill="#FFE19E"/>
+        <rect x="0" y="11" width="30" height="2" fill="#7A4F2E"/>
+        <rect x="-5" y="27" width="40" height="3" fill="#46137B"/>
+      </g>
+    </g>
+
+    <!-- entry door + stoop -->
+    <g transform="translate(75, 184)">
+      <rect x="0" y="0" width="30" height="60" fill="#5D4037"/>
+      <rect x="-2" y="-2" width="34" height="4" fill="#3B2A1F"/>
+      <rect x="3" y="4" width="24" height="46" fill="#3B2A1F"/>
+      <rect x="5" y="6" width="20" height="20" fill="#FFE19E"/>
+      <line x1="15" y1="6" x2="15" y2="26" stroke="#7A4F2E" stroke-width="1"/>
+      <line x1="5" y1="16" x2="25" y2="16" stroke="#7A4F2E" stroke-width="1"/>
+      <rect x="5" y="30" width="20" height="18" fill="#C384F0"/>
+      <circle cx="24" cy="42" r="1.8" fill="#FFD485"/>
+    </g>
+    <!-- stoop steps -->
+    <rect x="68" y="244" width="44" height="5" fill="#A89070"/>
+    <rect x="62" y="249" width="56" height="5" fill="#9F8866"/>
+    <rect x="56" y="254" width="68" height="5" fill="#8E7860"/>
+    <rect x="50" y="259" width="80" height="5" fill="#7E6A55"/>
+    <!-- iron railings -->
+    <line x1="70" y1="244" x2="52" y2="264" stroke="#1A0E2E" stroke-width="2"/>
+    <line x1="110" y1="244" x2="128" y2="264" stroke="#1A0E2E" stroke-width="2"/>
+    <line x1="60" y1="252" x2="60" y2="264" stroke="#1A0E2E" stroke-width="1"/>
+    <line x1="120" y1="252" x2="120" y2="264" stroke="#1A0E2E" stroke-width="1"/>
+
+    <!-- foundation -->
+    <rect x="-10" y="280" width="200" height="6" fill="#8E7860"/>
+  </g>
+
+  <!-- Lantern between buildings 3 and 4 -->
+  <g transform="translate(1030, 250)">
+    <rect x="3" y="20" width="2" height="50" fill="#3B2A1F"/>
+    <rect x="-2" y="22" width="12" height="2" fill="#3B2A1F"/>
+    <ellipse cx="4" cy="14" rx="7" ry="3" fill="#3B2A1F"/>
+    <rect x="-1" y="14" width="10" height="10" fill="#3B2A1F"/>
+    <ellipse cx="4" cy="24" rx="5" ry="2" fill="#3B2A1F"/>
+    <circle cx="4" cy="20" r="11" fill="#FFD485" opacity="0.55" style="animation: flicker 3s infinite ease-in-out;"/>
+    <rect x="2" y="16" width="4" height="6" fill="#FF974D"/>
+  </g>
+
+  <!-- Bench beside the lantern -->
+  <g transform="translate(1050, 290)">
+    <rect x="0" y="0" width="60" height="3" fill="#5D4037"/>
+    <rect x="0" y="8" width="60" height="3" fill="#5D4037"/>
+    <rect x="0" y="16" width="60" height="5" fill="#7A4F2E"/>
+    <rect x="3" y="0" width="3" height="24" fill="#3B2A1F"/>
+    <rect x="54" y="0" width="3" height="24" fill="#3B2A1F"/>
+    <rect x="6" y="21" width="3" height="14" fill="#3B2A1F"/>
+    <rect x="51" y="21" width="3" height="14" fill="#3B2A1F"/>
+  </g>
+
+  <!-- ========== Building 4: BOOKSHOP with hanging sign ========== -->
+  <g transform="translate(1140, 90)">
+    <!-- main cream walls -->
+    <rect x="0" y="60" width="240" height="220" fill="#F5E5D0"/>
+    <rect x="0" y="60" width="240" height="5" fill="#FFEFD8"/>
+
+    <!-- BRICK CORNER QUOINS (terracotta) -->
+    <g fill="#46137B">
+      <rect x="0" y="60" width="14" height="14"/>
+      <rect x="0" y="88" width="14" height="14"/>
+      <rect x="0" y="116" width="14" height="14"/>
+      <rect x="0" y="144" width="14" height="14"/>
+      <rect x="0" y="172" width="14" height="14"/>
+      <rect x="0" y="200" width="14" height="14"/>
+      <rect x="0" y="228" width="14" height="14"/>
+      <rect x="0" y="256" width="14" height="14"/>
+      <rect x="226" y="60" width="14" height="14"/>
+      <rect x="226" y="88" width="14" height="14"/>
+      <rect x="226" y="116" width="14" height="14"/>
+      <rect x="226" y="144" width="14" height="14"/>
+      <rect x="226" y="172" width="14" height="14"/>
+      <rect x="226" y="200" width="14" height="14"/>
+      <rect x="226" y="228" width="14" height="14"/>
+      <rect x="226" y="256" width="14" height="14"/>
+    </g>
+
+    <!-- Brown brick top trim -->
+    <rect x="-10" y="50" width="260" height="14" fill="#7A4F2E"/>
+    <rect x="-6" y="42" width="252" height="8" fill="#7A4F2E"/>
+    <rect x="-10" y="60" width="260" height="3" fill="#5D4037"/>
+    <!-- dentils -->
+    <g fill="#5D4037">
+      <rect x="0" y="54" width="3" height="6"/>
+      <rect x="20" y="54" width="3" height="6"/>
+      <rect x="40" y="54" width="3" height="6"/>
+      <rect x="60" y="54" width="3" height="6"/>
+      <rect x="80" y="54" width="3" height="6"/>
+      <rect x="100" y="54" width="3" height="6"/>
+      <rect x="120" y="54" width="3" height="6"/>
+      <rect x="140" y="54" width="3" height="6"/>
+      <rect x="160" y="54" width="3" height="6"/>
+      <rect x="180" y="54" width="3" height="6"/>
+      <rect x="200" y="54" width="3" height="6"/>
+      <rect x="220" y="54" width="3" height="6"/>
+    </g>
+
+    <!-- chimney -->
+    <rect x="180" y="20" width="20" height="40" fill="#A0552E"/>
+    <rect x="176" y="16" width="28" height="6" fill="#7A4F2E"/>
+
+    <!-- upper floor windows -->
+    <g transform="translate(40, 80)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#A0552E"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="32" fill="#FFE19E"/>
+      <rect x="2" y="16" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="32" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="6" height="32" fill="#46137B"/>
+      <rect x="28" y="2" width="6" height="32" fill="#46137B"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#7A4F2E"/>
+    </g>
+    <g transform="translate(100, 80)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#A0552E"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="32" fill="#FFE19E"/>
+      <rect x="2" y="16" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="32" fill="#7A4F2E"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#7A4F2E"/>
+      <rect x="-8" y="44" width="52" height="8" fill="#5D4037"/>
+      <circle cx="-2" cy="42" r="2.5" fill="#FF0029"/>
+      <circle cx="6" cy="40" r="2" fill="#FFD485"/>
+      <circle cx="14" cy="42" r="2.5" fill="#C384F0"/>
+      <circle cx="22" cy="40" r="2" fill="#FF974D"/>
+      <circle cx="30" cy="42" r="2.5" fill="#FF0029"/>
+      <circle cx="38" cy="40" r="2" fill="#FFD485"/>
+    </g>
+    <g transform="translate(160, 80)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#A0552E"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#7A4F2E"/>
+      <rect x="2" y="2" width="32" height="32" fill="#46137B"/>
+      <rect x="2" y="16" width="32" height="2" fill="#7A4F2E"/>
+      <rect x="17" y="2" width="2" height="32" fill="#7A4F2E"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#7A4F2E"/>
+    </g>
+
+    <!-- Hanging sign with chains -->
+    <line x1="60" y1="155" x2="60" y2="172" stroke="#1A0E2E" stroke-width="1"/>
+    <line x1="80" y1="155" x2="80" y2="172" stroke="#1A0E2E" stroke-width="1"/>
+    <rect x="46" y="172" width="48" height="22" fill="#7A4F2E"/>
+    <rect x="46" y="172" width="48" height="3" fill="#5D4037"/>
+    <rect x="46" y="190" width="48" height="3" fill="#5D4037"/>
+    <text x="70" y="186" font-family="serif" font-size="9" fill="#FFE19E" text-anchor="middle" font-weight="bold">BOOKS</text>
+
+    <!-- Awning above storefront (brown stripes for bookshop) -->
+    <rect x="-10" y="155" width="260" height="20" fill="#7A4F2E"/>
+    <rect x="-10" y="155" width="260" height="3" fill="#5D4037"/>
+    <rect x="20" y="155" width="14" height="20" fill="#C384F0"/>
+    <rect x="60" y="155" width="14" height="20" fill="#C384F0"/>
+    <rect x="100" y="155" width="14" height="20" fill="#C384F0"/>
+    <rect x="140" y="155" width="14" height="20" fill="#C384F0"/>
+    <rect x="180" y="155" width="14" height="20" fill="#C384F0"/>
+    <rect x="220" y="155" width="14" height="20" fill="#C384F0"/>
+    <path d="M -10 175 Q 0 184 10 175 Q 20 184 30 175 Q 40 184 50 175 Q 60 184 70 175 Q 80 184 90 175 Q 100 184 110 175 Q 120 184 130 175 Q 140 184 150 175 Q 160 184 170 175 Q 180 184 190 175 Q 200 184 210 175 Q 220 184 230 175 Q 240 184 250 175" stroke="#5D4037" stroke-width="2" fill="none"/>
+
+    <!-- Big shop window with books -->
+    <g transform="translate(30, 188)">
+      <rect x="-2" y="-2" width="84" height="74" fill="#7A4F2E"/>
+      <rect x="0" y="0" width="80" height="70" fill="#7AAFC9"/>
+      <line x1="40" y1="0" x2="40" y2="70" stroke="#7A4F2E" stroke-width="1.5"/>
+      <line x1="0" y1="35" x2="80" y2="35" stroke="#7A4F2E" stroke-width="1.5"/>
+      <rect x="2" y="2" width="14" height="20" fill="#A2C6D9" opacity="0.6"/>
+      <!-- Books in window -->
+      <rect x="6" y="48" width="3" height="20" fill="#FF0029"/>
+      <rect x="10" y="50" width="3" height="18" fill="#46137B"/>
+      <rect x="14" y="46" width="3" height="22" fill="#FF974D"/>
+      <rect x="18" y="51" width="3" height="17" fill="#3D5A3D"/>
+      <rect x="22" y="48" width="3" height="20" fill="#9F2236"/>
+      <rect x="26" y="50" width="3" height="18" fill="#C384F0"/>
+      <rect x="30" y="46" width="3" height="22" fill="#FFD485"/>
+      <rect x="48" y="48" width="3" height="20" fill="#46137B"/>
+      <rect x="52" y="50" width="3" height="18" fill="#FF0029"/>
+      <rect x="56" y="46" width="3" height="22" fill="#FFD485"/>
+      <rect x="60" y="51" width="3" height="17" fill="#588157"/>
+      <rect x="64" y="48" width="3" height="20" fill="#9F2236"/>
+      <rect x="68" y="50" width="3" height="18" fill="#A07BBF"/>
+      <rect x="72" y="46" width="3" height="22" fill="#FF974D"/>
+      <rect x="-4" y="70" width="88" height="4" fill="#7A4F2E"/>
+    </g>
+
+    <!-- Front door with arched top -->
+    <g transform="translate(140, 188)">
+      <path d="M 0 70 L 0 14 Q 0 0 24 0 Q 48 0 48 14 L 48 70 Z" fill="#5D4037"/>
+      <path d="M 4 16 L 4 14 Q 4 4 24 4 Q 44 4 44 14 L 44 16 Z" fill="#FFE19E"/>
+      <rect x="3" y="20" width="42" height="48" fill="#3B2A1F"/>
+      <rect x="6" y="22" width="36" height="20" fill="#C384F0"/>
+      <line x1="24" y1="22" x2="24" y2="42" stroke="#7A4F2E" stroke-width="1"/>
+      <rect x="6" y="46" width="36" height="22" fill="#C384F0"/>
+      <circle cx="40" cy="56" r="1.8" fill="#FFD485"/>
+    </g>
+
+    <!-- Right side: smaller shop window with display -->
+    <g transform="translate(200, 188)">
+      <rect x="-2" y="-2" width="42" height="74" fill="#7A4F2E"/>
+      <rect x="0" y="0" width="38" height="70" fill="#7AAFC9"/>
+      <line x1="0" y1="35" x2="38" y2="35" stroke="#7A4F2E" stroke-width="1.5"/>
+      <rect x="2" y="2" width="10" height="18" fill="#A2C6D9" opacity="0.6"/>
+      <!-- a stack of books inside -->
+      <rect x="8" y="58" width="22" height="3" fill="#9F2236"/>
+      <rect x="10" y="61" width="20" height="3" fill="#46137B"/>
+      <rect x="9" y="64" width="22" height="3" fill="#FF974D"/>
+      <rect x="-4" y="70" width="46" height="4" fill="#7A4F2E"/>
+    </g>
+
+    <!-- Potted plant by door -->
+    <g transform="translate(192, 252)">
+      <path d="M 0 0 L 18 0 L 16 18 L 2 18 Z" fill="#9F2236"/>
+      <rect x="0" y="0" width="18" height="3" fill="#7A1B2A"/>
+      <ellipse cx="9" cy="-4" rx="14" ry="8" fill="#3D5A3D"/>
+      <ellipse cx="4" cy="-8" rx="8" ry="6" fill="#588157"/>
+      <ellipse cx="14" cy="-7" rx="9" ry="6" fill="#588157"/>
+      <ellipse cx="9" cy="-12" rx="6" ry="4" fill="#6B9E67"/>
+    </g>
+
+    <!-- foundation -->
+    <rect x="-10" y="280" width="260" height="6" fill="#8E7860"/>
+  </g>
+
+  <!-- Tree between bookshop and cottage -->
+  <g transform="translate(1410, 200)">
+    <rect x="22" y="60" width="14" height="40" fill="#5D4037"/>
+    <ellipse cx="29" cy="50" rx="42" ry="38" fill="#3D5A3D"/>
+    <ellipse cx="29" cy="42" rx="36" ry="32" fill="#588157"/>
+    <ellipse cx="22" cy="36" rx="22" ry="18" fill="#6B9E67"/>
+    <ellipse cx="40" cy="46" rx="18" ry="16" fill="#6B9E67"/>
+    <ellipse cx="20" cy="30" rx="11" ry="8" fill="#8FB880" opacity="0.6"/>
+    <circle cx="42" cy="50" r="2" fill="#FF974D"/>
+    <circle cx="14" cy="56" r="2" fill="#FF0029"/>
+  </g>
+
+  <!-- ========== Building 5: COTTAGE with curved gable ========== -->
+  <g transform="translate(1490, 110)">
+    <!-- main sage green walls -->
+    <rect x="0" y="60" width="200" height="220" fill="#D7C6F1"/>
+    <rect x="0" y="60" width="200" height="4" fill="#E5D8F5"/>
+
+    <!-- BRICK CORNER QUOINS (warm terracotta) -->
+    <g fill="#7A4F2E">
+      <rect x="0" y="60" width="14" height="14"/>
+      <rect x="0" y="88" width="14" height="14"/>
+      <rect x="0" y="116" width="14" height="14"/>
+      <rect x="0" y="144" width="14" height="14"/>
+      <rect x="0" y="172" width="14" height="14"/>
+      <rect x="0" y="200" width="14" height="14"/>
+      <rect x="0" y="228" width="14" height="14"/>
+      <rect x="0" y="256" width="14" height="14"/>
+      <rect x="186" y="60" width="14" height="14"/>
+      <rect x="186" y="88" width="14" height="14"/>
+      <rect x="186" y="116" width="14" height="14"/>
+      <rect x="186" y="144" width="14" height="14"/>
+      <rect x="186" y="172" width="14" height="14"/>
+      <rect x="186" y="200" width="14" height="14"/>
+      <rect x="186" y="228" width="14" height="14"/>
+      <rect x="186" y="256" width="14" height="14"/>
+    </g>
+
+    <!-- Curved gable roof (rounded apex, NO spike) -->
+    <path d="M -10 60 L 0 60 L 0 50 Q 50 16 100 12 Q 150 16 200 50 L 200 60 L 210 60 L 210 70 L -10 70 Z" fill="#9F2236"/>
+    <line x1="0" y1="44" x2="200" y2="44" stroke="#7A1B2A" stroke-width="1" opacity="0.6"/>
+    <line x1="10" y1="34" x2="190" y2="34" stroke="#7A1B2A" stroke-width="1" opacity="0.6"/>
+    <line x1="22" y1="24" x2="178" y2="24" stroke="#7A1B2A" stroke-width="1" opacity="0.6"/>
+
+    <!-- chimney -->
+    <rect x="140" y="0" width="20" height="36" fill="#7A4F2E"/>
+    <rect x="136" y="-4" width="28" height="6" fill="#5D4037"/>
+    <!-- smoke wisps -->
+    <circle cx="146" cy="-12" r="3" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="152" cy="-20" r="2.5" fill="#FFFFFF" opacity="0.4"/>
+
+    <!-- attic round window -->
+    <circle cx="100" cy="48" r="10" fill="#FFE19E"/>
+    <circle cx="100" cy="48" r="10" fill="none" stroke="#7A4F2E" stroke-width="2"/>
+    <line x1="90" y1="48" x2="110" y2="48" stroke="#7A4F2E" stroke-width="1.5"/>
+    <line x1="100" y1="38" x2="100" y2="58" stroke="#7A4F2E" stroke-width="1.5"/>
+
+    <!-- 2nd floor: 3 windows -->
+    <g transform="translate(28, 90)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#7A4F2E"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#5D4037"/>
+      <rect x="2" y="2" width="32" height="32" fill="#FFE19E"/>
+      <rect x="2" y="16" width="32" height="2" fill="#5D4037"/>
+      <rect x="17" y="2" width="2" height="32" fill="#5D4037"/>
+      <rect x="2" y="2" width="6" height="32" fill="#46137B"/>
+      <rect x="28" y="2" width="6" height="32" fill="#46137B"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#7A4F2E"/>
+    </g>
+    <g transform="translate(82, 90)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#7A4F2E"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#5D4037"/>
+      <rect x="2" y="2" width="32" height="32" fill="#FFE19E"/>
+      <rect x="2" y="16" width="32" height="2" fill="#5D4037"/>
+      <rect x="17" y="2" width="2" height="32" fill="#5D4037"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#7A4F2E"/>
+      <rect x="-8" y="44" width="52" height="8" fill="#5D4037"/>
+      <circle cx="-2" cy="42" r="2.5" fill="#C384F0"/>
+      <circle cx="6" cy="40" r="2" fill="#FFD485"/>
+      <circle cx="14" cy="42" r="2.5" fill="#FF974D"/>
+      <circle cx="22" cy="40" r="2" fill="#FF0029"/>
+      <circle cx="30" cy="42" r="2.5" fill="#C384F0"/>
+      <circle cx="38" cy="40" r="2" fill="#FFD485"/>
+    </g>
+    <g transform="translate(140, 90)">
+      <rect x="-4" y="-4" width="44" height="44" fill="#7A4F2E"/>
+      <rect x="-2" y="-2" width="40" height="40" fill="#5D4037"/>
+      <rect x="2" y="2" width="32" height="32" fill="#46137B"/>
+      <rect x="2" y="16" width="32" height="2" fill="#5D4037"/>
+      <rect x="17" y="2" width="2" height="32" fill="#5D4037"/>
+      <rect x="-6" y="40" width="48" height="4" fill="#7A4F2E"/>
+    </g>
+
+    <!-- 1st floor: window + door + window -->
+    <g transform="translate(28, 175)">
+      <rect x="-4" y="-4" width="44" height="64" fill="#7A4F2E"/>
+      <rect x="-2" y="-2" width="40" height="60" fill="#5D4037"/>
+      <rect x="2" y="2" width="32" height="52" fill="#FFE19E"/>
+      <rect x="2" y="26" width="32" height="2" fill="#5D4037"/>
+      <line x1="17" y1="2" x2="17" y2="54" stroke="#5D4037" stroke-width="1.5"/>
+      <rect x="2" y="2" width="6" height="52" fill="#9F2236"/>
+      <rect x="28" y="2" width="6" height="52" fill="#9F2236"/>
+      <rect x="-6" y="60" width="48" height="4" fill="#7A4F2E"/>
+    </g>
+
+    <!-- door -->
+    <g transform="translate(80, 192)">
+      <rect x="0" y="0" width="36" height="78" fill="#5D4037"/>
+      <rect x="-2" y="-2" width="40" height="4" fill="#3B2A1F"/>
+      <rect x="3" y="4" width="30" height="56" fill="#3B2A1F"/>
+      <rect x="5" y="6" width="26" height="22" fill="#FFE19E"/>
+      <line x1="18" y1="6" x2="18" y2="28" stroke="#7A4F2E" stroke-width="1"/>
+      <line x1="5" y1="17" x2="31" y2="17" stroke="#7A4F2E" stroke-width="1"/>
+      <rect x="5" y="32" width="26" height="26" fill="#C384F0"/>
+      <circle cx="30" cy="46" r="1.8" fill="#FFD485"/>
+      <!-- wreath -->
+      <circle cx="18" cy="14" r="6" fill="none" stroke="#588157" stroke-width="2"/>
+      <circle cx="18" cy="14" r="4.5" fill="none" stroke="#3D5A3D" stroke-width="1"/>
+      <circle cx="14" cy="11" r="1" fill="#FF0029"/>
+      <circle cx="22" cy="13" r="1" fill="#FF0029"/>
+    </g>
+
+    <g transform="translate(132, 175)">
+      <rect x="-4" y="-4" width="44" height="64" fill="#7A4F2E"/>
+      <rect x="-2" y="-2" width="40" height="60" fill="#5D4037"/>
+      <rect x="2" y="2" width="32" height="52" fill="#FFE19E"/>
+      <rect x="2" y="26" width="32" height="2" fill="#5D4037"/>
+      <line x1="17" y1="2" x2="17" y2="54" stroke="#5D4037" stroke-width="1.5"/>
+      <rect x="-6" y="60" width="48" height="4" fill="#7A4F2E"/>
+    </g>
+
+    <!-- foundation -->
+    <rect x="-10" y="280" width="220" height="6" fill="#8E7860"/>
+  </g>
+
+  <!-- Picket fence on far right -->
+  <g transform="translate(1700, 305)">
+    <rect x="0" y="0" width="200" height="2" fill="#7A4F2E"/>
+    <rect x="0" y="10" width="200" height="2" fill="#7A4F2E"/>
+    <g fill="#A0683E">
+      <path d="M 0 2 L 0 22 L 6 22 L 6 2 L 3 -4 Z"/>
+      <path d="M 14 2 L 14 22 L 20 22 L 20 2 L 17 -4 Z"/>
+      <path d="M 28 2 L 28 22 L 34 22 L 34 2 L 31 -4 Z"/>
+      <path d="M 42 2 L 42 22 L 48 22 L 48 2 L 45 -4 Z"/>
+      <path d="M 56 2 L 56 22 L 62 22 L 62 2 L 59 -4 Z"/>
+      <path d="M 70 2 L 70 22 L 76 22 L 76 2 L 73 -4 Z"/>
+      <path d="M 84 2 L 84 22 L 90 22 L 90 2 L 87 -4 Z"/>
+      <path d="M 98 2 L 98 22 L 104 22 L 104 2 L 101 -4 Z"/>
+      <path d="M 112 2 L 112 22 L 118 22 L 118 2 L 115 -4 Z"/>
+      <path d="M 126 2 L 126 22 L 132 22 L 132 2 L 129 -4 Z"/>
+      <path d="M 140 2 L 140 22 L 146 22 L 146 2 L 143 -4 Z"/>
+      <path d="M 154 2 L 154 22 L 160 22 L 160 2 L 157 -4 Z"/>
+      <path d="M 168 2 L 168 22 L 174 22 L 174 2 L 171 -4 Z"/>
+      <path d="M 182 2 L 182 22 L 188 22 L 188 2 L 185 -4 Z"/>
+      <path d="M 196 2 L 196 22 L 200 22 L 200 2 L 198 -4 Z"/>
+    </g>
+  </g>
+
+  <!-- Lantern far right -->
+  <g transform="translate(1820, 250)">
+    <rect x="3" y="20" width="2" height="50" fill="#3B2A1F"/>
+    <rect x="-2" y="22" width="12" height="2" fill="#3B2A1F"/>
+    <ellipse cx="4" cy="14" rx="7" ry="3" fill="#3B2A1F"/>
+    <rect x="-1" y="14" width="10" height="10" fill="#3B2A1F"/>
+    <ellipse cx="4" cy="24" rx="5" ry="2" fill="#3B2A1F"/>
+    <circle cx="4" cy="20" r="11" fill="#FFD485" opacity="0.55" style="animation: flicker 3.2s infinite ease-in-out;"/>
+    <rect x="2" y="16" width="4" height="6" fill="#FF974D"/>
+  </g>
+
+  <!-- Sidewalk -->
+  <rect x="0" y="320" width="1920" height="14" fill="#D4B896"/>
+  <rect x="0" y="320" width="1920" height="2" fill="#A89070"/>
+  <g fill="#A89070">
+    <rect x="40" y="328" width="3" height="2"/>
+    <rect x="160" y="328" width="3" height="2"/>
+    <rect x="280" y="328" width="3" height="2"/>
+    <rect x="400" y="328" width="3" height="2"/>
+    <rect x="520" y="328" width="3" height="2"/>
+    <rect x="640" y="328" width="3" height="2"/>
+    <rect x="760" y="328" width="3" height="2"/>
+    <rect x="880" y="328" width="3" height="2"/>
+    <rect x="1000" y="328" width="3" height="2"/>
+    <rect x="1120" y="328" width="3" height="2"/>
+    <rect x="1240" y="328" width="3" height="2"/>
+    <rect x="1360" y="328" width="3" height="2"/>
+    <rect x="1480" y="328" width="3" height="2"/>
+    <rect x="1600" y="328" width="3" height="2"/>
+    <rect x="1720" y="328" width="3" height="2"/>
+    <rect x="1840" y="328" width="3" height="2"/>
+  </g>
+
+  <!-- Grass -->
+  <rect x="0" y="334" width="1920" height="40" fill="#7AAB58"/>
+  <rect x="0" y="334" width="1920" height="2" fill="#5C8841"/>
+  <g fill="#5C8841">
+    <rect x="40" y="340" width="2" height="6"/>
+    <rect x="44" y="338" width="2" height="8"/>
+    <rect x="120" y="342" width="2" height="6"/>
+    <rect x="200" y="340" width="2" height="6"/>
+    <rect x="204" y="338" width="2" height="8"/>
+    <rect x="320" y="342" width="2" height="6"/>
+    <rect x="324" y="340" width="2" height="7"/>
+    <rect x="450" y="340" width="2" height="6"/>
+    <rect x="600" y="342" width="2" height="6"/>
+    <rect x="604" y="340" width="2" height="8"/>
+    <rect x="780" y="340" width="2" height="6"/>
+    <rect x="900" y="342" width="2" height="6"/>
+    <rect x="904" y="340" width="2" height="8"/>
+    <rect x="1080" y="340" width="2" height="6"/>
+    <rect x="1200" y="342" width="2" height="6"/>
+    <rect x="1340" y="340" width="2" height="7"/>
+    <rect x="1500" y="342" width="2" height="6"/>
+    <rect x="1504" y="340" width="2" height="8"/>
+    <rect x="1700" y="340" width="2" height="7"/>
+    <rect x="1820" y="342" width="2" height="6"/>
+  </g>
+
+  <!-- Flowers along grass -->
+  <g>
+    <rect x="80" y="346" width="3" height="3" fill="#FF0029"/>
+    <rect x="83" y="346" width="3" height="3" fill="#FF974D"/>
+    <rect x="80" y="349" width="6" height="2" fill="#5C8841"/>
+    <rect x="180" y="346" width="3" height="3" fill="#FFD485"/>
+    <rect x="180" y="349" width="3" height="3" fill="#5C8841"/>
+    <rect x="380" y="346" width="3" height="3" fill="#C384F0"/>
+    <rect x="380" y="349" width="3" height="3" fill="#5C8841"/>
+    <rect x="540" y="348" width="3" height="3" fill="#FF0029"/>
+    <rect x="540" y="351" width="3" height="2" fill="#5C8841"/>
+    <rect x="720" y="346" width="3" height="3" fill="#FF974D"/>
+    <rect x="720" y="349" width="3" height="3" fill="#5C8841"/>
+    <rect x="880" y="346" width="3" height="3" fill="#C384F0"/>
+    <rect x="880" y="349" width="3" height="3" fill="#5C8841"/>
+    <rect x="1060" y="346" width="3" height="3" fill="#FF0029"/>
+    <rect x="1060" y="349" width="3" height="3" fill="#5C8841"/>
+    <rect x="1220" y="346" width="3" height="3" fill="#FFD485"/>
+    <rect x="1220" y="349" width="3" height="3" fill="#5C8841"/>
+    <rect x="1420" y="346" width="3" height="3" fill="#C384F0"/>
+    <rect x="1420" y="349" width="3" height="3" fill="#5C8841"/>
+    <rect x="1600" y="346" width="3" height="3" fill="#FF0029"/>
+    <rect x="1603" y="346" width="3" height="3" fill="#FF974D"/>
+    <rect x="1600" y="349" width="6" height="2" fill="#5C8841"/>
+    <rect x="1780" y="346" width="3" height="3" fill="#FFD485"/>
+    <rect x="1780" y="349" width="3" height="3" fill="#5C8841"/>
+  </g>
+
+  <!-- A tiny butterfly -->
+  <g transform="translate(720, 280)">
+    <rect x="0" y="0" width="2" height="3" fill="#1A0E2E"/>
+    <rect x="-3" y="-1" width="3" height="3" fill="#FF974D"/>
+    <rect x="2" y="-1" width="3" height="3" fill="#FF974D"/>
+    <rect x="-3" y="2" width="3" height="2" fill="#FF0029"/>
+    <rect x="2" y="2" width="3" height="2" fill="#FF0029"/>
+  </g>
+
+</svg>
+
+<!-- ========== Landing intro (scrolls away to reveal persona selection) ========== -->
+
+<section class="intro intro-welcome">
+  <div class="content">
+    <h1>Welcome to the<span class="accent">Renter's Journey</span></h1>
+    <p class="lede">An A-Lister's invitation to walk in our renters' shoes.</p>
+  </div>
+  <div class="scroll-hint">Scroll to begin ↓</div>
+</section>
+
+<section class="intro intro-what">
+  <div class="content">
+    <h2>This is <em>dogfooding</em>.</h2>
+    <p>Using the product the way our renters do. The goal is empathy, not quality assurance. The point is to close the gap between what we think the renter experience is and what it actually is.</p>
+  </div>
+</section>
+
+<section class="intro intro-how">
+  <div class="content">
+    <h2>How the journey works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Choose your renter</h3>
+        <p>Four personas. Pick whose path you want to walk.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Walk seven chapters</h3>
+        <p>From the the search to the signing, all the way to the welcome mat. Each chapter has its own surfaces and its own quests.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Complete dogfooding quests</h3>
+        <p>Real product actions on apartmentlist.com. Logged out, logged in. The quiz, the matches, the LDPs, the Renter Hub. Every surface a renter touches.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Collect Field Notes</h3>
+        <p>Copyable takeaways you can drop into Slack to share with other A-Listers. Your observations are the data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="intro intro-look">
+  <div class="content">
+    <h2>What to look for as you walk</h2>
+    <p>Put yourself in your renter's shoes and pay attention.</p>
+    <div class="questions">
+      <div class="q">What feels <em>easy</em>?</div>
+      <div class="q">What feels <em>hard</em>?</div>
+      <div class="q">Does something seem <em>broken</em>?</div>
+      <div class="q">Anything you're <em>impressed</em> by?</div>
+    </div>
+</section>
+
+<section class="intro intro-ready">
+  <div class="content">
+    <h2>Ready?</h2>
+    <p>Pick a renter. Start your renter's journey.</p>
+    <a href="#personas" class="btn-explore">Choose your renter ↓</a>
+  </div>
+</section>
+
+<!-- ========== Persona selection ========== -->
+
+<main class="stage" id="personas">
+
+  <header>
+    <h1 class="title">Choose your<span class="accent">renter.</span></h1>
+    <div class="pixel-divider">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- ALEX: bike -->
+    <article class="card alex">
+      <div class="sparkle s1"></div>
+      <div class="sparkle s2"></div>
+      <div class="sparkle s3"></div>
+      <div class="item-frame">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- shadow under wheels -->
+          <ellipse cx="100" cy="172" rx="80" ry="5" fill="#1A0E2E" opacity="0.18"/>
+
+          <!-- BACK WHEEL -->
+          <circle cx="55" cy="135" r="30" fill="none" stroke="#1A0E2E" stroke-width="5"/>
+          <circle cx="55" cy="135" r="4" fill="#1A0E2E"/>
+          <line x1="55" y1="108" x2="55" y2="162" stroke="#1A0E2E" stroke-width="1.5"/>
+          <line x1="28" y1="135" x2="82" y2="135" stroke="#1A0E2E" stroke-width="1.5"/>
+          <line x1="36" y1="116" x2="74" y2="154" stroke="#1A0E2E" stroke-width="1.5"/>
+          <line x1="74" y1="116" x2="36" y2="154" stroke="#1A0E2E" stroke-width="1.5"/>
+
+          <!-- FRONT WHEEL -->
+          <circle cx="155" cy="135" r="30" fill="none" stroke="#1A0E2E" stroke-width="5"/>
+          <circle cx="155" cy="135" r="4" fill="#1A0E2E"/>
+          <line x1="155" y1="108" x2="155" y2="162" stroke="#1A0E2E" stroke-width="1.5"/>
+          <line x1="128" y1="135" x2="182" y2="135" stroke="#1A0E2E" stroke-width="1.5"/>
+          <line x1="136" y1="116" x2="174" y2="154" stroke="#1A0E2E" stroke-width="1.5"/>
+          <line x1="174" y1="116" x2="136" y2="154" stroke="#1A0E2E" stroke-width="1.5"/>
+
+          <!-- DIAMOND FRAME -->
+          <!-- Down tube: bottom bracket to head tube -->
+          <line x1="105" y1="135" x2="138" y2="80" stroke="#6105C4" stroke-width="6" stroke-linecap="round"/>
+          <!-- Seat tube: bottom bracket to seat post -->
+          <line x1="105" y1="135" x2="92" y2="78" stroke="#6105C4" stroke-width="6" stroke-linecap="round"/>
+          <!-- Top tube: seat post to head tube -->
+          <line x1="92" y1="78" x2="138" y2="80" stroke="#6105C4" stroke-width="6" stroke-linecap="round"/>
+          <!-- Chain stays: bottom bracket to back wheel hub -->
+          <line x1="55" y1="135" x2="105" y2="135" stroke="#46137B" stroke-width="5" stroke-linecap="round"/>
+          <!-- Seat stays: back wheel hub to seat -->
+          <line x1="55" y1="135" x2="92" y2="78" stroke="#46137B" stroke-width="5" stroke-linecap="round"/>
+          <!-- Fork: head tube to front wheel hub -->
+          <line x1="138" y1="80" x2="155" y2="135" stroke="#1A0E2E" stroke-width="5" stroke-linecap="round"/>
+
+          <!-- BOTTOM BRACKET (where pedals attach) -->
+          <circle cx="105" cy="135" r="6" fill="#1A0E2E"/>
+
+          <!-- CHAINRING -->
+          <circle cx="105" cy="135" r="10" fill="none" stroke="#1A0E2E" stroke-width="1.5"/>
+
+          <!-- CRANK + PEDAL -->
+          <line x1="105" y1="135" x2="118" y2="148" stroke="#1A0E2E" stroke-width="3" stroke-linecap="round"/>
+          <rect x="113" y="146" width="11" height="5" fill="#1A0E2E" rx="1"/>
+
+          <!-- SEAT -->
+          <ellipse cx="90" cy="74" rx="12" ry="4" fill="#5D4037"/>
+          <ellipse cx="90" cy="73" rx="10" ry="2.5" fill="#7A5944"/>
+          <line x1="92" y1="76" x2="92" y2="78" stroke="#5D4037" stroke-width="2"/>
+
+          <!-- HANDLEBAR STEM (vertical from head tube) -->
+          <line x1="138" y1="80" x2="138" y2="58" stroke="#1A0E2E" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- HANDLEBAR (horizontal T-bar on top) -->
+          <line x1="120" y1="58" x2="156" y2="58" stroke="#1A0E2E" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- GRIPS -->
+          <rect x="116" y="55" width="6" height="6" fill="#5D4037" rx="1"/>
+          <rect x="154" y="55" width="6" height="6" fill="#5D4037" rx="1"/>
+
+          <!-- BELL on handlebar -->
+          <circle cx="132" cy="60" r="3" fill="#FF974D" stroke="#1A0E2E" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="badge">Level Upper</span>
+      <h2 class="name">Alex the Ambitious</h2>
+      <p class="tagline">Climbing the ladder, one square foot at a time.</p>
+      <div class="info-area">
+        <div class="default-info">
+          <blockquote class="mantra">"I've earned this. Show me the upgrade."</blockquote>
+          <div class="stats">
+            <div class="stat">
+              <span class="label">Urgency</span>
+              <span class="val">Moderate</span>
+            </div>
+            <div class="stat">
+              <span class="label">Clarity</span>
+              <span class="val">Very High</span>
+            </div>
+            <div class="stat">
+              <span class="label">Route</span>
+              <span class="val">SF → SF</span>
+            </div>
+            <div class="stat">
+              <span class="label">Budget</span>
+              <span class="val">$4,200/mo</span>
+            </div>
+          </div>
+        </div>
+        <div class="bio-overlay">
+          <p>Senior engineer in San Francisco. Lease ending after three years in a studio that no longer fits who they've become. They want a real kitchen, a serious gym, a bedroom that isn't also the office. The spreadsheet was drafted before the lease notice arrived. Three platforms run in tabs. Non-starter neighborhoods got crossed off weeks ago. The decision will not take long. The standards are not flexible.</p>
+        </div>
+      </div>
+      <button class="btn-embark">Embark with Alex</button>
+    </article>
+
+    <!-- JORDAN: dog (Max) -->
+    <article class="card jordan">
+      <div class="sparkle s1"></div>
+      <div class="sparkle s2"></div>
+      <div class="sparkle s3"></div>
+      <div class="item-frame">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="178" rx="60" ry="6" fill="#1A0E2E" opacity="0.18"/>
+          <!-- body -->
+          <ellipse cx="100" cy="138" rx="48" ry="42" fill="#E8B274"/>
+          <!-- chest highlight -->
+          <ellipse cx="100" cy="152" rx="28" ry="20" fill="#F0C28C"/>
+          <!-- back leg -->
+          <rect x="120" y="155" width="18" height="22" fill="#E8B274" rx="3"/>
+          <ellipse cx="129" cy="178" rx="11" ry="4" fill="#C8965A"/>
+          <!-- front legs -->
+          <rect x="78" y="158" width="14" height="22" fill="#E8B274" rx="3"/>
+          <rect x="105" y="158" width="14" height="22" fill="#E8B274" rx="3"/>
+          <ellipse cx="85" cy="180" rx="9" ry="4" fill="#C8965A"/>
+          <ellipse cx="112" cy="180" rx="9" ry="4" fill="#C8965A"/>
+          <!-- tail -->
+          <path d="M 145 122 Q 178 98 168 64" stroke="#E8B274" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <path d="M 145 122 Q 178 98 168 64" stroke="#C8965A" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <!-- head -->
+          <circle cx="100" cy="80" r="38" fill="#E8B274"/>
+          <!-- ears -->
+          <ellipse cx="68" cy="65" rx="14" ry="22" fill="#C8965A" transform="rotate(-15 68 65)"/>
+          <ellipse cx="132" cy="65" rx="14" ry="22" fill="#C8965A" transform="rotate(15 132 65)"/>
+          <!-- snout -->
+          <ellipse cx="100" cy="95" rx="14" ry="10" fill="#F0C28C"/>
+          <!-- eyes -->
+          <ellipse cx="86" cy="76" rx="4" ry="5" fill="#1A0E2E"/>
+          <ellipse cx="114" cy="76" rx="4" ry="5" fill="#1A0E2E"/>
+          <circle cx="87" cy="74" r="1.5" fill="#FFFFFF"/>
+          <circle cx="115" cy="74" r="1.5" fill="#FFFFFF"/>
+          <!-- nose -->
+          <ellipse cx="100" cy="90" rx="6" ry="5" fill="#1A0E2E"/>
+          <rect x="98" y="91" width="2" height="2" fill="#3B2A1F"/>
+          <!-- mouth -->
+          <path d="M 100 96 Q 92 105 86 100" stroke="#1A0E2E" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M 100 96 Q 108 105 114 100" stroke="#1A0E2E" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- tongue -->
+          <ellipse cx="100" cy="106" rx="6" ry="7" fill="#FFB6C1"/>
+          <line x1="100" y1="100" x2="100" y2="110" stroke="#FF7B8C" stroke-width="1"/>
+          <!-- bandana -->
+          <path d="M 70 113 L 100 121 L 130 113 L 130 124 L 100 132 L 70 124 Z" fill="#FF0029"/>
+          <path d="M 70 113 L 64 121 L 70 124 Z" fill="#FF0029"/>
+          <circle cx="84" cy="120" r="1.2" fill="#FFFFFF"/>
+          <circle cx="100" cy="125" r="1.2" fill="#FFFFFF"/>
+          <circle cx="116" cy="120" r="1.2" fill="#FFFFFF"/>
+        </svg>
+      </div>
+      <span class="badge">Achiever</span>
+      <h2 class="name">Jordan the Rising Star</h2>
+      <p class="tagline">A new city, a new job, and Max along for the ride.</p>
+      <div class="info-area">
+        <div class="default-info">
+          <blockquote class="mantra">"Three real options. One that works for Max. Before Monday."</blockquote>
+          <div class="stats">
+            <div class="stat">
+              <span class="label">Urgency</span>
+              <span class="val">High (18d)</span>
+            </div>
+            <div class="stat">
+              <span class="label">Clarity</span>
+              <span class="val">Moderate</span>
+            </div>
+            <div class="stat">
+              <span class="label">Route</span>
+              <span class="val">PDX → SEA</span>
+            </div>
+            <div class="stat">
+              <span class="label">Budget</span>
+              <span class="val">$2,400/mo</span>
+            </div>
+          </div>
+        </div>
+        <div class="bio-overlay">
+          <p>Got the job offer. Eighteen days to land in Seattle with Max the golden retriever in tow. The Portland apartment is a maze of moving boxes. They need a place fast: pet-friendly, leasing offices that respond inside twenty-four hours, no ghost listings. Three good options would be enough. Two would do. One that lets Max run in the morning would be a small miracle.</p>
+        </div>
+      </div>
+      <button class="btn-embark">Embark with Jordan</button>
+    </article>
+
+    <!-- TAYLOR & RILEY: camera -->
+    <article class="card taylor-riley">
+      <div class="sparkle s1"></div>
+      <div class="sparkle s2"></div>
+      <div class="sparkle s3"></div>
+      <div class="item-frame">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="172" rx="70" ry="6" fill="#1A0E2E" opacity="0.18"/>
+          <!-- camera body -->
+          <rect x="38" y="65" width="124" height="82" fill="#1A0E2E" rx="6"/>
+          <!-- top strip -->
+          <rect x="38" y="65" width="124" height="20" fill="#3B2A4F" rx="6"/>
+          <rect x="38" y="79" width="124" height="2" fill="#5D4037"/>
+          <!-- viewfinder bump -->
+          <rect x="80" y="55" width="40" height="14" fill="#1A0E2E" rx="3"/>
+          <rect x="84" y="58" width="32" height="3" fill="#3B2A4F"/>
+          <!-- viewfinder window -->
+          <rect x="85" y="59" width="10" height="8" fill="#46137B"/>
+          <rect x="86" y="60" width="3" height="2" fill="#C384F0" opacity="0.6"/>
+          <!-- shutter button -->
+          <circle cx="55" cy="74" r="6" fill="#FF0029"/>
+          <circle cx="55" cy="74" r="3" fill="#9F2236"/>
+          <circle cx="55" cy="73" r="1" fill="#FF6B7A"/>
+          <!-- rewind knob -->
+          <rect x="138" y="70" width="14" height="10" fill="#3B2A4F" rx="2"/>
+          <line x1="142" y1="72" x2="148" y2="72" stroke="#1A0E2E" stroke-width="0.5"/>
+          <line x1="142" y1="74" x2="148" y2="74" stroke="#1A0E2E" stroke-width="0.5"/>
+          <line x1="142" y1="76" x2="148" y2="76" stroke="#1A0E2E" stroke-width="0.5"/>
+          <!-- main lens -->
+          <circle cx="100" cy="108" r="34" fill="#1A0E2E"/>
+          <circle cx="100" cy="108" r="28" fill="#3B2A4F"/>
+          <circle cx="100" cy="108" r="22" fill="#1A0E2E"/>
+          <circle cx="100" cy="108" r="16" fill="#6105C4"/>
+          <circle cx="100" cy="108" r="11" fill="#46137B"/>
+          <ellipse cx="93" cy="100" rx="5" ry="3" fill="#C384F0" opacity="0.7"/>
+          <circle cx="96" cy="103" r="1.5" fill="#FFFFFF" opacity="0.8"/>
+          <!-- lens dial markers -->
+          <circle cx="100" cy="76" r="1.5" fill="#FFFFFF"/>
+          <circle cx="128" cy="108" r="1.5" fill="#FFFFFF"/>
+          <circle cx="100" cy="140" r="1.5" fill="#FFFFFF"/>
+          <circle cx="72" cy="108" r="1.5" fill="#FFFFFF"/>
+          <!-- brand text bar -->
+          <rect x="50" y="135" width="44" height="6" fill="#3B2A4F"/>
+          <rect x="52" y="137" width="6" height="2" fill="#C384F0"/>
+          <rect x="60" y="137" width="10" height="2" fill="#C384F0"/>
+          <rect x="72" y="137" width="6" height="2" fill="#C384F0"/>
+          <rect x="80" y="137" width="12" height="2" fill="#C384F0"/>
+          <!-- film canister beside -->
+          <rect x="142" y="125" width="20" height="22" fill="#5D4037" rx="2"/>
+          <rect x="142" y="123" width="20" height="3" fill="#3B2A1F"/>
+          <rect x="145" y="130" width="14" height="3" fill="#FFD485"/>
+          <rect x="145" y="137" width="14" height="2" fill="#FFD485"/>
+          <rect x="148" y="143" width="8" height="2" fill="#FFD485"/>
+        </svg>
+      </div>
+      <span class="badge">City Hopper</span>
+      <h2 class="name">Taylor & Riley</h2>
+      <p class="tagline">Two pairs of eyes, one new city to explore.</p>
+      <div class="info-area">
+        <div class="default-info">
+          <blockquote class="mantra">"We'll know the place when we both feel it. A street, a sunset, a coffee shop on the corner."</blockquote>
+          <div class="stats">
+            <div class="stat">
+              <span class="label">Urgency</span>
+              <span class="val">Low</span>
+            </div>
+            <div class="stat">
+              <span class="label">Clarity</span>
+              <span class="val">Vibe-led</span>
+            </div>
+            <div class="stat">
+              <span class="label">Route</span>
+              <span class="val">CHI → AUS</span>
+            </div>
+            <div class="stat">
+              <span class="label">Budget</span>
+              <span class="val">$2,500/mo</span>
+            </div>
+          </div>
+        </div>
+        <div class="bio-overlay">
+          <p>Three years in Chicago. Time for the next chapter. Riley wants the light, Taylor wants the food, both want a neighborhood with culture you can hear from the window. They search together, screen shared on the couch, sending listings to each other with one-line subjects (this one, no please). The neighborhood matters more than the unit. They will both have to feel it.</p>
+        </div>
+      </div>
+      <button class="btn-embark">Embark with Taylor</button>
+    </article>
+
+    <!-- JAMIE: kid's drawing of a house -->
+    <article class="card jamie">
+      <div class="sparkle s1"></div>
+      <div class="sparkle s2"></div>
+      <div class="sparkle s3"></div>
+      <div class="item-frame">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- paper background -->
+          <rect x="18" y="22" width="164" height="156" fill="#FFFCF0" stroke="#D4C4AC" stroke-width="2"/>
+          <!-- subtle paper texture -->
+          <rect x="18" y="22" width="164" height="156" fill="url(#paper-tex)" opacity="0.05"/>
+          <defs>
+            <pattern id="paper-tex" width="6" height="6" patternUnits="userSpaceOnUse">
+              <circle cx="3" cy="3" r="0.5" fill="#5D4037"/>
+            </pattern>
+          </defs>
+          <!-- paper corner curl -->
+          <path d="M 175 22 L 182 22 L 182 30 Z" fill="#E8DFC8" stroke="#D4C4AC" stroke-width="0.5"/>
+
+          <!-- sun in corner (yellow) - drawn loosely -->
+          <circle cx="160" cy="50" r="13" fill="#FFD485" stroke="#FF974D" stroke-width="2.5"/>
+          <line x1="160" y1="30" x2="160" y2="36" stroke="#FF974D" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="180" y1="50" x2="174" y2="50" stroke="#FF974D" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="146" y1="64" x2="150" y2="60" stroke="#FF974D" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="174" y1="64" x2="170" y2="60" stroke="#FF974D" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="146" y1="36" x2="150" y2="40" stroke="#FF974D" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="174" y1="36" x2="170" y2="40" stroke="#FF974D" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- sun smile -->
+          <path d="M 155 53 Q 160 58 165 53" stroke="#FF974D" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <circle cx="156" cy="48" r="0.8" fill="#FF974D"/>
+          <circle cx="164" cy="48" r="0.8" fill="#FF974D"/>
+
+          <!-- cloud -->
+          <ellipse cx="50" cy="48" rx="14" ry="7" fill="#FFFFFF" stroke="#A07BBF" stroke-width="2"/>
+          <ellipse cx="60" cy="44" rx="9" ry="6" fill="#FFFFFF" stroke="#A07BBF" stroke-width="2"/>
+
+          <!-- house base (square, slightly imperfect) -->
+          <path d="M 60 108 L 60 148 L 132 148 L 132 108 Z" fill="#F5E5D0" stroke="#9F2236" stroke-width="3" stroke-linejoin="round"/>
+
+          <!-- roof (triangle, wobbly) -->
+          <path d="M 56 108 L 96 76 L 136 108 Z" fill="#FF0029" stroke="#9F2236" stroke-width="3" stroke-linejoin="round"/>
+
+          <!-- chimney -->
+          <rect x="118" y="84" width="8" height="14" fill="#9F2236" stroke="#5D2535" stroke-width="2"/>
+          <!-- smoke -->
+          <circle cx="122" cy="78" r="3" fill="none" stroke="#A07BBF" stroke-width="1.5"/>
+          <circle cx="125" cy="72" r="2.5" fill="none" stroke="#A07BBF" stroke-width="1.5"/>
+
+          <!-- door -->
+          <rect x="86" y="125" width="20" height="23" fill="#5D4037" stroke="#3B2A1F" stroke-width="2"/>
+          <circle cx="100" cy="137" r="1.5" fill="#FFD485"/>
+
+          <!-- windows -->
+          <rect x="68" y="116" width="14" height="12" fill="#C384F0" stroke="#46137B" stroke-width="2"/>
+          <line x1="75" y1="116" x2="75" y2="128" stroke="#46137B" stroke-width="1.5"/>
+          <line x1="68" y1="122" x2="82" y2="122" stroke="#46137B" stroke-width="1.5"/>
+
+          <rect x="110" y="116" width="14" height="12" fill="#C384F0" stroke="#46137B" stroke-width="2"/>
+          <line x1="117" y1="116" x2="117" y2="128" stroke="#46137B" stroke-width="1.5"/>
+          <line x1="110" y1="122" x2="124" y2="122" stroke="#46137B" stroke-width="1.5"/>
+
+          <!-- grass squiggles at bottom -->
+          <path d="M 28 165 Q 38 158 48 165 Q 58 158 68 165 Q 78 158 88 165 Q 98 158 108 165 Q 118 158 128 165 Q 138 158 148 165 Q 158 158 168 165" stroke="#588157" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+          <!-- flowers in grass -->
+          <circle cx="40" cy="158" r="3" fill="#FF0029"/>
+          <line x1="40" y1="160" x2="40" y2="170" stroke="#588157" stroke-width="2"/>
+          <circle cx="155" cy="160" r="3" fill="#FFD485"/>
+          <line x1="155" y1="162" x2="155" y2="170" stroke="#588157" stroke-width="2"/>
+
+          <!-- tiny stick figure family near door -->
+          <g transform="translate(40, 132)">
+            <circle cx="4" cy="0" r="3" fill="none" stroke="#1A0E2E" stroke-width="1.5"/>
+            <line x1="4" y1="3" x2="4" y2="13" stroke="#1A0E2E" stroke-width="1.5"/>
+            <line x1="0" y1="7" x2="8" y2="7" stroke="#1A0E2E" stroke-width="1.5"/>
+            <line x1="4" y1="13" x2="1" y2="20" stroke="#1A0E2E" stroke-width="1.5"/>
+            <line x1="4" y1="13" x2="7" y2="20" stroke="#1A0E2E" stroke-width="1.5"/>
+            <circle cx="14" cy="3" r="2.5" fill="none" stroke="#1A0E2E" stroke-width="1.5"/>
+            <line x1="14" y1="5.5" x2="14" y2="13" stroke="#1A0E2E" stroke-width="1.5"/>
+            <line x1="10" y1="9" x2="18" y2="9" stroke="#1A0E2E" stroke-width="1.5"/>
+            <line x1="14" y1="13" x2="12" y2="20" stroke="#1A0E2E" stroke-width="1.5"/>
+            <line x1="14" y1="13" x2="17" y2="20" stroke="#1A0E2E" stroke-width="1.5"/>
+          </g>
+
+          <!-- "By Emma" in playful handwriting -->
+          <text x="118" y="170" font-family="'Comic Sans MS', cursive" font-size="11" fill="#FF974D" font-weight="bold">By Emma</text>
+        </svg>
+      </div>
+      <span class="badge">Pathfinder</span>
+      <h2 class="name">Jamie the Resilient Parent</h2>
+      <p class="tagline">Every choice has to work for both of us.</p>
+      <div class="info-area">
+        <div class="default-info">
+          <blockquote class="mantra">"The numbers, the school, the safety. No surprises."</blockquote>
+          <div class="stats">
+            <div class="stat">
+              <span class="label">Urgency</span>
+              <span class="val">High (5mo)</span>
+            </div>
+            <div class="stat">
+              <span class="label">Clarity</span>
+              <span class="val">Schools first</span>
+            </div>
+            <div class="stat">
+              <span class="label">Route</span>
+              <span class="val">PHL → JC</span>
+            </div>
+            <div class="stat">
+              <span class="label">Budget</span>
+              <span class="val">$3,200/mo</span>
+            </div>
+          </div>
+        </div>
+        <div class="bio-overlay">
+          <p>Single parent. Five months until Emma starts kindergarten. Suburban Philadelphia is no longer enough. Jamie wants Jersey City: a buzzing park, a school that values curiosity, a corner where Emma can wave to the same people every morning. Every dollar counts. School quality is the load-bearing wall. Jamie has read more reviews than they want to admit.</p>
+        </div>
+      </div>
+      <button class="btn-embark">Embark with Jamie</button>
+    </article>
+
+  </div>
+
+  <footer>
+    <p>The Renter's Journey is a dogfooding quest for A-Listers. Your progress is saved. Hover any renter to read their story and start your journey.</p>
+  </footer>
+
+</main>
+
+<script>
+  // Smoothly fade the background overlay in as the user scrolls past the welcome screen.
+  // Sunset stays vivid at the top, dims to oat as content takes focus.
+  (function () {
+    var fade = document.querySelector('.bg-fade');
+    if (!fade) return;
+    var ticking = false;
+
+    function update() {
+      var vh = window.innerHeight || 800;
+      // Start fading at 30% of viewport scrolled, fully faded by 90% scrolled
+      var start = vh * 0.3;
+      var end = vh * 0.9;
+      var y = window.scrollY || window.pageYOffset || 0;
+      var t = Math.max(0, Math.min(1, (y - start) / (end - start)));
+      // Add 'in' class once partially faded; the gradient handles the rest
+      if (t > 0) {
+        fade.classList.add('in');
+        fade.style.opacity = String(t);
+      } else {
+        fade.classList.remove('in');
+        fade.style.opacity = '0';
+      }
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    update();
+  })();
+</script>
+
+</body>
+</html>
