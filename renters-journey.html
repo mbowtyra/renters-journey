@@ -9332,41 +9332,50 @@ body {
     <div class="hud-card">
       <div class="hud-row">
         <div class="avatar-frame">
-          <!-- Jordan sprite (matches chapter-1 mockup) -->
-          <svg viewBox="0 0 32 48" shape-rendering="crispEdges">
-            <rect x="9" y="3" width="14" height="2" fill="#A06940"/>
-            <rect x="8" y="5" width="16" height="3" fill="#A06940"/>
-            <rect x="9" y="8" width="14" height="2" fill="#A06940"/>
-            <rect x="8" y="8" width="2" height="11" fill="#A06940"/>
-            <rect x="22" y="8" width="2" height="11" fill="#A06940"/>
-            <rect x="9" y="18" width="1" height="2" fill="#A06940"/>
-            <rect x="22" y="18" width="1" height="2" fill="#A06940"/>
-            <rect x="10" y="6" width="12" height="11" fill="#E8C5A4"/>
-            <rect x="9" y="7" width="1" height="9" fill="#E8C5A4"/>
-            <rect x="22" y="7" width="1" height="9" fill="#E8C5A4"/>
-            <rect x="9" y="8" width="14" height="2" fill="#A06940"/>
+          <!-- Sprite colors driven by CSS vars set by the avatar builder -->
+          <svg id="mapAvatarSvg" viewBox="0 0 32 48" shape-rendering="crispEdges">
+            <!-- Hair (long bob — color from --avatar-hair) -->
+            <rect x="9" y="3" width="14" height="2" fill="var(--avatar-hair)"/>
+            <rect x="8" y="5" width="16" height="3" fill="var(--avatar-hair)"/>
+            <rect x="9" y="8" width="14" height="2" fill="var(--avatar-hair)"/>
+            <rect x="8" y="8" width="2" height="11" fill="var(--avatar-hair)"/>
+            <rect x="22" y="8" width="2" height="11" fill="var(--avatar-hair)"/>
+            <rect x="9" y="18" width="1" height="2" fill="var(--avatar-hair)"/>
+            <rect x="22" y="18" width="1" height="2" fill="var(--avatar-hair)"/>
+            <!-- Face & neck (--avatar-skin) -->
+            <rect x="10" y="6" width="12" height="11" fill="var(--avatar-skin)"/>
+            <rect x="9" y="7" width="1" height="9" fill="var(--avatar-skin)"/>
+            <rect x="22" y="7" width="1" height="9" fill="var(--avatar-skin)"/>
+            <rect x="9" y="8" width="14" height="2" fill="var(--avatar-hair)"/>
+            <!-- Eyes -->
             <rect x="12" y="10" width="1" height="3" fill="#1A0E2E"/>
             <rect x="19" y="10" width="1" height="3" fill="#1A0E2E"/>
-            <rect x="14" y="14" width="1" height="1" fill="#C8576B"/>
-            <rect x="17" y="14" width="1" height="1" fill="#C8576B"/>
-            <rect x="15" y="15" width="2" height="1" fill="#C8576B"/>
-            <rect x="14" y="17" width="4" height="2" fill="#E8C5A4"/>
-            <rect x="8" y="19" width="16" height="9" fill="#FF974D"/>
-            <rect x="6" y="19" width="2" height="9" fill="#FF974D"/>
-            <rect x="24" y="19" width="2" height="9" fill="#FF974D"/>
-            <rect x="6" y="28" width="2" height="2" fill="#E8C5A4"/>
-            <rect x="24" y="28" width="2" height="2" fill="#E8C5A4"/>
-            <rect x="8" y="28" width="16" height="11" fill="#46137B"/>
-            <rect x="15" y="32" width="2" height="7" fill="#46137B"/>
+            <!-- Lips (--avatar-lip) -->
+            <rect x="14" y="14" width="1" height="1" fill="var(--avatar-lip)"/>
+            <rect x="17" y="14" width="1" height="1" fill="var(--avatar-lip)"/>
+            <rect x="15" y="15" width="2" height="1" fill="var(--avatar-lip)"/>
+            <!-- Neck (--avatar-skin) -->
+            <rect x="14" y="17" width="4" height="2" fill="var(--avatar-skin)"/>
+            <!-- Shirt & arms (--avatar-shirt) -->
+            <rect x="8" y="19" width="16" height="9" fill="var(--avatar-shirt)"/>
+            <rect x="6" y="19" width="2" height="9" fill="var(--avatar-shirt)"/>
+            <rect x="24" y="19" width="2" height="9" fill="var(--avatar-shirt)"/>
+            <!-- Hands (--avatar-skin) -->
+            <rect x="6" y="28" width="2" height="2" fill="var(--avatar-skin)"/>
+            <rect x="24" y="28" width="2" height="2" fill="var(--avatar-skin)"/>
+            <!-- Pants (--avatar-pants) -->
+            <rect x="8" y="28" width="16" height="11" fill="var(--avatar-pants)"/>
+            <rect x="15" y="32" width="2" height="7" fill="var(--avatar-pants)"/>
             <rect x="15" y="34" width="2" height="5" fill="rgba(0,0,0,0.15)"/>
-            <rect x="8" y="39" width="7" height="3" fill="#1A0E2E"/>
-            <rect x="17" y="39" width="7" height="3" fill="#1A0E2E"/>
+            <!-- Shoes (--avatar-shoes) -->
+            <rect x="8" y="39" width="7" height="3" fill="var(--avatar-shoes)"/>
+            <rect x="17" y="39" width="7" height="3" fill="var(--avatar-shoes)"/>
           </svg>
         </div>
         <div class="hud-meta">
           <div class="label">Your Renter</div>
-          <div class="name">Jordan</div>
-          <span class="class-chip">Achiever</span>
+          <div class="name" id="mapPersonaName">Jordan</div>
+          <span class="class-chip" id="mapPersonaChip">Achiever</span>
           <dl class="move-info">
             <dt>From</dt><dd>Portland, OR</dd>
             <dt>To</dt><dd>Seattle, WA</dd>
@@ -12479,13 +12488,34 @@ function syncAvatarScreen() {
 }
 
 // ── Map screen ────────────────────────────────────────────────────────────
+var PERSONA_CHIPS = { jordan:'Achiever', alex:'Ambitious', taylor:'Duo Quest', jamie:'Planner' };
+
 function syncMapScreen() {
   var profile = loadProfile();
   var meta = PERSONA_META[profile.persona] || PERSONA_META.jordan;
+
+  // Top-bar persona name
   var nameEl = document.querySelector('#screen-map .persona-context .name');
   if (nameEl) nameEl.textContent = meta.fullName;
+
+  // Sidebar HUD: persona name + class chip
+  var hudName = document.getElementById('mapPersonaName');
+  if (hudName) hudName.textContent = meta.shortName;
+  var hudChip = document.getElementById('mapPersonaChip');
+  if (hudChip) hudChip.textContent = PERSONA_CHIPS[profile.persona] || meta.badge || '';
+
+  // Apply saved avatar CSS vars so the sprite reflects the designed avatar
+  Object.keys(AVATAR_VARS).forEach(function(k) {
+    if (profile[k]) document.documentElement.style.setProperty(AVATAR_VARS[k], profile[k]);
+  });
+  if (profile.skin && SKIN_TO_LIP[profile.skin])
+    document.documentElement.style.setProperty('--avatar-lip', SKIN_TO_LIP[profile.skin]);
+
+  // Wire change-renter (once)
   var changeEl = document.querySelector('#screen-map .persona-context .change:not([data-wired])');
   if (changeEl) { changeEl.setAttribute('data-wired','1'); changeEl.style.cursor='pointer'; changeEl.addEventListener('click',function(){RJ.navigate('screen-intro');}); }
+
+  // Apply lock/unlock state to chapter cards
   var cards = document.querySelectorAll('#screen-map .chapter-card');
   cards.forEach(function(card, idx) {
     var chNum = idx+1; var unlocked = chNum <= profile.unlockedChapter;

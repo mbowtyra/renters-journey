@@ -431,13 +431,34 @@ function syncAvatarScreen() {
 }
 
 // ── Map screen ────────────────────────────────────────────────────────────
+var PERSONA_CHIPS = { jordan:'Achiever', alex:'Ambitious', taylor:'Duo Quest', jamie:'Planner' };
+
 function syncMapScreen() {
   var profile = loadProfile();
   var meta = PERSONA_META[profile.persona] || PERSONA_META.jordan;
+
+  // Top-bar persona name
   var nameEl = document.querySelector('#screen-map .persona-context .name');
   if (nameEl) nameEl.textContent = meta.fullName;
+
+  // Sidebar HUD: persona name + class chip
+  var hudName = document.getElementById('mapPersonaName');
+  if (hudName) hudName.textContent = meta.shortName;
+  var hudChip = document.getElementById('mapPersonaChip');
+  if (hudChip) hudChip.textContent = PERSONA_CHIPS[profile.persona] || meta.badge || '';
+
+  // Apply saved avatar CSS vars so the sprite reflects the designed avatar
+  Object.keys(AVATAR_VARS).forEach(function(k) {
+    if (profile[k]) document.documentElement.style.setProperty(AVATAR_VARS[k], profile[k]);
+  });
+  if (profile.skin && SKIN_TO_LIP[profile.skin])
+    document.documentElement.style.setProperty('--avatar-lip', SKIN_TO_LIP[profile.skin]);
+
+  // Wire change-renter (once)
   var changeEl = document.querySelector('#screen-map .persona-context .change:not([data-wired])');
   if (changeEl) { changeEl.setAttribute('data-wired','1'); changeEl.style.cursor='pointer'; changeEl.addEventListener('click',function(){RJ.navigate('screen-intro');}); }
+
+  // Apply lock/unlock state to chapter cards
   var cards = document.querySelectorAll('#screen-map .chapter-card');
   cards.forEach(function(card, idx) {
     var chNum = idx+1; var unlocked = chNum <= profile.unlockedChapter;
