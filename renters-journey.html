@@ -12613,34 +12613,190 @@ function syncMapScreen() {
   });
 }
 
+// ── Field notes helpers ───────────────────────────────────────────────────
+function noteIdFor(ta, chNum, idx) {
+  var questEl = ta.closest('[data-quest]');
+  var qId = questEl ? questEl.getAttribute('data-quest') : (chNum + '-' + idx);
+  return 'note-ch' + chNum + '-q' + String(qId).replace(/\./g, '-');
+}
+function labelFor(ta, chNum, idx) {
+  var questEl = ta.closest('[data-quest]');
+  if (questEl) {
+    var h = questEl.querySelector('h3');
+    if (h && h.textContent.trim()) return h.textContent.trim();
+    return 'Quest ' + questEl.getAttribute('data-quest');
+  }
+  // No quest wrapper (e.g. chapter 1 plain reflections): use the <label> sibling
+  var prompt = ta.closest('.reflection-prompt');
+  if (prompt) {
+    var lbl = prompt.querySelector('label');
+    if (lbl && lbl.textContent.trim()) return lbl.textContent.trim();
+  }
+  return 'Reflection ' + (idx + 1);
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function refreshNotesCard(chNum) {
+  var screenEl = document.getElementById('screen-ch' + chNum);
+  if (!screenEl) return;
+  var notesCard = screenEl.querySelector('.notes-card');
+  if (!notesCard) return;
+  var profile = loadProfile();
+  var notes = getPersonaNotes(profile.persona).filter(function(n) { return n.chapter === chNum; });
+
+  var h3 = notesCard.querySelector('h3');
+  if (h3) {
+    h3.innerHTML = 'Field Notes <span style="font-family:\'VT323\',monospace;font-size:13px;color:var(--ink-soft);letter-spacing:1px;">'
+      + notes.length + ' saved</span>';
+  }
+
+  var list = notesCard.querySelector('.notes-list');
+  if (!list) return;
+
+  if (notes.length === 0) {
+    list.innerHTML = '<div class="note empty"><p class="note-text">Nothing yet. Start typing in the reflections below.</p></div>';
+    return;
+  }
+
+  list.innerHTML = notes.map(function(note, idx) {
+    var label = note.label || ('Note ' + (idx + 1));
+    return '<div class="note">'
+      + '<div class="note-meta">' + escHtml(label) + '</div>'
+      + '<p class="note-text">' + escHtml(note.text) + '</p>'
+      + '<div class="note-actions">'
+      + '<button class="copy-btn" data-copy="' + escHtml(note.text) + '">Copy to Slack</button>'
+      + '</div></div>';
+  }).join('');
+
+  list.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var text = btn.getAttribute('data-copy');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.textContent = 'Copied!';
+          setTimeout(function() { btn.textContent = 'Copy to Slack'; }, 1500);
+        });
+      } else {
+        // Fallback
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = 'Copied!';
+        setTimeout(function() { btn.textContent = 'Copy to Slack'; }, 1500);
+      }
+    });
+  });
+}
+
 // ── Chapter screens ───────────────────────────────────────────────────────
 function syncChapterScreen(n) {
-  var profile = loadProfile();
-  var screenEl = document.getElementById('screen-ch'+n);
+  var profile  = loadProfile();
+  var screenEl = document.getElementById('screen-ch' + n);
   if (!screenEl) return;
   applyPersonaTheme(profile.persona);
+
+  // Wire change-renter (once)
   var changeEl = screenEl.querySelector('.persona-context .change:not([data-wired])');
-  if (changeEl) { changeEl.setAttribute('data-wired','1'); changeEl.style.cursor='pointer'; changeEl.addEventListener('click',function(){RJ.navigate('screen-intro');}); }
+  if (changeEl) {
+    changeEl.setAttribute('data-wired','1');
+    changeEl.style.cursor = 'pointer';
+    changeEl.addEventListener('click', function() { RJ.navigate('screen-intro'); });
+  }
+
+  // Wire quest checkboxes: step-check ↔ master quest-check (once per quest)
+  screenEl.querySelectorAll('.quest:not([data-wired])').forEach(function(quest) {
+    quest.setAttribute('data-wired', '1');
+    var steps  = quest.querySelectorAll('.step-check');
+    var master = quest.querySelector('.quest-check');
+    if (!steps.length || !master) return;
+    steps.forEach(function(s) {
+      s.addEventListener('change', function() {
+        master.checked = Array.from(steps).every(function(c) { return c.checked; });
+        if (gateUpdate) gateUpdate();
+      });
+    });
+    master.addEventListener('change', function() {
+      if (master.checked) steps.forEach(function(s) { s.checked = true; });
+      if (gateUpdate) gateUpdate();
+    });
+  });
+
+  // Gate & wire continue button (once)
   var continueBtn = screenEl.querySelector('#continueBtn:not([data-wired])');
+  var gateUpdate  = null;
+
   if (continueBtn) {
-    continueBtn.setAttribute('data-wired','1');
-    var tas = screenEl.querySelectorAll('.reflection-input');
-    function checkFilled() {
-      var ok = tas.length > 0;
-      tas.forEach(function(ta){ if(!ta.value.trim()) ok=false; });
-      if(ok){ continueBtn.classList.remove('disabled'); continueBtn.removeAttribute('aria-disabled'); }
-      else  { continueBtn.classList.add('disabled');    continueBtn.setAttribute('aria-disabled','true'); }
-    }
-    tas.forEach(function(ta){ ta.addEventListener('input',checkFilled); });
-    checkFilled();
-    continueBtn.addEventListener('click',function(e){
+    continueBtn.setAttribute('data-wired', '1');
+
+    var reflInputs  = screenEl.querySelectorAll('.reflection-input');
+    // Core quests only (exclude .optional side quests)
+    var coreChecks  = screenEl.querySelectorAll('.quest:not(.optional) .quest-check');
+    var statusEl    = screenEl.querySelector('#reflectionStatus');
+
+    gateUpdate = function() {
+      var reflOk   = Array.from(reflInputs).every(function(ta) { return ta.value.trim().length >= 4; });
+      var questsOk = !coreChecks.length || Array.from(coreChecks).every(function(c) { return c.checked; });
+      var allDone  = reflOk && questsOk;
+
+      if (statusEl) {
+        if (allDone) {
+          statusEl.textContent = 'Reflection complete \u00b7 ready to walk on';
+          statusEl.classList.add('complete');
+        } else {
+          var filled = Array.from(reflInputs).filter(function(ta) { return ta.value.trim().length >= 4; }).length;
+          var checked = Array.from(coreChecks).filter(function(c) { return c.checked; }).length;
+          statusEl.textContent = 'Quests: ' + checked + '/' + coreChecks.length
+            + ' \u00b7 Reflections: ' + filled + '/' + reflInputs.length;
+          statusEl.classList.remove('complete');
+        }
+      }
+      if (allDone) {
+        continueBtn.classList.remove('disabled');
+        continueBtn.removeAttribute('aria-disabled');
+      } else {
+        continueBtn.classList.add('disabled');
+        continueBtn.setAttribute('aria-disabled', 'true');
+      }
+    };
+
+    reflInputs.forEach(function(ta) { ta.addEventListener('input', gateUpdate); });
+    coreChecks.forEach(function(c)  { c.addEventListener('change', gateUpdate); });
+    gateUpdate();
+
+    // Auto-save reflection as a field note on blur
+    reflInputs.forEach(function(ta, i) {
+      ta.addEventListener('blur', function() {
+        var text = ta.value.trim();
+        if (!text) return;
+        var noteId = noteIdFor(ta, n, i);
+        var label  = labelFor(ta, n, i);
+        saveNote({ id: noteId, persona: profile.persona, chapter: n, label: label, text: text, ts: Date.now() });
+        refreshNotesCard(n);
+      });
+    });
+
+    // Walk on
+    continueBtn.addEventListener('click', function(e) {
       e.preventDefault();
-      if(continueBtn.classList.contains('disabled')) return;
-      var prof=loadProfile();
-      if(n+1<=7 && n+1>prof.unlockedChapter) saveProfile({unlockedChapter:n+1});
-      RJ.navigate(n<7?'screen-ch'+(n+1):'screen-ultimate');
+      if (continueBtn.classList.contains('disabled')) return;
+      // Flush any unsaved reflections
+      reflInputs.forEach(function(ta, i) {
+        var text = ta.value.trim();
+        if (!text) return;
+        saveNote({ id: noteIdFor(ta, n, i), persona: profile.persona, chapter: n, label: labelFor(ta, n, i), text: text, ts: Date.now() });
+      });
+      var prof = loadProfile();
+      if (n + 1 <= 7 && n + 1 > prof.unlockedChapter) saveProfile({ unlockedChapter: n + 1 });
+      RJ.navigate(n < 7 ? 'screen-ch' + (n + 1) : 'screen-ultimate');
     });
   }
+
+  // Populate notes sidebar from localStorage
+  refreshNotesCard(n);
 }
 
 // ── Ultimate quest ────────────────────────────────────────────────────────
@@ -12657,7 +12813,14 @@ function syncUltimateScreen() {
 
 // ── Init ──────────────────────────────────────────────────────────────────
 function init() {
-  applyPersonaTheme(loadProfile().persona);
+  var _p = loadProfile();
+  applyPersonaTheme(_p.persona);
+  // Apply saved avatar CSS vars immediately so sprites render correctly
+  Object.keys(AVATAR_VARS).forEach(function(k) {
+    if (_p[k]) document.documentElement.style.setProperty(AVATAR_VARS[k], _p[k]);
+  });
+  if (_p.skin && SKIN_TO_LIP[_p.skin])
+    document.documentElement.style.setProperty('--avatar-lip', SKIN_TO_LIP[_p.skin]);
   document.querySelectorAll('.screen').forEach(function(s){ s.style.display='none'; });
   var hash = window.location.hash.replace('#','');
   if (hash && VALID_SCREENS.indexOf(hash)!==-1) { RJ.navigate(hash); }
