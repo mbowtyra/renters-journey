@@ -3688,6 +3688,52 @@ body {
     font-size: 12px;
     line-height: 1.4;
   }
+  #screen-ch1 .notes-copy-all-wrap,
+#screen-ch2 .notes-copy-all-wrap,
+#screen-ch3 .notes-copy-all-wrap,
+#screen-ch4 .notes-copy-all-wrap,
+#screen-ch5 .notes-copy-all-wrap,
+#screen-ch6 .notes-copy-all-wrap,
+#screen-ch7 .notes-copy-all-wrap {
+    padding: 6px 0 8px;
+    border-bottom: 1px solid rgba(26,14,46,0.15);
+    margin-bottom: 4px;
+  }
+  #screen-ch1 .copy-all-btn,
+#screen-ch2 .copy-all-btn,
+#screen-ch3 .copy-all-btn,
+#screen-ch4 .copy-all-btn,
+#screen-ch5 .copy-all-btn,
+#screen-ch6 .copy-all-btn,
+#screen-ch7 .copy-all-btn {
+    width: 100%;
+    text-align: center;
+  }
+  #screen-ch1 .copy-ch-btn,
+#screen-ch2 .copy-ch-btn,
+#screen-ch3 .copy-ch-btn,
+#screen-ch4 .copy-ch-btn,
+#screen-ch5 .copy-ch-btn,
+#screen-ch6 .copy-ch-btn,
+#screen-ch7 .copy-ch-btn {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 11px;
+    padding: 2px 7px;
+    line-height: 1.4;
+    vertical-align: middle;
+  }
+  #screen-ch1 .notes-group-summary,
+#screen-ch2 .notes-group-summary,
+#screen-ch3 .notes-group-summary,
+#screen-ch4 .notes-group-summary,
+#screen-ch5 .notes-group-summary,
+#screen-ch6 .notes-group-summary,
+#screen-ch7 .notes-group-summary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
   /* === CORE QUESTS — checkbox + flat sections === */
   #screen-ch1 .quest .quest-num,
@@ -13389,7 +13435,7 @@ var PERSONA_META = {
     bio: 'Taylor and Riley have been in Chicago for three years, the longest they\'ve stayed anywhere. Polaroids from Lisbon are still on the fridge, Riley\'s camera lives next to the toaster. The plan\u2014forming for months\u2014is to leave Chicago for Austin.\n\nThey search together. Listings get screenshot-shared between phones. Riley reads Reddit threads about Austin neighborhoods. Taylor texts friends who\'ve lived there. They decide together.\n\nLow urgency, very high preference clarity on neighborhood vibe. The apartment has to feel right for both of them.'
   },
   jamie: {
-    fullName: 'Jamie the Planner', shortName: 'Jamie', color: '#5C8841',
+    fullName: 'Jamie the Pathfinder', shortName: 'Jamie', color: '#5C8841',
     from: 'Suburban Philadelphia, PA', to: 'Jersey City, NJ', timeframe: '~5 months',
     currentRent: '$1,500', budget: '$3,200',
     bio: 'Jamie is a single parent in suburban Philadelphia, but their family support system is in Jersey. Daughter Emma starts kindergarten in five months, which means whatever happens next has to happen fast. The plan is Jersey City. The schools are good, the transit is doable, but the budget is tight.\n\nEvery search filter does double duty. School zone and pet-friendly. Budget cap and laundry in-unit. Jamie hasn\'t fully committed yet because committing means it\'s real.\n\nThe clock is running. There\'s no room for ghost listings or slow agents.'
@@ -13607,7 +13653,7 @@ function syncAvatarScreen() {
 }
 
 // ── Map screen ────────────────────────────────────────────────────────────
-var PERSONA_CHIPS = { jordan:'Achiever', alex:'Ambitious', taylor:'Duo Quest', jamie:'Planner' };
+var PERSONA_CHIPS = { jordan:'Rising Star', alex:'Level Upper', taylor:'City Hopper', jamie:'Pathfinder' };
 
 function syncMapScreen() {
   var profile = loadProfile();
@@ -16086,21 +16132,41 @@ function refreshNotesCard(chNum) {
     groups[key].push(note);
   });
 
-  var html = groupOrder.map(function(key) {
+  // Build "Copy all" text for the entire persona's notes
+  var allNotesText = notes.map(function(note) {
+    var prefix = note.chapter ? '[Ch. ' + note.chapter + (note.label ? ' \u00b7 ' + note.label : '') + '] ' : '';
+    return prefix + note.text;
+  }).join('\n\n');
+
+  var html = '<div class="notes-copy-all-wrap">'
+    + '<button class="copy-btn copy-all-btn" data-copy="' + escHtml(allNotesText) + '">Copy all notes</button>'
+    + '</div>';
+
+  html += groupOrder.map(function(key) {
     var groupNotes = groups[key];
     var chLabel = key ? 'Ch. ' + key + ' \u00b7 ' + (CH_NAMES[key] || 'Chapter ' + key) : 'General';
     var isCurrentCh = (key === chNum);
     var openAttr = isCurrentCh ? ' open' : '';
+
+    // "Copy chapter" text: all notes from this chapter
+    var chText = groupNotes.map(function(note) {
+      return (note.label ? '[' + note.label + '] ' : '') + note.text;
+    }).join('\n\n');
+
     var items = groupNotes.map(function(note) {
       var questLabel = note.label ? escHtml(note.label) : '';
       return '<li class="note-item">'
         + (questLabel ? '<div class="note-quest-label">' + questLabel + '</div>' : '')
         + '<p class="note-text">' + escHtml(note.text) + '</p>'
-        + '<button class="copy-btn" data-copy="' + escHtml(note.text) + '">Copy to Slack</button>'
+        + '<button class="copy-btn" data-copy="' + escHtml(note.text) + '">Copy</button>'
         + '</li>';
     }).join('');
+
     return '<details class="notes-chapter-group"' + openAttr + '>'
-      + '<summary class="notes-group-summary">' + escHtml(chLabel) + ' <span class="notes-group-count">(' + groupNotes.length + ')</span></summary>'
+      + '<summary class="notes-group-summary">'
+      + escHtml(chLabel) + ' <span class="notes-group-count">(' + groupNotes.length + ')</span>'
+      + '<button class="copy-btn copy-ch-btn" data-copy="' + escHtml(chText) + '">Copy chapter</button>'
+      + '</summary>'
       + '<ul class="notes-bullet-list">' + items + '</ul>'
       + '</details>';
   }).join('');
