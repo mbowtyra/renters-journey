@@ -644,47 +644,25 @@
   .card.taylor-riley { --card-color: var(--light-purple); --portrait-bg: #ECE0F7; }
   .card.jamie { --card-color: var(--red); --portrait-bg: #FFE6E9; }
 
-  /* Info area: holds default content (mantra + stats) AND hover bio overlay */
   .info-area {
-    position: relative;
     margin-bottom: 14px;
-    min-height: 160px;
   }
 
-  .default-info, .bio-overlay {
-    position: absolute;
-    inset: 0;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+  .bio-body {
+    padding: 10px 10px 10px;
+    border-top: 1px dashed var(--ink-soft);
   }
 
-  .default-info { opacity: 1; }
-
-  .bio-overlay {
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-    background: var(--paper);
-    border-left: 4px solid var(--card-color, var(--indigo));
-    padding: 12px 14px;
-    overflow-y: auto;
-  }
-
-  .bio-overlay p {
-    font-style: italic;
-    font-size: 14px;
+  .bio-body p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
     line-height: 1.55;
     color: var(--ink);
-    margin: 0;
+    margin: 0 0 8px;
+    font-style: italic;
   }
 
-  .card:hover .default-info { opacity: 0; pointer-events: none; }
-  .card:hover .bio-overlay { opacity: 1; transform: translateY(0); pointer-events: auto; }
-
-  /* Touch devices: tap to flip */
-  @media (hover: none) {
-    .card:active .default-info { opacity: 0; }
-    .card:active .bio-overlay { opacity: 1; }
-  }
+  .bio-body p:last-child { margin-bottom: 0; }
 
   /* Sparkles on hover */
   .sparkle {
@@ -1974,7 +1952,6 @@
       <h2 class="name">Alex the Ambitious</h2>
       <p class="tagline">Climbing the ladder, one square foot at a time.</p>
       <div class="info-area">
-        <div class="default-info">
           <blockquote class="mantra">"I've earned this. Show me the upgrade."</blockquote>
           <details class="card-brief">
             <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
@@ -2000,12 +1977,14 @@
               </div>
             </div>
           </details>
-        </div>
-        <div class="bio-overlay">
-          <p>Alex is a senior engineer in San Francisco. Three years in the same studio apartment, their salary has gone up but the square footage hasn't. The bike lives on the wall because there's nowhere else to put it. The lease non-renewal came last week, and Alex is treating it as permission to finally upgrade.</p>
-          <p>The wishlist is specific: a real kitchen with counter space, a bedroom door that closes, somewhere to put the bike that isn't a wall mount. SoMa is the safe pick because the commute would be twelve minutes. Hayes Valley keeps coming back if the budget can stretch.</p>
-          <p>Alex hunts with a spreadsheet (the spreadsheet was drafted before the lease notice came). Three platforms run in browser tabs at once. The standards aren't flexible, but the budget might be.</p>
-        </div>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>About Alex</span><span class="brief-arrow">▶</span></summary>
+            <div class="bio-body">
+              <p>Alex is a senior engineer in San Francisco. Three years in the same studio apartment, their salary has gone up but the square footage hasn't. The bike lives on the wall because there's nowhere else to put it. The lease non-renewal came last week, and Alex is treating it as permission to finally upgrade.</p>
+              <p>The wishlist is specific: a real kitchen with counter space, a bedroom door that closes, somewhere to put the bike that isn't a wall mount. SoMa is the safe pick because the commute would be twelve minutes. Hayes Valley keeps coming back if the budget can stretch.</p>
+              <p>Alex hunts with a spreadsheet (the spreadsheet was drafted before the lease notice came). Three platforms run in browser tabs at once. The standards aren't flexible, but the budget might be.</p>
+            </div>
+          </details>
       </div>
       <button class="btn-embark">Embark with Alex</button>
     </article>
@@ -2022,7 +2001,6 @@
       <h2 class="name">Jordan the Rising Star</h2>
       <p class="tagline">A new city, a new job, and Max along for the ride.</p>
       <div class="info-area">
-        <div class="default-info">
           <blockquote class="mantra">"Three real options. One that works for Max. Before Monday."</blockquote>
           <details class="card-brief">
             <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
@@ -2049,12 +2027,14 @@
               </div>
             </div>
           </details>
-        </div>
-        <div class="bio-overlay">
-          <p>Jordan got the offer last week. New job in Seattle, three weeks to land. Right now they're standing in their Portland apartment looking at a corner that's about to fill up with moving boxes, with Max the golden retriever asleep on the dog bed that has to get packed first. Excited about the role, but slightly underslept and a little bit panicking.</p>
-          <p>The shortlist has shape but not edges. A yard would be ideal, a park within walking distance will do. A real home office matters because the new role is hybrid and the kitchen table can't keep doing double duty. Pet-friendly isn't a perk for Jordan. Max needs to actually be welcome.</p>
-          <p>Eighteen days isn't a lot of time to chase ghost listings or wait three days for a property to respond. Jordan wants the map view first. They'll come back to the quiz later, maybe.</p>
-        </div>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>About Jordan</span><span class="brief-arrow">▶</span></summary>
+            <div class="bio-body">
+              <p>Jordan got the offer last week. New job in Seattle, three weeks to land. Right now they're standing in their Portland apartment looking at a corner that's about to fill up with moving boxes, with Max the golden retriever asleep on the dog bed that has to get packed first. Excited about the role, but slightly underslept and a little bit panicking.</p>
+              <p>The shortlist has shape but not edges. A yard would be ideal, a park within walking distance will do. A real home office matters because the new role is hybrid and the kitchen table can't keep doing double duty. Pet-friendly isn't a perk for Jordan. Max needs to actually be welcome.</p>
+              <p>Eighteen days isn't a lot of time to chase ghost listings or wait three days for a property to respond. Jordan wants the map view first. They'll come back to the quiz later, maybe.</p>
+            </div>
+          </details>
       </div>
       <button class="btn-embark">Embark with Jordan</button>
     </article>
@@ -2071,7 +2051,6 @@
       <h2 class="name">Taylor & Riley</h2>
       <p class="tagline">Two pairs of eyes, one new city to explore.</p>
       <div class="info-area">
-        <div class="default-info">
           <blockquote class="mantra">"We'll know the place when we both feel it. A street, a sunset, a coffee shop on the corner."</blockquote>
           <details class="card-brief">
             <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
@@ -2098,12 +2077,14 @@
               </div>
             </div>
           </details>
-        </div>
-        <div class="bio-overlay">
-          <p>Taylor and Riley have been in Chicago for three years, the longest they've stayed anywhere. Polaroids from Lisbon are still on the fridge, a zine from Mexico City lives on the counter, and Riley's camera lives next to the toaster. The plan, which has been forming for months, is to leave Chicago for Austin.</p>
-          <p>Riley wants walkable streets and a photography scene that lives outside galleries. Taylor wants incredible food. They both want a neighborhood they can hear from the window. The unit matters less than what's around it.</p>
-          <p>They search together. Listings get screenshot-shared between phones with one-line captions like "this one" or "no please." Riley reads Reddit threads about Austin neighborhoods. Taylor texts friends who've lived there. Different approaches, same couch, mutual veto. The user embodies Taylor. Riley is a narrative character throughout the journey.</p>
-        </div>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>About Taylor & Riley</span><span class="brief-arrow">▶</span></summary>
+            <div class="bio-body">
+              <p>Taylor and Riley have been in Chicago for three years, the longest they've stayed anywhere. Polaroids from Lisbon are still on the fridge, a zine from Mexico City lives on the counter, and Riley's camera lives next to the toaster. The plan, which has been forming for months, is to leave Chicago for Austin.</p>
+              <p>Riley wants walkable streets and a photography scene that lives outside galleries. Taylor wants incredible food. They both want a neighborhood they can hear from the window. The unit matters less than what's around it.</p>
+              <p>They search together. Listings get screenshot-shared between phones with one-line captions like "this one" or "no please." Riley reads Reddit threads about Austin neighborhoods. Taylor texts friends who've lived there. Different approaches, same couch, mutual veto. You play as Taylor. Riley is a narrative character throughout the journey.</p>
+            </div>
+          </details>
       </div>
       <button class="btn-embark">Embark with Taylor</button>
     </article>
@@ -2120,7 +2101,6 @@
       <h2 class="name">Jamie the Resilient Parent</h2>
       <p class="tagline">Every choice has to work for both of us.</p>
       <div class="info-area">
-        <div class="default-info">
           <blockquote class="mantra">"The numbers, the school, the safety. No surprises."</blockquote>
           <details class="card-brief">
             <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
@@ -2148,12 +2128,14 @@
               </div>
             </div>
           </details>
-        </div>
-        <div class="bio-overlay">
-          <p>Jamie is a single parent in suburban Philadelphia, but the family support system is in Jersey. Their daughter Emma is starting kindergarten in five months, which means whatever happens next has to happen fast. The plan is Jersey City. The schools are good, the transit is doable, but the budget is tight, and Jamie hasn't fully committed yet because committing means it's real.</p>
-          <p>School quality is the first filter, then safe streets and a walkable park. A two-bedroom is non-negotiable. Pet-friendly stays on the list because Emma keeps asking about a small dog.</p>
-          <p>Jamie reads every review and cross-references school ratings on three sites. They've joined three NJ parent Facebook groups under their work email and lurk in all of them. They want one good place. Not perfect, just good. Emma is a narrative character throughout the journey.</p>
-        </div>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>About Jamie</span><span class="brief-arrow">▶</span></summary>
+            <div class="bio-body">
+              <p>Jamie is a single parent in suburban Philadelphia, but the family support system is in Jersey. Their daughter Emma is starting kindergarten in five months, which means whatever happens next has to happen fast. The plan is Jersey City. The schools are good, the transit is doable, but the budget is tight, and Jamie hasn't fully committed yet because committing means it's real.</p>
+              <p>School quality is the first filter, then safe streets and a walkable park. A two-bedroom is non-negotiable. Pet-friendly stays on the list because Emma keeps asking about a small dog.</p>
+              <p>Jamie reads every review and cross-references school ratings on three sites. They've joined three NJ parent Facebook groups under their work email and lurk in all of them. They want one good place. Not perfect, just good. Emma is a narrative character throughout the journey.</p>
+            </div>
+          </details>
       </div>
       <button class="btn-embark">Embark with Jamie</button>
     </article>
@@ -2161,7 +2143,7 @@
   </div>
 
   <footer>
-    <p>The Renter's Journey is a dogfooding quest for A-Listers. Your progress is saved. Hover any renter to read their story and start your journey.</p>
+    <p>The Renter's Journey is a dogfooding quest for A-Listers. Your progress is saved. Pick a renter and start your journey.</p>
   </footer>
 
 </main>

@@ -656,48 +656,25 @@ body {
   #screen-intro .card.taylor-riley { --card-color: var(--light-purple); --portrait-bg: #ECE0F7; }
   #screen-intro .card.jamie { --card-color: var(--red); --portrait-bg: #FFE6E9; }
 
-  /* Info area: holds default content (mantra + stats) AND hover bio overlay */
   #screen-intro .info-area {
-    position: relative;
     margin-bottom: 14px;
-    min-height: 160px;
   }
 
-  #screen-intro .default-info,
-#screen-intro .bio-overlay {
-    position: absolute;
-    inset: 0;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+  #screen-intro .bio-body {
+    padding: 10px 10px 10px;
+    border-top: 1px dashed var(--ink-soft);
   }
 
-  #screen-intro .default-info { opacity: 1; }
-
-  #screen-intro .bio-overlay {
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-    background: var(--paper);
-    border-left: 4px solid var(--card-color, var(--indigo));
-    padding: 12px 14px;
-    overflow-y: auto;
-  }
-
-  #screen-intro .bio-overlay p {
-    font-style: italic;
-    font-size: 14px;
+  #screen-intro .bio-body p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
     line-height: 1.55;
     color: var(--ink);
-    margin: 0;
+    margin: 0 0 8px;
+    font-style: italic;
   }
 
-  #screen-intro .card:hover .default-info { opacity: 0; pointer-events: none; }
-  #screen-intro .card:hover .bio-overlay { opacity: 1; transform: translateY(0); pointer-events: auto; }
-
-  /* Touch devices: tap to flip */
-  @media (hover: none) {
-    #screen-intro .card:active .default-info { opacity: 0; }
-    #screen-intro .card:active .bio-overlay { opacity: 1; }
-  }
+  #screen-intro .bio-body p:last-child { margin-bottom: 0; }
 
   /* Sparkles on hover */
   #screen-intro .sparkle {
@@ -7593,7 +7570,6 @@ body {
       <h2 class="name">Alex the Ambitious</h2>
       <p class="tagline">Climbing the ladder, one square foot at a time.</p>
       <div class="info-area">
-        <div class="default-info">
           <blockquote class="mantra">"I've earned this. Show me the upgrade."</blockquote>
           <details class="card-brief">
             <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
@@ -7619,12 +7595,14 @@ body {
               </div>
             </div>
           </details>
-        </div>
-        <div class="bio-overlay">
-          <p>Alex is a senior engineer in San Francisco. Three years in the same studio apartment, their salary has gone up but the square footage hasn't. The bike lives on the wall because there's nowhere else to put it. The lease non-renewal came last week, and Alex is treating it as permission to finally upgrade.</p>
-          <p>The wishlist is specific: a real kitchen with counter space, a bedroom door that closes, somewhere to put the bike that isn't a wall mount. SoMa is the safe pick because the commute would be twelve minutes. Hayes Valley keeps coming back if the budget can stretch.</p>
-          <p>Alex hunts with a spreadsheet (the spreadsheet was drafted before the lease notice came). Three platforms run in browser tabs at once. The standards aren't flexible, but the budget might be.</p>
-        </div>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>About Alex</span><span class="brief-arrow">▶</span></summary>
+            <div class="bio-body">
+              <p>Alex is a senior engineer in San Francisco. Three years in the same studio apartment, their salary has gone up but the square footage hasn't. The bike lives on the wall because there's nowhere else to put it. The lease non-renewal came last week, and Alex is treating it as permission to finally upgrade.</p>
+              <p>The wishlist is specific: a real kitchen with counter space, a bedroom door that closes, somewhere to put the bike that isn't a wall mount. SoMa is the safe pick because the commute would be twelve minutes. Hayes Valley keeps coming back if the budget can stretch.</p>
+              <p>Alex hunts with a spreadsheet (the spreadsheet was drafted before the lease notice came). Three platforms run in browser tabs at once. The standards aren't flexible, but the budget might be.</p>
+            </div>
+          </details>
       </div>
       <button class="btn-embark">Embark with Alex</button>
     </article>
@@ -7641,7 +7619,6 @@ body {
       <h2 class="name">Jordan the Rising Star</h2>
       <p class="tagline">A new city, a new job, and Max along for the ride.</p>
       <div class="info-area">
-        <div class="default-info">
           <blockquote class="mantra">"Three real options. One that works for Max. Before Monday."</blockquote>
           <details class="card-brief">
             <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
@@ -7668,12 +7645,14 @@ body {
               </div>
             </div>
           </details>
-        </div>
-        <div class="bio-overlay">
-          <p>Jordan got the offer last week. New job in Seattle, three weeks to land. Right now they're standing in their Portland apartment looking at a corner that's about to fill up with moving boxes, with Max the golden retriever asleep on the dog bed that has to get packed first. Excited about the role, but slightly underslept and a little bit panicking.</p>
-          <p>The shortlist has shape but not edges. A yard would be ideal, a park within walking distance will do. A real home office matters because the new role is hybrid and the kitchen table can't keep doing double duty. Pet-friendly isn't a perk for Jordan. Max needs to actually be welcome.</p>
-          <p>Eighteen days isn't a lot of time to chase ghost listings or wait three days for a property to respond. Jordan wants the map view first. They'll come back to the quiz later, maybe.</p>
-        </div>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>About Jordan</span><span class="brief-arrow">▶</span></summary>
+            <div class="bio-body">
+              <p>Jordan got the offer last week. New job in Seattle, three weeks to land. Right now they're standing in their Portland apartment looking at a corner that's about to fill up with moving boxes, with Max the golden retriever asleep on the dog bed that has to get packed first. Excited about the role, but slightly underslept and a little bit panicking.</p>
+              <p>The shortlist has shape but not edges. A yard would be ideal, a park within walking distance will do. A real home office matters because the new role is hybrid and the kitchen table can't keep doing double duty. Pet-friendly isn't a perk for Jordan. Max needs to actually be welcome.</p>
+              <p>Eighteen days isn't a lot of time to chase ghost listings or wait three days for a property to respond. Jordan wants the map view first. They'll come back to the quiz later, maybe.</p>
+            </div>
+          </details>
       </div>
       <button class="btn-embark">Embark with Jordan</button>
     </article>
@@ -7690,7 +7669,6 @@ body {
       <h2 class="name">Taylor & Riley</h2>
       <p class="tagline">Two pairs of eyes, one new city to explore.</p>
       <div class="info-area">
-        <div class="default-info">
           <blockquote class="mantra">"We'll know the place when we both feel it. A street, a sunset, a coffee shop on the corner."</blockquote>
           <details class="card-brief">
             <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
@@ -7717,12 +7695,14 @@ body {
               </div>
             </div>
           </details>
-        </div>
-        <div class="bio-overlay">
-          <p>Taylor and Riley have been in Chicago for three years, the longest they've stayed anywhere. Polaroids from Lisbon are still on the fridge, a zine from Mexico City lives on the counter, and Riley's camera lives next to the toaster. The plan, which has been forming for months, is to leave Chicago for Austin.</p>
-          <p>Riley wants walkable streets and a photography scene that lives outside galleries. Taylor wants incredible food. They both want a neighborhood they can hear from the window. The unit matters less than what's around it.</p>
-          <p>They search together. Listings get screenshot-shared between phones with one-line captions like "this one" or "no please." Riley reads Reddit threads about Austin neighborhoods. Taylor texts friends who've lived there. Different approaches, same couch, mutual veto. The user embodies Taylor. Riley is a narrative character throughout the journey.</p>
-        </div>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>About Taylor & Riley</span><span class="brief-arrow">▶</span></summary>
+            <div class="bio-body">
+              <p>Taylor and Riley have been in Chicago for three years, the longest they've stayed anywhere. Polaroids from Lisbon are still on the fridge, a zine from Mexico City lives on the counter, and Riley's camera lives next to the toaster. The plan, which has been forming for months, is to leave Chicago for Austin.</p>
+              <p>Riley wants walkable streets and a photography scene that lives outside galleries. Taylor wants incredible food. They both want a neighborhood they can hear from the window. The unit matters less than what's around it.</p>
+              <p>They search together. Listings get screenshot-shared between phones with one-line captions like "this one" or "no please." Riley reads Reddit threads about Austin neighborhoods. Taylor texts friends who've lived there. Different approaches, same couch, mutual veto. You play as Taylor. Riley is a narrative character throughout the journey.</p>
+            </div>
+          </details>
       </div>
       <button class="btn-embark">Embark with Taylor</button>
     </article>
@@ -7739,7 +7719,6 @@ body {
       <h2 class="name">Jamie the Resilient Parent</h2>
       <p class="tagline">Every choice has to work for both of us.</p>
       <div class="info-area">
-        <div class="default-info">
           <blockquote class="mantra">"The numbers, the school, the safety. No surprises."</blockquote>
           <details class="card-brief">
             <summary><span class="brief-label"><span class="pixel-dot"></span>What they're looking for</span><span class="brief-arrow">▶</span></summary>
@@ -7767,12 +7746,14 @@ body {
               </div>
             </div>
           </details>
-        </div>
-        <div class="bio-overlay">
-          <p>Jamie is a single parent in suburban Philadelphia, but the family support system is in Jersey. Their daughter Emma is starting kindergarten in five months, which means whatever happens next has to happen fast. The plan is Jersey City. The schools are good, the transit is doable, but the budget is tight, and Jamie hasn't fully committed yet because committing means it's real.</p>
-          <p>School quality is the first filter, then safe streets and a walkable park. A two-bedroom is non-negotiable. Pet-friendly stays on the list because Emma keeps asking about a small dog.</p>
-          <p>Jamie reads every review and cross-references school ratings on three sites. They've joined three NJ parent Facebook groups under their work email and lurk in all of them. They want one good place. Not perfect, just good. Emma is a narrative character throughout the journey.</p>
-        </div>
+          <details class="card-brief">
+            <summary><span class="brief-label"><span class="pixel-dot"></span>About Jamie</span><span class="brief-arrow">▶</span></summary>
+            <div class="bio-body">
+              <p>Jamie is a single parent in suburban Philadelphia, but the family support system is in Jersey. Their daughter Emma is starting kindergarten in five months, which means whatever happens next has to happen fast. The plan is Jersey City. The schools are good, the transit is doable, but the budget is tight, and Jamie hasn't fully committed yet because committing means it's real.</p>
+              <p>School quality is the first filter, then safe streets and a walkable park. A two-bedroom is non-negotiable. Pet-friendly stays on the list because Emma keeps asking about a small dog.</p>
+              <p>Jamie reads every review and cross-references school ratings on three sites. They've joined three NJ parent Facebook groups under their work email and lurk in all of them. They want one good place. Not perfect, just good. Emma is a narrative character throughout the journey.</p>
+            </div>
+          </details>
       </div>
       <button class="btn-embark">Embark with Jamie</button>
     </article>
@@ -7780,7 +7761,7 @@ body {
   </div>
 
   <footer>
-    <p>The Renter's Journey is a dogfooding quest for A-Listers. Your progress is saved. Hover any renter to read their story and start your journey.</p>
+    <p>The Renter's Journey is a dogfooding quest for A-Listers. Your progress is saved. Pick a renter and start your journey.</p>
   </footer>
 
 </main>
@@ -13372,169 +13353,2268 @@ function escHtml(s) {
 
 var CH_NAMES = ['','The Long Night','First Light','The Search Begins','The Crossroads','The First Hello','The Key','The Welcome Mat'];
 
-// Persona-specific tonight-cards and reflection text for each chapter.
-// Sourced verbatim from memory/content-{persona}.md.
 var PERSONA_CHAPTERS = {
-  alex: {
+  "jordan": {
     1: {
-      eyebrow: 'Where Alex is tonight',
-      blurb: "Alex got the lease non-renewal today and they're at their studio desk, already running the numbers. Here's what was running through their head.",
-      q1: "What stood out to you about the start of Alex's renter journey?",
-      q2: 'What is Alex looking for in an apartment?',
-      q2hint: "What's negotiable, and what's not?",
-      reflectionIntro: 'Scan Alex\'s journal entry again and reread their "About Alex" bio in the upper right corner. When you\'re ready, reflect below.',
+      "eyebrow": "Where Jordan is tonight",
+      "blurb": "Jordan got a new job, and they're up late journaling and thinking about the move. Here's what was running through their head.",
+      "q1": "What stood out to you about the start of Jordan's renter journey?",
+      "q2": "What is Jordan looking for in an apartment?",
+      "q2hint": "What's negotiable, and what's not?",
+      "reflectionIntro": "Scan Jordan's journal entry again and reread their \"About Jordan\" bio in the upper right corner. When you're ready, reflect below.",
+      "quests": [],
+      "sideQuests": [],
+      "finalReflection": {}
     },
     2: {
-      eyebrow: 'Where Alex starts',
-      blurb: 'After last night\u2019s spreadsheet session, Alex sits down with the laptop after work. Three browser tabs open: Apartment List, Zillow, Apartments.com. The spreadsheet is on the right monitor. Apartment List has about sixty seconds to make a first impression.',
-      reflectionIntro: 'After the homepage, the Renter Tools, and the content, sit with one last question. Alex has a spreadsheet and standards.',
+      "eyebrow": "Where Jordan starts",
+      "blurb": "The job starts in sixteen days. Jordan is on the couch in Portland with Max asleep at their feet, phone out, searching for Seattle apartments. Apartment List came up. They click in. They haven't taken the quiz and aren't sure they have time for it.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the homepage, the Renter Tools, and the content, sit with one last question. Jordan has sixteen days.",
+      "quests": [
+        {
+          "label": "Core Quest 2.1 · The Homepage",
+          "title": "The Sixty-Second Test",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open the homepage as Jordan, on your phone if possible — that's where they are right now.",
+            "Does the homepage make it obvious how to start a search in Seattle? Look for a map view or city search. Notice where the eyes land first.",
+            "Don't take the quiz yet. Just spend sixty seconds looking around."
+          ],
+          "sitWithIt": [],
+          "reflection": "After sixty seconds, would Jordan stay or click away? What would make them put the phone down?"
+        },
+        {
+          "label": "Core Quest 2.2 · Renter Tools",
+          "title": "The Renter Tools Tour",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-tools",
+              "href": "https://www.apartmentlist.com/renter-tools"
+            },
+            {
+              "text": "Cost of Living",
+              "href": "https://www.apartmentlist.com/cost-of-living"
+            },
+            {
+              "text": "Rate My Rent",
+              "href": "https://www.apartmentlist.com/rate-my-rent"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open the Renter Tools dropdown. Jordan is moving from Portland to Seattle on a $2,400 budget.",
+            "Run the [Cost of Living](https://www.apartmentlist.com/cost-of-living) comparison between Portland and Seattle. Then try [Rate My Rent](https://www.apartmentlist.com/rate-my-rent) on their current Portland apartment.",
+            "Read the results as Jordan. What does the data say, and what does it miss about an 18-day relocation?"
+          ],
+          "sitWithIt": [],
+          "reflection": "Which Renter Tool would Jordan actually use? What did it surface that mattered, and what did it miss for someone relocating across state lines on a deadline?"
+        },
+        {
+          "label": "Core Quest 2.3 · Beyond the Listings",
+          "title": "Beyond the Listings",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-life",
+              "href": "https://www.apartmentlist.com/renter-life"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open Renter Life. Find content about relocating, renting with a pet, or moving to a new city quickly.",
+            "Read whatever catches Jordan's eye. Look for articles that would actually help someone moving from Portland to Seattle in three weeks with a golden retriever.",
+            "Notice what's there and what's missing."
+          ],
+          "sitWithIt": [],
+          "reflection": "What would Jordan make of this content? What would they read, and what would feel like it wasn't written for someone in their situation?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "A competitor — Zillow Apartments.com Rent.com or another",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open one competitor in a new tab. Try doing the same thing Jordan would do on Apartment List: search Seattle, filter for pet-friendly, scroll.",
+            "Notice what's different, better, or worse — especially for someone moving urgently to a new city."
+          ],
+          "sitWithIt": [],
+          "reflection": "What does the competitor do that Apartment List doesn't, and vice versa? Where would Jordan rather be on day one of the search?",
+          "sideLabel": "What Else Is Out There (universal, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "What does Jordan think of Apartment List?",
+        "intro": "After the homepage, the Renter Tools, and the content, sit with one last question. Jordan has sixteen days.",
+        "prompt": "From Jordan's point of view, what is Apartment List? Does it feel built for someone in their situation?"
+      }
     },
     3: {
-      eyebrow: 'Where Alex starts',
-      blurb: 'Alex has cleared Sunday afternoon for the quiz. The spreadsheet is on the second monitor. Apartment List gets five minutes to prove it understands what \u201cone bedroom, Hayes Valley, $4,200 hard cap\u201d actually means.',
-      reflectionIntro: 'After the quiz, the signup, and the first scroll through the matches, sit with one last question. Alex answered fourteen steps. Apartment List made its bets.',
+      "eyebrow": "Where Jordan starts",
+      "blurb": "Thirteen days. Jordan takes the quiz on their phone. Max is on the couch next to them. The quiz wants to know about Jordan's personality type. Jordan clicks through it.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the quiz, the signup, and the first scroll through the matches, sit with one last question. Thirteen days is a short window.",
+      "quests": [
+        {
+          "label": "Core Quest 3.1 · The Quiz",
+          "title": "Thirteen Days, One Quiz",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/quiz",
+              "href": "https://www.apartmentlist.com/quiz"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Take the quiz as Jordan. Answer every step: Seattle, $2,400 cap, hybrid work, pet-friendly.",
+            "Pay close attention to the Pets step. Does it ask about Max's size or breed, or just yes/no? Note what it asks and what it doesn't.",
+            "Notice the Personality step. Jordan doesn't understand how it relates to finding a place. Note that friction."
+          ],
+          "sitWithIt": [],
+          "reflection": "Where did the quiz capture what matters to Jordan — the pet policy, the timeline, the budget — and where did it miss?"
+        },
+        {
+          "label": "Core Quest 3.2 · Sign Up & Matches",
+          "title": "Seattle, Filtered",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/signup",
+              "href": "https://www.apartmentlist.com/signup"
+            },
+            {
+              "text": "apartmentlist.com/matches",
+              "href": "https://www.apartmentlist.com/matches"
+            }
+          ],
+          "headsup": "Use a test account — format `youremail+test[date]@apartmentlist.com`",
+          "scenario": null,
+          "steps": [
+            "Sign up as Jordan (with a +test account) and land in their matches.",
+            "How many Seattle listings came back? Are they pet-friendly? Does the volume feel right for a 13-day window?",
+            "Would Jordan trust this list to start making calls today?"
+          ],
+          "sitWithIt": [],
+          "reflection": "After signing up, what did Jordan's Seattle matches look like? Did the quiz pay off here, or does the list feel too thin to act on in thirteen days?"
+        },
+        {
+          "label": "Core Quest 3.3 · Light Cycle",
+          "title": "The Fast Pass",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/light_cycle",
+              "href": "https://www.apartmentlist.com/light_cycle"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Start swiping through properties as Jordan. Notice what signals make them stop or keep going in two seconds: a backyard photo, a dog-park mention, a move-in date.",
+            "Notice what cycling emphasizes and what it hides for someone on a tight deadline.",
+            "Pay attention to when swiping starts to feel like delay rather than research."
+          ],
+          "sitWithIt": [],
+          "reflection": "What does cycling surface for Jordan on a tight timeline? When does swiping stop feeling like research and start feeling like it's slowing them down?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/quiz",
+              "href": "https://www.apartmentlist.com/quiz"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Go back to the quiz and pay specific attention to the Pets step.",
+            "Note what it asks about Max: size, breed, weight, or just yes/no pet-friendly.",
+            "After the quiz, count how many pet-friendly matches came back in Seattle."
+          ],
+          "sitWithIt": [],
+          "reflection": "The pet step asked [blank] but didn't ask [blank]. After the quiz, [blank] matches remained.",
+          "sideLabel": "Where Max Roams (Jordan-specific, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "Does Apartment List move fast enough for Jordan?",
+        "intro": "After the quiz, the signup, and the first scroll through the matches, sit with one last question. Thirteen days is a short window.",
+        "prompt": "Does Apartment List understand what Jordan needs after taking the quiz? Does the platform feel like it can move at Jordan's speed?"
+      }
     },
     4: {
-      eyebrow: 'Where Alex starts',
-      blurb: 'The cycling has been running in the background for two days. The shortlist has eight properties. Alex opens the spreadsheet, adds a comparison column, and starts reading LDPs slowly. Tonight eight becomes three.',
-      reflectionIntro: 'After the shortlist, the deep read, and the outside research pass, sit with one last question.',
+      "eyebrow": "Where Jordan starts",
+      "blurb": "Ten days left. Jordan has eight properties in their shortlist, all in Seattle. They search each one on Reddit. Two have management complaints. One has a dog park within a quarter mile. Jordan moves that one to the top.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the shortlist, the pet clause deep-read, and the outside research, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 4.1 · The Shortlist",
+          "title": "The Keep Pile",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/shortlist",
+              "href": "https://www.apartmentlist.com/shortlist"
+            },
+            {
+              "text": "apartmentlist.com/shortlist/not-for-me",
+              "href": "https://www.apartmentlist.com/shortlist/not-for-me"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Save five or more Seattle listings as Jordan. Use the shortlist to organize what they're seriously considering.",
+            "Mark one or two as Not For Me. Focus on what gets Jordan to a no quickly — management responsiveness, no pet information, no green space listed.",
+            "Notice whether it's easy to filter for pet-friendly once you're in the shortlist."
+          ],
+          "sitWithIt": [],
+          "reflection": "What ended up on Jordan's shortlist, and what did the Not For Me pile have in common? Did Apartment List's shortlist tool help Jordan move fast, or did they have to do the work themselves?"
+        },
+        {
+          "label": "Core Quest 4.2 · The Listing Detail Page",
+          "title": "The Pet Clause",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one of Jordan's serious contenders. The one they keep coming back to.",
+            "Read the LDP top to bottom. Find the pet policy section. How easy is it to locate? What does it actually say about Max's size or breed?",
+            "Notice what's in the amenities list versus what's verified."
+          ],
+          "sitWithIt": [],
+          "reflection": "What did the listing tell Jordan, and what's still unclear about bringing Max? Where does the LDP leave them to find out on their own?"
+        },
+        {
+          "label": "Core Quest 4.3 · External Validation",
+          "title": "The Second Opinion",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "Reddit Google reviews — wherever Jordan would actually go",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one shortlisted property. Search Reddit for the building name. Read Google reviews.",
+            "Look specifically for mentions of pet policies, management response time, or anything that would change Jordan's read on the place.",
+            "Notice what the outside world says that the AL listing didn't."
+          ],
+          "sitWithIt": [],
+          "reflection": "What did external research surface that the AL listing didn't? What's Apartment List leaving Jordan to verify on their own?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "On three shortlisted properties, find each pet policy. Note where the info lives on the page.",
+            "What's stated: size limits, breed restrictions, monthly pet rent, pet deposit? What's missing entirely?",
+            "Note which listings have verifiable pet info and which just say \"pet-friendly.\""
+          ],
+          "sitWithIt": [],
+          "reflection": "The pet policy at [blank] said [blank] but didn't say [blank].",
+          "sideLabel": "The Pet Policy Read (Jordan-specific, optional)"
+        },
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "On a shortlisted property, scan the POI section for parks, dog parks, and trails.",
+            "How close are dog parks? Is there a real green space or just a green pin on the map?",
+            "Are walking time estimates honest?"
+          ],
+          "sitWithIt": [],
+          "reflection": "The closest dog park was [blank] minutes from [blank]. Max would [blank].",
+          "sideLabel": "Park Within Walking (Jordan-specific, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "Ten days, a shortlist, and Max.",
+        "intro": "After the shortlist, the pet clause deep-read, and the outside research, sit with one last question.",
+        "prompt": "Which Seattle contenders made Jordan's cut, and would any of them actually work for Max? Is Apartment List helping Jordan move fast enough?"
+      }
     },
     5: {
-      eyebrow: 'Where Alex starts',
-      blurb: 'Three contenders, three messages queued. Alex has one list of questions for all three leasing offices: smart home features, exact monthly cost, earliest move-in date. The 24-hour rule applies. Tonight they hit send.',
-      reflectionIntro: "After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Alex's 24-hour rule is doing real work now.",
+      "eyebrow": "Where Jordan starts",
+      "blurb": "Jordan has two live remote tours scheduled. The first is Tuesday morning. There's no time to wait three days for a property to respond. The eighteen-day window closes next Monday.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Jordan has eighteen days. One of these contenders has to start feeling like a place to land.",
+      "quests": [
+        {
+          "label": "Core Quest 5.1 · Messaging",
+          "title": "The First Message",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one of Jordan's top contenders. Send a message as Jordan. Ask about: pet-friendly specifics for a 65lb golden retriever, earliest move-in within the 18-day window, whether a live remote tour is available.",
+            "Notice what Apartment List sets up around the message: suggested questions, expected response time, anything that prepares Jordan for what comes next."
+          ],
+          "sitWithIt": [],
+          "reflection": "How did it feel for Jordan to send the first message? Did Apartment List prepare them for what comes next, or did they hit send and wonder if anyone was on the other end?"
+        },
+        {
+          "label": "Core Quest 5.2 · Tour Scheduling",
+          "title": "Lining Up a Look",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Try to schedule a live remote tour at a Jordan contender. They're in Portland — a live remote is more practical than flying.",
+            "Look for a time that works around the packing chaos. Weekday morning, weekday afternoon. Notice the available slots.",
+            "If something needs to be rescheduled, try that too. How easy is it to change?"
+          ],
+          "sitWithIt": [],
+          "reflection": "How did booking a tour feel for Jordan? Did Apartment List make the process easier or harder?"
+        },
+        {
+          "label": "Core Quest 5.3 · The Virtual Walkthrough",
+          "title": "Through the Screen",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Watch a virtual tour, or join a live remote one, on a Jordan contender. Jordan is evaluating this place from 175 miles away.",
+            "Look for the things Jordan needs to see: the back yard or nearest green space for Max, the home office corner, whether there's room for the dog bed and the moving boxes at once.",
+            "Notice what the screen can't show. What would Jordan still want to ask in person?"
+          ],
+          "sitWithIt": [],
+          "reflection": "What did the virtual walkthrough let Jordan see, and what stayed out of frame? Could they almost commit from this, or do they need to be in the room?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [],
+          "headsup": null,
+          "scenario": null,
+          "steps": [],
+          "sitWithIt": [],
+          "reflection": "When [property] didn't respond after [X] hours, what did Jordan do — and what does the silence do to the shortlist when there are only ten days left?",
+          "sideLabel": "The Quiet Hour (universal, optional)"
+        },
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Send a message to a leasing office about availability and Jordan's 18-day move-in window.",
+            "Track the response time. Does AL surface an expected response time before Jordan messages?",
+            "Note whether the response is specific or templated."
+          ],
+          "sitWithIt": [],
+          "reflection": "The leasing office at [blank] responded in [blank] hours. The reply was [blank].",
+          "sideLabel": "The Fast Response (Jordan-specific, optional)"
+        },
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Try a virtual or live remote tour on a shortlisted property.",
+            "Is the quality high enough for Jordan to evaluate without flying out? Can you ask questions in real time? Can you see Max-relevant details — back yard, flooring, doorways?"
+          ],
+          "sitWithIt": [],
+          "reflection": "The virtual tour at [blank] let Jordan see [blank] but missed [blank].",
+          "sideLabel": "The Virtual Walkthrough (Jordan-specific, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "One real answer in.",
+        "intro": "After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Jordan has eighteen days. One of these contenders has to start feeling like a place to land.",
+        "prompt": "After the first hello, which contender feels closest to a real place for Jordan and Max, and what is Apartment List doing (or not doing) to help them get there?"
+      }
     },
     6: {
-      eyebrow: 'Where Alex starts',
-      blurb: 'The Hayes Valley place said yes. The Docusign link arrived at 6pm. Alex is reading the lease.',
-      reflectionIntro: 'After the pick, the lease read, and the Renter Hub walk, sit with one last question.',
+      "eyebrow": "Where Jordan starts",
+      "blurb": "The live remote tour was Tuesday morning. The agent walked through every closet and showed the back yard for Max. Jordan has been thinking about it since. The pet rent is $75 a month. The lease is due back by tomorrow.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the pick, the lease read, and the Renter Hub walk, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 6.1 · Picking the Place",
+          "title": "The Decision",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/shortlist",
+              "href": "https://www.apartmentlist.com/shortlist"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open Jordan's shortlist, or picture the two places they're considering.",
+            "For each: can Max actually live there? Is the home office corner big enough? Is there real green space within walking distance?",
+            "Pick one. Which place is Jordan signing for? Notice the deciding factor."
+          ],
+          "sitWithIt": [],
+          "reflection": "Which place did Jordan pick, and what made it the one? Was Apartment List part of how they got there, or did the deciding factor come from the live remote tour?"
+        },
+        {
+          "label": "Core Quest 6.2 · A Scenario",
+          "title": "The Lease Arrives",
+          "optional": false,
+          "surfaces": [],
+          "headsup": null,
+          "scenario": "The lease arrived. Jordan reads the pet clause first. It says \"pet-friendly\" but lists a 25lb weight limit. Max is 65 lbs. Jordan checks the listing again — no weight limit was mentioned anywhere. The leasing agent is reachable by email. The signed lease is due in 48 hours.",
+          "steps": [],
+          "sitWithIt": [
+            "How does Jordan feel about a weight limit that never appeared in the listing?",
+            "If the weight limit is firm, what's the next move? There are twelve days left.",
+            "What does this moment say about what's missing from Apartment List's pet policy disclosure?"
+          ],
+          "reflection": "What does Jordan do with the 48 hours and a lease that has a clause the listing never mentioned? And what does this say about where Apartment List's job ends?"
+        },
+        {
+          "label": "Core Quest 6.3 · The Renter Hub Walk",
+          "title": "Walking the Renter Hub",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-hub",
+              "href": "https://www.apartmentlist.com/renter-hub"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open Renter Hub. Walk through all five sections: Split rent payments, Deposit alternatives, Renters insurance, Moving help, Internet & utilities.",
+            "Read the descriptions and pricing as Jordan. Picture the first month in Seattle: moving from Portland, unpacking for Max, setting up the home office.",
+            "Mark the sections that would actually help Jordan, and the ones that wouldn't apply."
+          ],
+          "sitWithIt": [],
+          "reflection": "Of the five Renter Hub sections, which ones would Jordan actually use, and which would they skip? Where does Renter Hub feel built for someone in the middle of an urgent cross-city move?"
+        }
+      ],
+      "sideQuests": [],
+      "finalReflection": {
+        "heading": "The key in hand.",
+        "intro": "After the pick, the lease read, and the Renter Hub walk, sit with one last question.",
+        "prompt": "Where does Apartment List help Jordan quietly in this moment, and where does it leave them to do the work alone?"
+      }
     },
     7: {
-      eyebrow: 'Where Alex starts',
-      blurb: 'Six months in. The Hayes Valley place feels like home now. The bike is on the wall mount, the kitchen has real counter space, the bedroom door closes. Alex hasn\u2019t opened the Apartment List app in three months, but they never deleted it. Today an email landed from Apartment List, and somewhere on Alex\u2019s phone there\u2019s a notification asking for a review.',
-      reflectionIntro: 'After the stray email, the review moment, and the blog stroll, sit with one last question.',
-    },
+      "eyebrow": "Where Jordan starts",
+      "blurb": "Three weeks in Seattle. Max has claimed a corner of the back yard. Jordan's new colleagues keep asking where they found their place. The five-star review went up the morning after signing. The app is still on the phone.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the stray email, the review moment, and the blog stroll, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 7.1 · A Scenario",
+          "title": "A Letter from Apartment List",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "Jordan's email inbox",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": "Three weeks after Jordan signed, an email arrives from Apartment List. Subject: \"New Seattle listings for you.\" Inside are five properties — all in neighborhoods Jordan never searched, none near the dog park that tipped the scales. Jordan has already started following the apartment's Instagram.",
+          "steps": [],
+          "sitWithIt": [
+            "Does the email land as helpful, irrelevant, or something in between?",
+            "Does Apartment List know Jordan signed? Does it know about Max?",
+            "What would a relevant post-move email look like for Jordan right now?"
+          ],
+          "reflection": "Does this email feel like a useful pulse, neutral noise, or something that makes Jordan want to unsubscribe? What would Apartment List need to know to make it land?"
+        },
+        {
+          "label": "Core Quest 7.2 · A Scenario",
+          "title": "The Review Moment",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "App Store or Google Play review",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": "Three weeks in, Jordan's colleagues keep asking where they found their place. Jordan tells them about the live remote tour: the agent who walked through every closet and showed the back yard for Max. Then Jordan remembers they haven't actually left an App Store review yet.",
+          "steps": [],
+          "sitWithIt": [
+            "Does Jordan tap the review notification or save it for after the chaos of the move settles?",
+            "What's the star rating?"
+          ],
+          "reflection": "Draft the two sentences Jordan would actually write. What lands first: the live remote tour, or the 18-day panic?"
+        },
+        {
+          "label": "Core Quest 7.3 · Apartment Living Stroll",
+          "title": "The Apartment Living Stroll",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-life",
+              "href": "https://www.apartmentlist.com/renter-life"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Browse Renter Life. Find one article relevant to Jordan's post-move state: settling into a new city, relocating with a pet, building a routine somewhere new.",
+            "Read it as Jordan. Notice what's useful and what feels generic."
+          ],
+          "sitWithIt": [],
+          "reflection": "What would Jordan actually read from Renter Life? And what would they share with the colleague who just mentioned they're thinking about relocating?"
+        }
+      ],
+      "sideQuests": [],
+      "finalReflection": {
+        "heading": "Six months in, what stayed?",
+        "intro": "After the stray email, the review moment, and the blog stroll, sit with one last question.",
+        "prompt": "What kind of presence does Apartment List have in Jordan's life six months in? The go-to for the next move, a useful background pulse, or something Jordan already forgot the name of?"
+      }
+    }
   },
-  jordan: {
+  "alex": {
     1: {
-      eyebrow: 'Where Jordan is tonight',
-      blurb: "Jordan got a new job, and they're up late journaling and thinking about the move. Here's what was running through their head.",
-      q1: "What stood out to you about the start of Jordan's renter journey?",
-      q2: 'What is Jordan looking for in an apartment?',
-      q2hint: "What's negotiable, and what's not?",
-      reflectionIntro: 'Scan Jordan\'s journal entry again and reread their "About Jordan" bio in the upper right corner. When you\'re ready, reflect below.',
+      "eyebrow": "Where Alex is tonight",
+      "blurb": "Alex got the lease non-renewal today and they're at their studio desk, already running the numbers. Here's what was running through their head.",
+      "q1": "What stood out to you about the start of Alex's renter journey?",
+      "q2": "What is Alex looking for in an apartment?",
+      "q2hint": "What's negotiable, and what's not?",
+      "reflectionIntro": "Scan Alex's journal entry again and reread their \"About Alex\" bio in the upper right corner. When you're ready, reflect below.",
+      "quests": [],
+      "sideQuests": [],
+      "finalReflection": {}
     },
     2: {
-      eyebrow: 'Where Jordan starts',
-      blurb: "The job starts in sixteen days. Jordan is on the couch in Portland with Max asleep at their feet, phone out, searching for Seattle apartments. Apartment List came up. They click in. They haven't taken the quiz and aren't sure they have time for it.",
-      reflectionIntro: 'After the homepage, the Renter Tools, and the content, sit with one last question. Jordan has sixteen days.',
+      "eyebrow": null,
+      "blurb": null,
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": null,
+      "quests": [],
+      "sideQuests": [],
+      "finalReflection": {}
     },
     3: {
-      eyebrow: 'Where Jordan starts',
-      blurb: "Thirteen days. Jordan takes the quiz on their phone. Max is on the couch next to them. The quiz wants to know about Jordan's personality type. Jordan clicks through it.",
-      reflectionIntro: 'After the quiz, the signup, and the first scroll through the matches, sit with one last question. Thirteen days is a short window.',
+      "eyebrow": "Where Alex starts",
+      "blurb": "Alex has cleared Sunday afternoon for the quiz. The spreadsheet is on the second monitor. Apartment List gets five minutes to prove it understands what \"one bedroom, Hayes Valley, $4,200 hard cap\" actually means.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the quiz, the signup, and the first scroll through the matches, sit with one last question. Alex answered fourteen steps. Apartment List made its bets.",
+      "quests": [
+        {
+          "label": "Core Quest 3.1 · The Quiz",
+          "title": "Fourteen Steps",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/quiz",
+              "href": "https://www.apartmentlist.com/quiz"
+            },
+            {
+              "text": "apartmentlist.com/matches",
+              "href": "https://www.apartmentlist.com/matches"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Take the quiz from the start as Alex. Answer every step as them: budget, location, laundry, commute, everything.",
+            "Pay close attention to the budget and commute steps. Alex has specific numbers. Note whether the quiz can handle that level of specificity.",
+            "Notice the steps that feel off or that Alex would pause on."
+          ],
+          "sitWithIt": [],
+          "reflection": "Where did the quiz let Alex be specific, and where did it flatten their search into something that doesn't fit the spreadsheet?"
+        },
+        {
+          "label": "Core Quest 3.2 · Sign Up & Matches",
+          "title": "What Comes Back",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/signup",
+              "href": "https://www.apartmentlist.com/signup"
+            },
+            {
+              "text": "apartmentlist.com/matches",
+              "href": "https://www.apartmentlist.com/matches"
+            }
+          ],
+          "headsup": "Use a test account — format `youremail+test[date]@apartmentlist.com`",
+          "scenario": null,
+          "steps": [
+            "Finish signing up as Alex (with a +test account) and land in their matches.",
+            "Take in the first impression: how many matches, how relevant do they look, which neighborhoods are surfacing.",
+            "Would Alex trust this list, or reach for the other tabs?"
+          ],
+          "sitWithIt": [],
+          "reflection": "After signing up, what did Alex's matches look like? Did the quiz pay off here, or does the list feel like it missed something?"
+        },
+        {
+          "label": "Core Quest 3.3 · Light Cycle",
+          "title": "One at a Time",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/light_cycle",
+              "href": "https://www.apartmentlist.com/light_cycle"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Start swiping through properties as Alex. Photos, prices, neighborhoods.",
+            "Notice what cycling emphasizes and what it hides.",
+            "Pay attention to when swiping starts to feel like work for someone who prefers a sortable list."
+          ],
+          "sitWithIt": [],
+          "reflection": "What does the cycling interface surface for Alex, and what does it bury? When does swiping stop feeling like research?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "A competitor — Zillow Apartments.com Rent.com or another",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open one competitor in a new tab.",
+            "Try doing the same thing Alex would do on Apartment List — search a city, scroll, see what's there.",
+            "Notice what's different, better, or worse."
+          ],
+          "sitWithIt": [],
+          "reflection": "What does the competitor do that Apartment List doesn't, and vice versa? Where would Alex rather be?",
+          "sideLabel": "What Else Is Out There (universal, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "Does Apartment List get Alex?",
+        "intro": "After the quiz, the signup, and the first scroll through the matches, sit with one last question. Alex answered fourteen steps. Apartment List made its bets.",
+        "prompt": "Does Apartment List understand what Alex is searching for? Where did it nail it, and what feels off?"
+      }
     },
     4: {
-      eyebrow: 'Where Jordan starts',
-      blurb: 'Ten days left. Jordan has eight properties in their shortlist, all in Seattle. They search each one on Reddit. Two have management complaints. One has a dog park within a quarter mile. Jordan moves that one to the top.',
-      reflectionIntro: 'After the shortlist, the pet clause deep-read, and the outside research, sit with one last question.',
+      "eyebrow": "Where Alex starts",
+      "blurb": "The cycling has been running in the background for two days. The shortlist has eight properties. Alex opens the spreadsheet, adds a comparison column, and starts reading LDPs slowly. Tonight eight becomes three.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the shortlist, the deep read, and the outside research pass, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 4.1 · The Shortlist",
+          "title": "The Keep Pile",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/shortlist",
+              "href": "https://www.apartmentlist.com/shortlist"
+            },
+            {
+              "text": "apartmentlist.com/shortlist/not-for-me",
+              "href": "https://www.apartmentlist.com/shortlist/not-for-me"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Save five or more listings as Alex. Use the shortlist to organize what they're seriously considering.",
+            "Mark one or two as Not For Me. What are you passing on, and why?",
+            "Revisit the keep pile. What do the saved properties have in common? What patterns are showing up?"
+          ],
+          "sitWithIt": [],
+          "reflection": "What ended up on Alex's shortlist, and what did the Not For Me pile have in common? Where did Apartment List help with the sort, and where did Alex have to do the work in their own spreadsheet?"
+        },
+        {
+          "label": "Core Quest 4.2 · The Listing Detail Page",
+          "title": "Reading the Fine Print",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one of Alex's serious contenders. The one they'd want to call about tomorrow.",
+            "Read it top to bottom: every section, every photo, every amenity line.",
+            "Notice what reads like marketing copy and what's actually missing."
+          ],
+          "sitWithIt": [],
+          "reflection": "What did the listing tell Alex, and what's still unanswered? Where does the LDP stop short of what Alex needs to feel confident about a place?"
+        },
+        {
+          "label": "Core Quest 4.3 · External Validation",
+          "title": "The Second Opinion",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "Reddit Google reviews Yelp — wherever Alex would actually go",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one shortlisted property. Do what Alex would actually do to validate it: search Reddit for the building name, read Google reviews.",
+            "Notice what the outside world says that the AL listing didn't.",
+            "Note whether anything that surfaces would change the shortlist."
+          ],
+          "sitWithIt": [],
+          "reflection": "What did external research surface that the AL listing didn't? Where does Apartment List leave the validation question for Alex to answer alone?"
+        }
+      ],
+      "sideQuests": [],
+      "finalReflection": {
+        "heading": "Down to three?",
+        "intro": "After the shortlist, the deep read, and the outside research pass, sit with one last question.",
+        "prompt": "Which contenders made the cut for Alex, and what was the deciding factor? Is Apartment List's data enough to defend the shortlist, or is Alex filling gaps from Reddit and Street View?"
+      }
     },
     5: {
-      eyebrow: 'Where Jordan starts',
-      blurb: "Jordan has two live remote tours scheduled. The first is Tuesday morning. There's no time to wait three days for a property to respond. The eighteen-day window closes next Monday.",
-      reflectionIntro: 'After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Jordan has eighteen days. One of these contenders has to start feeling like a place to land.',
+      "eyebrow": "Where Alex starts",
+      "blurb": "Three contenders, three messages queued. Alex has one list of questions for all three leasing offices: smart home features, exact monthly cost, earliest move-in date. The 24-hour rule applies. Tonight they hit send.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Alex's 24-hour rule is doing real work now.",
+      "quests": [
+        {
+          "label": "Core Quest 5.1 · Messaging",
+          "title": "The First Message",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one of Alex's top contenders. Find the contact form or email link on the listing.",
+            "Write a message as Alex. Ask the questions they would actually ask: smart home features, exact monthly cost, earliest available move-in.",
+            "Notice what Apartment List sets up around the message: suggested questions, expected response time, anything that tells Alex what happens next."
+          ],
+          "sitWithIt": [],
+          "reflection": "How did it feel for Alex to send the first message? Did Apartment List prepare them for what comes next, or did they hit send and wonder if anyone was on the other end?"
+        },
+        {
+          "label": "Core Quest 5.2 · Tour Scheduling",
+          "title": "Lining Up a Look",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Try to schedule a tour at one of Alex's contenders, in-person or remote, whichever they'd prefer.",
+            "Look for the kind of slot Alex would actually pick: a weekday evening or tight window around work.",
+            "If something needs to be rescheduled, try that too. How easy is it to change?"
+          ],
+          "sitWithIt": [],
+          "reflection": "How did booking a tour feel for Alex? Did Apartment List make the process easier or harder?"
+        },
+        {
+          "label": "Core Quest 5.3 · The Virtual Walkthrough",
+          "title": "Through the Screen",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Watch a virtual tour, or schedule a live remote one, on an Alex contender.",
+            "Look for the things Alex needs to see: the kitchen counter space, the bedroom, the storage situation, where the bike could go.",
+            "Notice what the screen can't show. What would Alex still want to verify in person?"
+          ],
+          "sitWithIt": [],
+          "reflection": "What did the virtual walkthrough let Alex see, and what stayed out of frame? Could they almost commit from this, or does the kitchen still need to be seen in person?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [],
+          "headsup": null,
+          "scenario": null,
+          "steps": [],
+          "sitWithIt": [],
+          "reflection": "When [property] didn't respond after [X] hours, what did Alex do — and what does the silence do to the shortlist?",
+          "sideLabel": "The Quiet Hour (universal, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "One real answer in.",
+        "intro": "After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Alex's 24-hour rule is doing real work now.",
+        "prompt": "After the first hello, which contender is moving up Alex's list, and what is Apartment List doing (or not doing) to help them get there?"
+      }
     },
     6: {
-      eyebrow: 'Where Jordan starts',
-      blurb: 'The live remote tour was Tuesday morning. The agent walked through every closet and showed the back yard for Max. Jordan has been thinking about it since. The pet rent is $75 a month. The lease is due back by tomorrow.',
-      reflectionIntro: 'After the pick, the lease read, and the Renter Hub walk, sit with one last question.',
+      "eyebrow": "Where Alex starts",
+      "blurb": "The Hayes Valley place said yes. The Docusign link arrived at 6pm. Alex is reading the lease.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the pick, the lease read, and the Renter Hub walk, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 6.1 · Picking the Place",
+          "title": "The Decision",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/shortlist",
+              "href": "https://www.apartmentlist.com/shortlist"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open Alex's shortlist, or picture the two places they've been going back and forth on.",
+            "Walk each one as Alex: run the monthly total including fees, check the commute time, picture the bike in the floor plan.",
+            "Pick one. Which place is Alex signing for? Notice the deciding factor."
+          ],
+          "sitWithIt": [],
+          "reflection": "Which place did Alex pick, and what made it the one? Was Apartment List part of how they got there, or did the deciding factor come from somewhere else?"
+        },
+        {
+          "label": "Core Quest 6.2 · A Scenario",
+          "title": "The Lease Arrives",
+          "optional": false,
+          "surfaces": [],
+          "headsup": null,
+          "scenario": "The lease arrived. There's an early termination clause: leaving before 12 months costs two months' rent. There's also a parking add-on that wasn't in the listed price — $175 a month. Alex has been budgeting $4,200. This lease puts them at $4,375 before negotiation. The leasing office picks up the phone tomorrow morning. The signed lease is due in 72 hours.",
+          "steps": [],
+          "sitWithIt": [
+            "How does Alex feel about a monthly fee that wasn't in the quoted price?",
+            "How does the early termination clause land for someone who planned this move 90 days ahead?",
+            "What does Alex do with 72 hours and a leasing office that picks up the phone?"
+          ],
+          "reflection": "What does Alex do with the 72 hours? Sign, push back, ask about the parking? And what does this moment say about where Apartment List's job ends and the property's begins?"
+        },
+        {
+          "label": "Core Quest 6.3 · The Renter Hub Walk",
+          "title": "Walking the Renter Hub",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-hub",
+              "href": "https://www.apartmentlist.com/renter-hub"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open Renter Hub. Walk through all five sections: Split rent payments, Deposit alternatives, Renters insurance, Moving help, Internet & utilities.",
+            "Read the descriptions, ratings, and pricing as Alex. Picture what their first month in the new place looks like with each.",
+            "Mark what would actually help Alex, and what wouldn't apply."
+          ],
+          "sitWithIt": [],
+          "reflection": "Of the five Renter Hub sections, which ones would Alex actually use, and which would they skip? Where does Renter Hub feel like the right service at the right moment, and where does it feel built for a different kind of renter?"
+        }
+      ],
+      "sideQuests": [],
+      "finalReflection": {
+        "heading": "The key in hand.",
+        "intro": "After the pick, the lease read, and the Renter Hub walk, sit with one last question.",
+        "prompt": "Where does Apartment List help Alex quietly in this moment, and where does it leave them to do the work alone?"
+      }
     },
     7: {
-      eyebrow: 'Where Jordan starts',
-      blurb: "Three weeks in Seattle. Max has claimed a corner of the back yard. Jordan's new colleagues keep asking where they found their place. The five-star review went up the morning after signing. The app is still on the phone.",
-      reflectionIntro: 'After the stray email, the review moment, and the blog stroll, sit with one last question.',
-    },
+      "eyebrow": null,
+      "blurb": null,
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": null,
+      "quests": [],
+      "sideQuests": [],
+      "finalReflection": {}
+    }
   },
-  taylor: {
+  "taylor": {
     1: {
-      eyebrow: 'Where Taylor & Riley are tonight',
-      blurb: 'Riley said \u201cwhere next\u201d again last night. Taylor knew it was coming before they said it. Three years in Chicago, the Polaroids from Lisbon still on the fridge. Austin is winning. Here\'s what was running through Taylor\'s head.',
-      q1: "What stood out to you about the start of Taylor & Riley's renter journey?",
-      q2: 'What is Taylor & Riley looking for in an apartment?',
-      q2hint: "What's negotiable, and what's not?",
-      reflectionIntro: 'Scan Taylor\'s journal entry again and reread the "About Taylor & Riley" bio in the upper right corner. When you\'re ready, reflect below.',
+      "eyebrow": "Where Taylor & Riley are tonight",
+      "blurb": "Riley said \"where next\" again last night. Taylor knew it was coming before they said it. Three years in Chicago, the Polaroids from Lisbon still on the fridge. Austin is winning. Here's what was running through Taylor's head.",
+      "q1": "What stood out to you about the start of Taylor & Riley's renter journey?",
+      "q2": "What is Taylor & Riley looking for in an apartment?",
+      "q2hint": "What's negotiable, and what's not?",
+      "reflectionIntro": "Scan Taylor's journal entry again and reread the \"About Taylor & Riley\" bio in the upper right corner. When you're ready, reflect below.",
+      "quests": [],
+      "sideQuests": [],
+      "finalReflection": {}
     },
     2: {
-      eyebrow: 'Where Taylor & Riley start',
-      blurb: 'Taylor and Riley have been sending each other Google Maps links to Austin neighborhoods for two weeks. Tonight they sit down together with the laptop and open Apartment List for the first time. Riley is already asking about the map view.',
-      reflectionIntro: 'After the homepage, the Renter Tools, and the content, sit with one last question. Two people, one city, no commitments yet.',
+      "eyebrow": "Where Taylor & Riley start",
+      "blurb": "Taylor and Riley have been sending each other Google Maps links to Austin neighborhoods for two weeks. Tonight they sit down together with the laptop and open Apartment List for the first time. Riley is already asking about the map view.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the homepage, the Renter Tools, and the content, sit with one last question. Two people, one city, no commitments yet.",
+      "quests": [
+        {
+          "label": "Core Quest 2.1 · The Homepage",
+          "title": "The Sixty-Second Test",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open the homepage as Taylor & Riley, together. Picture them on the same laptop.",
+            "Does the homepage acknowledge two people looking at once? Does it make it easy to start with Austin?",
+            "Don't take the quiz yet. Just spend sixty seconds looking around. Notice what draws Taylor's eye first, and what Riley would click."
+          ],
+          "sitWithIt": [],
+          "reflection": "After sixty seconds, would Taylor & Riley stay or click away? What would make them close the laptop?"
+        },
+        {
+          "label": "Core Quest 2.2 · Renter Tools",
+          "title": "The Renter Tools Tour",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-tools",
+              "href": "https://www.apartmentlist.com/renter-tools"
+            },
+            {
+              "text": "Cost of Living",
+              "href": "https://www.apartmentlist.com/cost-of-living"
+            },
+            {
+              "text": "Rent Report",
+              "href": "https://www.apartmentlist.com/rent-report"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open the Renter Tools dropdown. Taylor & Riley are moving from Chicago to Austin on a combined $2,500 budget.",
+            "Try the [Cost of Living](https://www.apartmentlist.com/cost-of-living) comparison: Chicago vs. Austin. Then check the [Rent Report](https://www.apartmentlist.com/rent-report) for Austin market trends.",
+            "Read the results together. What does the data say about the Austin move, and what does it miss about a couple looking for neighborhood vibe over square footage?"
+          ],
+          "sitWithIt": [],
+          "reflection": "Which Renter Tool would Taylor & Riley actually use? What did it surface about the Austin move that mattered, and what did it miss?"
+        },
+        {
+          "label": "Core Quest 2.3 · Beyond the Listings",
+          "title": "Beyond the Listings",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-life",
+              "href": "https://www.apartmentlist.com/renter-life"
+            },
+            {
+              "text": "apartmentlist.com/tx/austin",
+              "href": "https://www.apartmentlist.com/tx/austin"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open [Renter Life](https://www.apartmentlist.com/renter-life). Find something relevant to Taylor & Riley: Austin guides, moving tips, neighborhood comparisons.",
+            "Also check the [Austin city page](https://www.apartmentlist.com/tx/austin). Read the neighborhood descriptions.",
+            "Notice what speaks to Taylor's food obsession and Riley's eye for a photography scene — and what reads like a generic travel blog."
+          ],
+          "sitWithIt": [],
+          "reflection": "What would Taylor & Riley make of this content? What would Riley want to read, and what would Taylor screenshot and text back?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "A competitor — Zillow Apartments.com Craigslist or another",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open one competitor in a new tab. Try doing what Taylor & Riley would do: search Austin, look at neighborhoods, see what the map view gives.",
+            "Notice what's different, better, or worse — especially for two people who want to feel a neighborhood before they commit."
+          ],
+          "sitWithIt": [],
+          "reflection": "What does the competitor do that Apartment List doesn't, and vice versa? Where would Taylor & Riley rather be?",
+          "sideLabel": "What Else Is Out There (universal, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "What do Taylor & Riley think of Apartment List?",
+        "intro": "After the homepage, the Renter Tools, and the content, sit with one last question. Two people, one city, no commitments yet.",
+        "prompt": "From Taylor & Riley's point of view, what is Apartment List? Does it feel like a platform built for people who make a decision together?"
+      }
     },
     3: {
-      eyebrow: 'Where Taylor & Riley start',
-      blurb: "Taylor and Riley are on the laptop together. The quiz is open. The budget step is coming and they're already arguing about the number. $2,500 is where they've landed, but Riley keeps looking at $2,800 options in East Austin.",
-      reflectionIntro: 'After the quiz, the welcome screen, and the first scroll through the matches, sit with one last question. Two people, one search, no commitments yet.',
+      "eyebrow": "Where Taylor & Riley start",
+      "blurb": "Taylor and Riley are on the laptop together. The quiz is open. The budget step is coming and they're already arguing about the number. $2,500 is where they've landed, but Riley keeps looking at $2,800 options in East Austin.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the quiz, the welcome screen, and the first scroll through the matches, sit with one last question. Two people, one search, no commitments yet.",
+      "quests": [
+        {
+          "label": "Core Quest 3.1 · The Quiz",
+          "title": "Answering Together",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/quiz",
+              "href": "https://www.apartmentlist.com/quiz"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Take the quiz as Taylor & Riley together. Try to answer every step for both of them at once.",
+            "Notice the moments where you have to pick a side — budget, commute, lifestyle. What gets compromised?",
+            "Look for any signal that the quiz knows two people are searching, or any way to tell it so."
+          ],
+          "sitWithIt": [],
+          "reflection": "Where did the quiz let Taylor & Riley in as a duo, and where did it quietly assume only one of them? What would they have wanted it to ask?"
+        },
+        {
+          "label": "Core Quest 3.2 · Sign Up & Matches",
+          "title": "Looking Around",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/signup",
+              "href": "https://www.apartmentlist.com/signup"
+            },
+            {
+              "text": "apartmentlist.com/matches",
+              "href": "https://www.apartmentlist.com/matches"
+            }
+          ],
+          "headsup": "Use a test account — format `youremail+test[date]@apartmentlist.com`",
+          "scenario": null,
+          "steps": [
+            "Finish signing up as Taylor & Riley (with a +test account) and land on their home screen.",
+            "Take in the first impression: what's on the page, what's pulling for attention first.",
+            "Walk through whatever tutorial or intro tips Apartment List shows. Read it, click it, or skip it as Taylor & Riley would."
+          ],
+          "sitWithIt": [],
+          "reflection": "What kind of welcome did Apartment List give Taylor & Riley? Did the home screen and tutorial help them get oriented, or get in the way?"
+        },
+        {
+          "label": "Core Quest 3.3 · Light Cycle",
+          "title": "Just Looking",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/light_cycle",
+              "href": "https://www.apartmentlist.com/light_cycle"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Start looking through listings as Taylor & Riley. Photos, prices, neighborhoods. They're not ready to save anything yet.",
+            "Notice what holds their attention: a photo of a street they could imagine walking down, a neighborhood name, a price that opens up options.",
+            "Notice what they'd slide right past."
+          ],
+          "sitWithIt": [],
+          "reflection": "When Taylor & Riley first scroll through the matches, what holds their attention? What makes them want to keep going versus step away?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/tx/austin",
+              "href": "https://www.apartmentlist.com/tx/austin"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open the Austin city page. Scroll through neighborhoods. Read the descriptions.",
+            "What kind of language is used? Does it feel curated or scraped? Are any neighborhoods called out for art, food, or music?"
+          ],
+          "sitWithIt": [],
+          "reflection": "The city page for Austin called out [blank] but didn't capture [blank].",
+          "sideLabel": "The City Page Walk (Taylor & Riley-specific, optional)"
+        },
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/quiz",
+              "href": "https://www.apartmentlist.com/quiz"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Take the quiz again, this time trying to answer specifically for both of their workplaces.",
+            "Does the quiz allow for two commutes? Is there a way to indicate searching as a couple?"
+          ],
+          "sitWithIt": [],
+          "reflection": "The quiz let Taylor & Riley [blank] but assumed [blank].",
+          "sideLabel": "The Two-Person Quiz (Taylor & Riley-specific, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "Does Apartment List get them?",
+        "intro": "After the quiz, the welcome screen, and the first scroll through the matches, sit with one last question. Two people, one search, no commitments yet.",
+        "prompt": "Does Apartment List understand what Taylor & Riley want after taking the quiz? Where did it nail it, and what feels off?"
+      }
     },
     4: {
-      eyebrow: 'Where Taylor & Riley start',
-      blurb: "Taylor and Riley have twelve properties in their shortlist. They review it over a shared screen on Sunday afternoon. Riley pulls up Street View on each one. They settle on six. Three feel like them. Three don't, but they're still arguing about which is which.",
-      reflectionIntro: 'After the shortlist, the deep read, and the outside research, sit with one last question.',
+      "eyebrow": "Where Taylor & Riley start",
+      "blurb": "Taylor and Riley have twelve properties in their shortlist. They review it over a shared screen on Sunday afternoon. Riley pulls up Street View on each one. They settle on six. Three feel like them. Three don't, but they're still arguing about which is which.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the shortlist, the deep read, and the outside research, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 4.1 · The Shortlist",
+          "title": "The Keep Pile",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/shortlist",
+              "href": "https://www.apartmentlist.com/shortlist"
+            },
+            {
+              "text": "apartmentlist.com/shortlist/not-for-me",
+              "href": "https://www.apartmentlist.com/shortlist/not-for-me"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Build Taylor & Riley's shortlist. Save a mix of listings: the ones Riley screenshots, the ones Taylor would actually call about tomorrow.",
+            "Mark a few as Not For Me. What made them a no — the neighborhood, the unit, the photos, the price?",
+            "Notice whether Apartment List makes it easy to sort by neighborhood or vibe rather than just bedrooms and price."
+          ],
+          "sitWithIt": [],
+          "reflection": "What ended up on Taylor & Riley's shortlist, and what did the Not For Me pile have in common? Where did Apartment List help them sort, and where did they have to take the conversation offline?"
+        },
+        {
+          "label": "Core Quest 4.2 · The Listing Detail Page",
+          "title": "Reading the Room",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one of their serious contenders. The one they both keep coming back to.",
+            "Read the LDP top to bottom: every photo, every amenity, every word about the neighborhood and the surrounding area.",
+            "Notice what the listing says about the neighborhood specifically — and what it leaves unsaid."
+          ],
+          "sitWithIt": [],
+          "reflection": "What did the listing tell Taylor & Riley, and what didn't it say about the neighborhood they're actually looking for?"
+        },
+        {
+          "label": "Core Quest 4.3 · External Validation",
+          "title": "The Second Opinion",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "Reddit the Austin neighborhood subreddits Google reviews Nextdoor — wherever Taylor & Riley would go",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one shortlisted property. Do what Taylor & Riley would actually do: search the neighborhood subreddit, read Google reviews, text Mara.",
+            "Look for mentions of the music scene, food options, street noise, walkability at night.",
+            "Notice what the outside world says that the AL listing didn't."
+          ],
+          "sitWithIt": [],
+          "reflection": "What did external research add to the listing? Where does Apartment List leave the neighborhood question for Taylor & Riley to answer on their own?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Scan the POI section for food. Skip the chains. Look for taquerias, food markets, coffee roasters — the kind of places Taylor actually wants to live near.",
+            "Notice whether Apartment List distinguishes between local spots and national chains in the POI."
+          ],
+          "sitWithIt": [],
+          "reflection": "Within walking distance of [blank], the food scene was [blank].",
+          "sideLabel": "The Food Test (Taylor & Riley-specific, optional)"
+        },
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Scan the unit photos for natural light, window placement, and a corner that could become a photography workspace.",
+            "Are unit photos taken with enough light to evaluate the space? Are floor plans available?"
+          ],
+          "sitWithIt": [],
+          "reflection": "The unit at [blank] showed [blank] which Riley would [blank].",
+          "sideLabel": "Riley's Workspace (Taylor & Riley-specific, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "Down to three?",
+        "intro": "After the shortlist, the deep read, and the outside research, sit with one last question.",
+        "prompt": "Which Austin contenders made the cut for Taylor & Riley, and what was the deciding factor? Is what Apartment List surfaces enough to feel a neighborhood, or do they have to go find it themselves?"
+      }
     },
     5: {
-      eyebrow: 'Where Taylor & Riley start',
-      blurb: "One property on top. Taylor wants to schedule a Sunday morning tour. The in-app scheduler doesn't have Sunday slots. They call the leasing office. The agent picks up. The tour is booked for this weekend.",
-      reflectionIntro: 'After the first message, the tour booking, and the walkthrough through a screen, sit with one last question.',
+      "eyebrow": "Where Taylor & Riley start",
+      "blurb": "One property on top. Taylor wants to schedule a Sunday morning tour. The in-app scheduler doesn't have Sunday slots. They call the leasing office. The agent picks up. The tour is booked for this weekend.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the first message, the tour booking, and the walkthrough through a screen, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 5.1 · Messaging",
+          "title": "The First Message",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one of Taylor & Riley's top contenders. Write a message as Taylor.",
+            "Ask the things they would actually ask: natural light in the second bedroom, walkability on a weekday evening, move-in window, whether the neighborhood actually has the music scene the listing implies.",
+            "Notice what Apartment List sets up around the message: suggested questions, expected response time, anything that prepares them for what comes next."
+          ],
+          "sitWithIt": [],
+          "reflection": "How did it feel for Taylor & Riley to send the first message? Did Apartment List prepare them for what comes next, or did they hit send and wonder if anyone was listening?"
+        },
+        {
+          "label": "Core Quest 5.2 · Tour Scheduling",
+          "title": "Lining Up a Look",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Try to schedule a tour at one of their top contenders. Look for a Sunday morning slot — that's when Taylor & Riley would actually go together.",
+            "Notice whether the scheduling allows weekend slots or defaults to weekdays.",
+            "If the online scheduler doesn't have Sunday availability, note what happens next: does Apartment List guide them, or does Taylor have to call?"
+          ],
+          "sitWithIt": [],
+          "reflection": "How did booking a tour feel for Taylor & Riley? Did Apartment List make the process easier or harder?"
+        },
+        {
+          "label": "Core Quest 5.3 · The Virtual Walkthrough",
+          "title": "Through the Screen",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Watch a virtual tour, or schedule a live remote one, on a Taylor & Riley contender.",
+            "Look for the things they care about: natural light, a corner for Riley's camera setup, what the street sounds like from the window, whether the neighborhood energy comes through at all.",
+            "Notice what you can't feel through a screen."
+          ],
+          "sitWithIt": [],
+          "reflection": "What did the virtual walkthrough let Taylor & Riley see, and what stayed out of frame? Can you feel a neighborhood from a virtual tour?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Try specifically to book a Sunday morning tour at two different properties.",
+            "Is the scheduling flexible? Does it default to weekdays? Can you actually book a weekend tour, or do you need to call?"
+          ],
+          "sitWithIt": [],
+          "reflection": "Scheduling a Sunday tour at [blank] was [blank].",
+          "sideLabel": "The Sunday Morning Test (Taylor & Riley-specific, optional)"
+        },
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [],
+          "headsup": null,
+          "scenario": null,
+          "steps": [],
+          "sitWithIt": [],
+          "reflection": "When [property] didn't respond after [X] hours, what did Taylor & Riley do — and what does the silence do to the shortlist for two people who have to agree on the next step?",
+          "sideLabel": "The Quiet Hour (universal, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "One real answer in.",
+        "intro": "After the first message, the tour booking, and the walkthrough through a screen, sit with one last question.",
+        "prompt": "After the first hello, which contender feels closest to a place Taylor & Riley would actually live in, and what is Apartment List doing (or not doing) to help them get there?"
+      }
     },
     6: {
-      eyebrow: 'Where Taylor & Riley start',
-      blurb: 'Taylor and Riley spent two days on the lease. Riley pushed on the move-in date. Taylor pushed on the deposit. They got the move-in date. They accepted the deposit. Both of them sign on a Saturday morning, with coffee.',
-      reflectionIntro: 'After the pick, the lease read, and the Renter Hub walk, sit with one last question.',
+      "eyebrow": "Where Taylor & Riley start",
+      "blurb": "Taylor and Riley spent two days on the lease. Riley pushed on the move-in date. Taylor pushed on the deposit. They got the move-in date. They accepted the deposit. Both of them sign on a Saturday morning, with coffee.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the pick, the lease read, and the Renter Hub walk, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 6.1 · Picking the Place",
+          "title": "The Decision",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/shortlist",
+              "href": "https://www.apartmentlist.com/shortlist"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open Taylor & Riley's shortlist, or picture the three places they've been going back and forth on.",
+            "Walk each one as both of them: does the neighborhood hold up? Does the unit work for how they actually live? Does it have room for Riley's camera corner and Taylor's notebook shelf?",
+            "Pick one. Which place do they both say yes to?"
+          ],
+          "sitWithIt": [],
+          "reflection": "Which place did Taylor & Riley pick, and what made it the one? Was Apartment List part of how they got there, or did the deciding factor come from Street View, Reddit, or a text to Mara?"
+        },
+        {
+          "label": "Core Quest 6.2 · A Scenario",
+          "title": "The Lease Arrives",
+          "optional": false,
+          "surfaces": [],
+          "headsup": null,
+          "scenario": "The lease arrived. The move-in date is three weeks out — a week later than what the listing said. The deposit is two months' rent. Riley wants to push on the move-in date. Taylor wants to push on the deposit. They have 72 hours to respond. The leasing office answers emails within a day.",
+          "steps": [],
+          "sitWithIt": [
+            "Which one do Taylor & Riley actually negotiate? What do they let go?",
+            "Is there anything in the lease that surprised them, given what the listing said?",
+            "Where could Apartment List have helped them know what's typically negotiable?"
+          ],
+          "reflection": "What do Taylor & Riley do with the 72 hours? What gets negotiated, what gets accepted, and what does this moment say about where Apartment List's job ends?"
+        },
+        {
+          "label": "Core Quest 6.3 · The Renter Hub Walk",
+          "title": "Walking the Renter Hub",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-hub",
+              "href": "https://www.apartmentlist.com/renter-hub"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open Renter Hub. Walk through all five sections: Split rent payments, Deposit alternatives, Renters insurance, Moving help, Internet & utilities.",
+            "Read the descriptions and pricing as Taylor & Riley. Picture their move from Chicago to Austin: the shared UHaul, the new neighborhood, the first month.",
+            "Mark the sections that would actually help them, and the ones that wouldn't apply."
+          ],
+          "sitWithIt": [],
+          "reflection": "Of the five Renter Hub sections, which ones would Taylor & Riley actually use, and which would they skip? Where does Renter Hub feel useful for people who've moved cities before?"
+        }
+      ],
+      "sideQuests": [],
+      "finalReflection": {
+        "heading": "The key in hand.",
+        "intro": "After the pick, the lease read, and the Renter Hub walk, sit with one last question.",
+        "prompt": "Where does Apartment List help Taylor & Riley quietly in this moment, and where does it leave them to do the work alone?"
+      }
     },
     7: {
-      eyebrow: 'Where Taylor & Riley start',
-      blurb: "Six months in East Austin. Taylor's notebook is full. Riley has a wall of prints from the neighborhood. The Apartment List newsletter arrives most Tuesdays. They've told three people to use the app.",
-      reflectionIntro: 'After the stray email, the review moment, and the blog stroll, sit with one last question.',
-    },
+      "eyebrow": "Where Taylor & Riley start",
+      "blurb": "Six months in East Austin. Taylor's notebook is full. Riley has a wall of prints from the neighborhood. The Apartment List newsletter arrives most Tuesdays. They've told three people to use the app. The story always includes the specific thing in the listings that made Austin feel right.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the stray email, the review moment, and the blog stroll, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 7.1 · A Scenario",
+          "title": "A Letter from Apartment List",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "Taylor's email inbox",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": "Six months in, an email arrives from Apartment List: \"Discover apartments in Austin.\" Taylor opens it out of habit. The listings inside are all in a part of town they never considered — newer buildings, different vibe. Not them.",
+          "steps": [],
+          "sitWithIt": [
+            "Does the email feel like Apartment List knows where Taylor & Riley ended up, or like it's sending a generic batch?",
+            "What would a relevant post-move email look like for them right now?"
+          ],
+          "reflection": "Does this email feel like a useful pulse, neutral noise, or something that misses the point entirely? What would Apartment List need to know to make it land?"
+        },
+        {
+          "label": "Core Quest 7.2 · A Scenario",
+          "title": "The Review Moment",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "App Store or Google Play review",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": "Six months in. Taylor is at the coffee shop on the corner — the one that was actually in the POI section of the listing they picked. A push notification slides down: \"How was your experience with Apartment List?\" Taylor has their notebook. They could write something.",
+          "steps": [],
+          "sitWithIt": [
+            "Does Taylor tap the notification? What's the star rating?",
+            "What lands first: the neighborhood description that hooked them, or the quiz that didn't account for two people?"
+          ],
+          "reflection": "Draft the two sentences Taylor & Riley would actually write in a review. What leads?"
+        },
+        {
+          "label": "Core Quest 7.3 · Apartment Living Stroll",
+          "title": "The Apartment Living Stroll",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-life",
+              "href": "https://www.apartmentlist.com/renter-life"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Browse Renter Life. Find one article that speaks to Taylor & Riley's post-move reality: settling into a new city, finding a neighborhood routine, something about Austin or city life that feels written for them.",
+            "Read it as Taylor. Notice what's useful and what feels like it wasn't written for someone who moved for a street, a sunset, and a corner coffee shop."
+          ],
+          "sitWithIt": [],
+          "reflection": "What would Taylor actually read, and what would feel like it wasn't written for them? Would Riley want to share it?"
+        }
+      ],
+      "sideQuests": [],
+      "finalReflection": {
+        "heading": "Six months in, what stayed?",
+        "intro": "After the stray email, the review moment, and the blog stroll, sit with one last question.",
+        "prompt": "What kind of presence does Apartment List have in Taylor & Riley's life six months in? The go-to for the next move, a useful background pulse, or something they'd only remember when a friend asks where they found that place in East Austin?"
+      }
+    }
   },
-  jamie: {
+  "jamie": {
     1: {
-      eyebrow: 'Where Jamie is tonight',
-      blurb: "Emma asked again where they're moving. Jamie hasn't said Jersey City yet, partly because they haven't said it to themselves yet. Here's what was running through their head.",
-      q1: "What stood out to you about the start of Jamie's renter journey?",
-      q2: 'What is Jamie looking for in an apartment?',
-      q2hint: "What's negotiable, and what's not?",
-      reflectionIntro: 'Scan Jamie\'s journal entry again and reread their "About Jamie" bio in the upper right corner. When you\'re ready, reflect below.',
+      "eyebrow": "Where Jamie is tonight",
+      "blurb": "Emma asked again where they're moving. Jamie hasn't said Jersey City yet, partly because they haven't said it to themselves yet. Here's what was running through their head.",
+      "q1": "What stood out to you about the start of Jamie's renter journey?",
+      "q2": "What is Jamie looking for in an apartment?",
+      "q2hint": "What's negotiable, and what's not?",
+      "reflectionIntro": "Scan Jamie's journal entry again and reread their \"About Jamie\" bio in the upper right corner. When you're ready, reflect below.",
+      "quests": [],
+      "sideQuests": [],
+      "finalReflection": {}
     },
     2: {
-      eyebrow: 'Where Jamie starts',
-      blurb: 'Emma is asleep. Jamie is at the kitchen table with the laptop, GreatSchools open in one tab, Apartment List in another. The Rent Calculator is open too. The numbers have to work.',
-      reflectionIntro: 'After the homepage, the Renter Tools, and the content, sit with one last question. Emma starts kindergarten in five months.',
+      "eyebrow": "Where Jamie starts",
+      "blurb": "Emma is asleep. Jamie is at the kitchen table with the laptop, GreatSchools open in one tab, Apartment List in another. The Rent Calculator is open too. The numbers have to work.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the homepage, the Renter Tools, and the content, sit with one last question. Emma starts kindergarten in five months.",
+      "quests": [
+        {
+          "label": "Core Quest 2.1 · The Homepage",
+          "title": "The Sixty-Second Test",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open the homepage as Jamie. It's late. Emma's in bed. This needs to be useful fast.",
+            "Notice whether the homepage acknowledges renters with kids, school zone needs, or two-bedroom requirements anywhere. Does it make it easy to start with what Jamie cares about most?",
+            "Don't take the quiz yet. Just spend sixty seconds looking around."
+          ],
+          "sitWithIt": [],
+          "reflection": "After sixty seconds, would Jamie stay or click away? What would catch their eye, and what would feel like it wasn't written for them?"
+        },
+        {
+          "label": "Core Quest 2.2 · Renter Tools",
+          "title": "The Renter Tools Tour",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-tools",
+              "href": "https://www.apartmentlist.com/renter-tools"
+            },
+            {
+              "text": "Rent Calculator",
+              "href": "https://www.apartmentlist.com/rent-calculator"
+            },
+            {
+              "text": "Rate My Rent",
+              "href": "https://www.apartmentlist.com/rate-my-rent"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open the Renter Tools. Jamie is a single parent moving to Jersey City on $95,000 a year. The budget is $3,200.",
+            "Run Jamie's income through the [Rent Calculator](https://www.apartmentlist.com/rent-calculator). Does the result feel realistic for a single parent with a kid?",
+            "Then try [Rate My Rent](https://www.apartmentlist.com/rate-my-rent) on their current suburban Philadelphia apartment. Does it feel accurate?"
+          ],
+          "sitWithIt": [],
+          "reflection": "Which Renter Tool would Jamie actually use? What did it surface that mattered, and where did it fall short for someone with a specific number to work with?"
+        },
+        {
+          "label": "Core Quest 2.3 · Beyond the Listings",
+          "title": "Beyond the Listings",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-life",
+              "href": "https://www.apartmentlist.com/renter-life"
+            },
+            {
+              "text": "apartmentlist.com/nj/jersey-city",
+              "href": "https://www.apartmentlist.com/nj/jersey-city"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open [Renter Life](https://www.apartmentlist.com/renter-life). Look for content about moving with kids, budgeting after a move, or settling into a new city as a family.",
+            "Also open the [Jersey City city page](https://www.apartmentlist.com/nj/jersey-city). Read the neighborhood descriptions. What do they say about families, schools, or parks?",
+            "Notice what's there for Jamie and what's missing."
+          ],
+          "sitWithIt": [],
+          "reflection": "What would Jamie make of this content? What would they actually read, and what would they wish was there?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "A competitor — Zillow Apartments.com or another",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open one competitor in a new tab. Try doing what Jamie would do: search Jersey City, two bedrooms, under $3,200. Scroll and compare.",
+            "Notice what's different, better, or worse — especially for someone whose primary filter is school zone."
+          ],
+          "sitWithIt": [],
+          "reflection": "What does the competitor do that Apartment List doesn't, and vice versa? Where would Jamie rather be for this search?",
+          "sideLabel": "What Else Is Out There (universal, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "What does Jamie think of Apartment List?",
+        "intro": "After the homepage, the Renter Tools, and the content, sit with one last question. Emma starts kindergarten in five months.",
+        "prompt": "From Jamie's point of view, what is Apartment List? Does it feel like a platform that understands what they're looking for?"
+      }
     },
     3: {
-      eyebrow: 'Where Jamie starts',
-      blurb: 'Late Tuesday. Emma is in bed. Jamie takes the quiz on the laptop. The budget step is careful. The bedroom step is not flexible. The Personality step is confusing. Jamie clicks through it and hopes the matches surface something in the right school zone.',
-      reflectionIntro: 'After the quiz, the signup, and the first scroll through the matches, sit with one last question. Emma starts kindergarten in five months.',
+      "eyebrow": "Where Jamie starts",
+      "blurb": "Late Tuesday. Emma is in bed. Jamie takes the quiz on the laptop. The budget step is careful. The bedroom step is not flexible. The Personality step is confusing. Jamie clicks through it and hopes the matches surface something in the right school zone.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the quiz, the signup, and the first scroll through the matches, sit with one last question. Emma starts kindergarten in five months.",
+      "quests": [
+        {
+          "label": "Core Quest 3.1 · The Quiz",
+          "title": "The Hard Requirements",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/quiz",
+              "href": "https://www.apartmentlist.com/quiz"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Take the quiz as Jamie. Set 2-bedroom as a non-negotiable. Add every relevant filter: budget, in-unit laundry, pet-friendly.",
+            "Look for a way to tell the quiz about Emma, or about school zones. Note whether it exists.",
+            "Click through the Personality step as Jamie would: quickly, skeptically. Note whether it feels relevant."
+          ],
+          "sitWithIt": [],
+          "reflection": "Where did the quiz let Jamie be specific about what matters, and where did it leave out the things that matter most?"
+        },
+        {
+          "label": "Core Quest 3.2 · Sign Up & Matches",
+          "title": "The First Look",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/signup",
+              "href": "https://www.apartmentlist.com/signup"
+            },
+            {
+              "text": "apartmentlist.com/matches",
+              "href": "https://www.apartmentlist.com/matches"
+            }
+          ],
+          "headsup": "Use a test account — format `youremail+test[date]@apartmentlist.com`",
+          "scenario": null,
+          "steps": [
+            "Sign up as Jamie (with a +test account) and land in their matches.",
+            "Are there two-bedroom listings in Jersey City or the right part of NJ? Are prices showing the full cost, or just base rent?",
+            "Would Jamie trust this list to cross-reference against GreatSchools?"
+          ],
+          "sitWithIt": [],
+          "reflection": "After signing up, what did Jamie's matches look like? Did the quiz pay off here, or does the list still feel like it doesn't know about Emma?"
+        },
+        {
+          "label": "Core Quest 3.3 · Light Cycle",
+          "title": "One at a Time",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/light_cycle",
+              "href": "https://www.apartmentlist.com/light_cycle"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Start swiping through properties as Jamie. Notice what a listing has to show in two seconds to make Jamie stop: a bedroom count, a price that fits, a neighborhood name they recognize.",
+            "Notice what cycling emphasizes and what it hides. School zones won't appear here.",
+            "Pay attention to when swiping starts to feel like a search strategy that wasn't built for Jamie's checklist."
+          ],
+          "sitWithIt": [],
+          "reflection": "What does the cycling interface surface for Jamie, and what does it hide? When does swiping stop feeling like research for someone with a school-zone checklist?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/quiz",
+              "href": "https://www.apartmentlist.com/quiz"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pay specific attention to the Bedrooms step. Can Jamie set 2-bedroom as a hard requirement, or just a preference?",
+            "Does the quiz ask about kids? About school zoning? About proximity to childcare?",
+            "Note what the quiz is missing for someone with Emma to think about."
+          ],
+          "sitWithIt": [],
+          "reflection": "The quiz let Jamie filter for [blank] but never asked about [blank].",
+          "sideLabel": "The Two-Bedroom Filter (Jamie-specific, optional)"
+        },
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/profile",
+              "href": "https://www.apartmentlist.com/profile"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Walk through Profile registration as Jamie. Pay attention to the Renter History questions, especially income and eviction history.",
+            "How does the income range feel for a single parent? How does the eviction question land for someone navigating a recent life change?",
+            "Is the tone trustworthy or anxiety-inducing?"
+          ],
+          "sitWithIt": [],
+          "reflection": "The Renter History questions felt [blank] for Jamie because [blank].",
+          "sideLabel": "The Renter History Pause (Jamie-specific, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "Does Apartment List know what Jamie needs?",
+        "intro": "After the quiz, the signup, and the first scroll through the matches, sit with one last question. Emma starts kindergarten in five months.",
+        "prompt": "Does Apartment List understand what Jamie is searching for? Where did it get close, and where does it leave the most important filter for Jamie to do alone?"
+      }
     },
     4: {
-      eyebrow: 'Where Jamie starts',
-      blurb: "It's 11pm. Emma's asleep, and the six properties Jamie has been chewing on are open in six tabs. They have a school-zone spreadsheet on the side. Three listings are in the right zone. The Google reviews for one have a complaint about water pressure.",
-      reflectionIntro: 'After the shortlist, the deep read, and the outside research, sit with one last question.',
+      "eyebrow": "Where Jamie starts",
+      "blurb": "It's 11pm. Emma's asleep, and the six properties Jamie has been chewing on are open in six tabs. They have a school-zone spreadsheet on the side. Three listings are in the right zone. The Google reviews for one have a complaint about water pressure.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the shortlist, the deep read, and the outside research, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 4.1 · The Shortlist",
+          "title": "The Keep Pile",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/shortlist",
+              "href": "https://www.apartmentlist.com/shortlist"
+            },
+            {
+              "text": "apartmentlist.com/shortlist/not-for-me",
+              "href": "https://www.apartmentlist.com/shortlist/not-for-me"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Save five listings as Jamie. Feel free to use \"maybe\" or \"love it\" — notice when you use which.",
+            "Say no to a few listings. Notice what gets a no quickly: a neighborhood that doesn't work, a price that needs explanation, a photo that doesn't match the description.",
+            "Revisit the keep pile. Revisit the no pile. What patterns are showing up? How easy is it to compare?"
+          ],
+          "sitWithIt": [],
+          "reflection": "What ended up on Jamie's keep pile, and what did the no pile have in common? Where did Apartment List help with the sort, and where did Jamie have to do the work alone?"
+        },
+        {
+          "label": "Core Quest 4.2 · The Listing Detail Page",
+          "title": "The Full Read",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick two listings from Jamie's keep pile that they keep going back and forth on.",
+            "Try to compare them: open them in two tabs, read the amenities, look at the photos, read the neighborhood description.",
+            "Notice where Apartment List helps with the comparing and where Jamie ends up doing it on their own."
+          ],
+          "sitWithIt": [],
+          "reflection": "How did putting two listings side by side feel for Jamie? Where did Apartment List make the choice easier, and where did Jamie end up keeping the spreadsheet open?"
+        },
+        {
+          "label": "Core Quest 4.3 · External Validation",
+          "title": "The Outside Check",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "Google reviews GreatSchools Reddit NJ parent Facebook groups — wherever Jamie would actually go",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one of Jamie's serious contenders. The one they keep coming back to.",
+            "Read the LDP carefully. Then go where Jamie would actually go to check: search the building name, read the reviews, cross-reference the address on GreatSchools.",
+            "Notice what the outside world says that the listing didn't."
+          ],
+          "sitWithIt": [],
+          "reflection": "What did the listing tell Jamie, and what did the outside picture add or contradict? Where did Apartment List leave them to fill in the blanks?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            },
+            {
+              "text": "GreatSchools.org",
+              "href": "https://www.greatschools.org"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "On three shortlisted listings, look for school zoning information anywhere on the page.",
+            "If it's not there, note where Jamie would have to go to verify. How many steps outside Apartment List does the school question require?"
+          ],
+          "sitWithIt": [],
+          "reflection": "On the listings Jamie shortlisted, school information was [blank].",
+          "sideLabel": "The School Door (Jamie-specific, optional)"
+        },
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Search the POI section for parks, playgrounds, and family-friendly spaces near a shortlisted property.",
+            "Are family spaces highlighted? Playgrounds, daycare, pediatric care? Or just generic green pins?"
+          ],
+          "sitWithIt": [],
+          "reflection": "The POI section for [blank] showed parks at [blank] but missed [blank].",
+          "sideLabel": "The Family Park (Jamie-specific, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "Which contenders made it through the night?",
+        "intro": "After the shortlist, the deep read, and the outside research, sit with one last question.",
+        "prompt": "Which contenders made it through the night for Jamie, and why? Is the shortlist real, or does Jamie need another pass before they'd pick up the phone tomorrow?"
+      }
     },
     5: {
-      eyebrow: 'Where Jamie starts',
-      blurb: 'Jamie has three serious contenders. Each message to a leasing office asks the same three things: school zone, parking, playground within walking distance. The first reply came in four hours with specific answers. The second replied with a marketing pitch. The third said "come tour." Jamie books a tour at the first.',
-      reflectionIntro: 'After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Emma starts kindergarten in five months.',
+      "eyebrow": "Where Jamie starts",
+      "blurb": "Jamie has three serious contenders. Each message to a leasing office asks the same three things: school zone, parking, playground within walking distance. The first reply came in four hours with specific answers. The second replied with a marketing pitch. The third said \"come tour.\" Jamie books a tour at the first.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Emma starts kindergarten in five months.",
+      "quests": [
+        {
+          "label": "Core Quest 5.1 · Messaging",
+          "title": "The First Message",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Pick one of Jamie's top contenders. Write a message as Jamie. Ask the things they would actually ask: school zone confirmation, parking availability, playground proximity.",
+            "Notice what Apartment List sets up around the message: suggested questions, expected response time, anything that might help Jamie know what to ask.",
+            "Note whether any of the suggested questions are relevant to a parent with a kindergartener."
+          ],
+          "sitWithIt": [],
+          "reflection": "How did it feel for Jamie to send the first message? Did Apartment List prepare them for what comes next, or did they hit send and wonder if anyone was on the other end?"
+        },
+        {
+          "label": "Core Quest 5.2 · Tour Scheduling",
+          "title": "Lining Up a Look",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Try to schedule a tour at one of Jamie's contenders. Look for an afternoon slot that would work around Emma's pickup.",
+            "Notice whether the scheduling is flexible or defaults to business hours.",
+            "If something needs to be rescheduled, try that too. How easy is it to change with a kid's schedule involved?"
+          ],
+          "sitWithIt": [],
+          "reflection": "How did booking a tour feel for Jamie? Did Apartment List make the process easier or harder?"
+        },
+        {
+          "label": "Core Quest 5.3 · The Virtual Walkthrough",
+          "title": "Through the Screen",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com",
+              "href": "https://www.apartmentlist.com"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Watch a virtual tour on a Jamie contender.",
+            "Look for what Jamie would need to see: the second bedroom for Emma, the building entrance, whether there's a playground or park visible nearby, what the street looks like from the window.",
+            "Notice what the screen can't show. What would Jamie still want to walk past in person?"
+          ],
+          "sitWithIt": [],
+          "reflection": "What did the virtual walkthrough let Jamie see, and what stayed out of frame? Could they almost commit from this, or does the neighborhood still need to be walked in person?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [],
+          "headsup": null,
+          "scenario": null,
+          "steps": [],
+          "sitWithIt": [],
+          "reflection": "When [property] didn't respond after [X] hours, what did Jamie do — and what does the silence mean for someone whose timeline is anchored to a school start date?",
+          "sideLabel": "The Quiet Hour (universal, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "One real answer in.",
+        "intro": "After the first message, the tour booking, and the walkthrough through a screen, sit with one last question. Emma starts kindergarten in five months.",
+        "prompt": "After the first hello, which contender is rising in Jamie's list, and what is Apartment List doing (or not doing) to help them get there?"
+      }
     },
     6: {
-      eyebrow: 'Where Jamie starts',
-      blurb: "Emma's school list is on the fridge. The deposit is counted. Jamie has been reading the same two listings for three days. Tonight they pick one. The lease is due by the end of the week.",
-      reflectionIntro: 'After the pick, the lease read, and the Renter Hub walk, sit with one last question.',
+      "eyebrow": "Where Jamie starts",
+      "blurb": "Emma's school list is on the fridge. The deposit is counted. Jamie has been reading the same two listings for three days. Tonight they pick one. The lease is due by the end of the week.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the pick, the lease read, and the Renter Hub walk, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 6.1 · Picking the Place",
+          "title": "The Decision",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/shortlist",
+              "href": "https://www.apartmentlist.com/shortlist"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open Jamie's shortlist, or picture the three places they've been chewing on.",
+            "Walk each one as Jamie: run the monthly total, picture the morning commute, picture Emma in the neighborhood on a Tuesday afternoon.",
+            "Pick one. Which place is Jamie signing for? Notice the deciding factor: school zone, walkability, the price, a Google review, a gut feeling."
+          ],
+          "sitWithIt": [],
+          "reflection": "Which place did Jamie pick, and what made it the one? Was Apartment List part of how they got there, or did the deciding factor come from somewhere else?"
+        },
+        {
+          "label": "Core Quest 6.2 · A Scenario",
+          "title": "The Lease Arrives",
+          "optional": false,
+          "surfaces": [],
+          "headsup": null,
+          "scenario": "The lease arrived Friday morning. There are fees Jamie didn't realize existed: a $50 garbage disposal fee and $150 for parking. Emma has soccer practice tonight and ballet in the morning, and Jamie picked up a shift on Sunday. The leasing office is closed on weekends. The signed lease is due in 48 hours.",
+          "steps": [],
+          "sitWithIt": [
+            "How does Jamie feel about $200 a month in fees they didn't budget for?",
+            "How does it impact their budget? What gets squeezed when the rent line jumps by $200?",
+            "Picture the weekend: soccer, ballet, the Sunday shift, the closed leasing office, the 48-hour clock. When could Jamie even push back?"
+          ],
+          "reflection": "What does Jamie do with the 48 hours? Sign, push back, walk away, ask a friend? And what does this moment say about where Apartment List's job ends and the property's begins?"
+        },
+        {
+          "label": "Core Quest 6.3 · The Renter Hub Walk",
+          "title": "Walking the Renter Hub",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-hub",
+              "href": "https://www.apartmentlist.com/renter-hub"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Open Renter Hub. Walk through all five sections: Split rent payments, Deposit alternatives, Renters insurance, Moving help, Internet & utilities.",
+            "Read the descriptions, ratings, and pricing as Jamie. Picture what their first month looks like with each.",
+            "Mark the sections that would actually help Jamie, and the ones that wouldn't apply."
+          ],
+          "sitWithIt": [],
+          "reflection": "Of the five Renter Hub sections, which ones would Jamie actually use, and which would they skip? Where does Renter Hub feel curated for them, and where does it feel like a list of partners to wade through?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-hub",
+              "href": "https://www.apartmentlist.com/renter-hub"
+            }
+          ],
+          "headsup": null,
+          "scenario": "The property wants first month's rent plus a security deposit equal to two months of rent. Jamie has read the same sentence three times. The numbers don't fit. The agent mentioned deposit alternatives in passing. Jamie remembers Renter Hub had a section about that.",
+          "steps": [
+            "Open Deposit alternatives. Compare Rhino, LeaseLock, and Obligo as Jamie would.",
+            "Pay attention to the ratings and the \"pricing varies\" notes. What would Jamie still need to find out before saying yes?",
+            "Check whether the property Jamie picked actually accepts any of these. If Renter Hub doesn't say, notice that."
+          ],
+          "sitWithIt": [],
+          "reflection": "Of the deposit alternatives, which one would Jamie actually use, and what would they still need to find out before committing?",
+          "sideLabel": "The Deposit Check (Jamie-specific, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "Where the hard work ends.",
+        "intro": "After the pick, the lease read, and the Renter Hub walk, sit with one last question.",
+        "prompt": "Where does Apartment List help Jamie quietly in this moment, and where does it leave them to do the work alone?"
+      }
     },
     7: {
-      eyebrow: 'Where Jamie starts',
-      blurb: "Emma has been in school for four months. They have a Tuesday evening routine: the park, then dinner. Jamie reads Apartment Living articles sometimes \u2014 the ones about decorating small spaces, budgeting after a move, setting up a home for two. Some are useful. Some aren't written for a single parent.",
-      reflectionIntro: 'After the stray email, the review moment, and the blog stroll, sit with one last question.',
-    },
-  },
+      "eyebrow": "Where Jamie starts",
+      "blurb": "Emma has been in school for four months. They have a Tuesday evening routine: the park, then dinner. Jamie reads Apartment Living articles sometimes — the ones about decorating small spaces, budgeting after a move, setting up a home for two. Some are useful. Some aren't written for a single parent.",
+      "q1": null,
+      "q2": null,
+      "q2hint": null,
+      "reflectionIntro": "After the stray email, the review moment, and the blog stroll, sit with one last question.",
+      "quests": [
+        {
+          "label": "Core Quest 7.1 · A Scenario",
+          "title": "A Letter from Apartment List",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "Jamie's email inbox",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": "Four months after moving in, an email arrives from Apartment List: \"Ready to find your next place?\" Inside are listings near their current address. Jamie reads the subject line and puts the phone down.",
+          "steps": [],
+          "sitWithIt": [
+            "Why does this email arrive now? Does it feel like Apartment List knows Jamie already signed a lease?",
+            "What would a useful post-move email look like for Jamie right now?"
+          ],
+          "reflection": "Does this email feel like a useful pulse, neutral noise, or something that misses where Jamie actually is? What would Apartment List need to know to make it land?"
+        },
+        {
+          "label": "Core Quest 7.2 · A Scenario",
+          "title": "The Review Moment",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "App Store or Google Play review",
+              "href": null
+            }
+          ],
+          "headsup": null,
+          "scenario": "Four months in, a push notification: \"How was your experience?\" Jamie has the app installed because the next move is years away, and they never deleted it. Emma is drawing at the kitchen table.",
+          "steps": [],
+          "sitWithIt": [
+            "Does Jamie tap the notification? What's the star rating?",
+            "What leads: the school zone search they did alone, the deposit alternative that saved them upfront, or something else entirely?"
+          ],
+          "reflection": "Draft the two sentences Jamie would actually write in a review. What lands first?"
+        },
+        {
+          "label": "Core Quest 7.3 · Apartment Living Stroll",
+          "title": "The Apartment Living Stroll",
+          "optional": false,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-life",
+              "href": "https://www.apartmentlist.com/renter-life"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Browse Renter Life. Find one article that speaks to Jamie's post-move reality: settling in with a kid, budgeting after a move, decorating for two, building a routine in a new city.",
+            "Read it as Jamie. Notice what's useful and what feels too generic to apply."
+          ],
+          "sitWithIt": [],
+          "reflection": "What would Jamie actually read from Renter Life, and what would feel like it wasn't written for a single parent? What article is missing?"
+        }
+      ],
+      "sideQuests": [
+        {
+          "label": null,
+          "title": null,
+          "optional": true,
+          "surfaces": [
+            {
+              "text": "apartmentlist.com/renter-life",
+              "href": "https://www.apartmentlist.com/renter-life"
+            }
+          ],
+          "headsup": null,
+          "scenario": null,
+          "steps": [
+            "Search Apartment Living for content specifically useful to Jamie: budgeting for two, setting up a kid's room, childcare resources in a new city.",
+            "Note what's there and what's missing. Does the content acknowledge that some renters have a child in tow?"
+          ],
+          "sitWithIt": [],
+          "reflection": "Apartment Living's content for parents felt [blank].",
+          "sideLabel": "The Apartment Living Guide (Jamie-specific, optional)"
+        }
+      ],
+      "finalReflection": {
+        "heading": "Six months in, what stayed?",
+        "intro": "After the stray email, the review moment, and the blog stroll, sit with one last question.",
+        "prompt": "What kind of presence does Apartment List have in Jamie's life now? The go-to for the next move, something useful in the background, or an app that's still installed mostly out of habit?"
+      }
+    }
+  }
 };
 
 function refreshNotesCard(chNum) {
@@ -13591,12 +15671,155 @@ function refreshNotesCard(chNum) {
   });
 }
 
+// ── Quest rendering ────────────────────────────────────────────────────────
+
+function _esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function _linkify(text) {
+  // Convert markdown [label](url) links to <a> tags
+  return String(text || '').replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(_, label, href) {
+    return '<a href="' + _esc(href) + '" target="_blank" rel="noopener">' + _esc(label) + '</a>';
+  });
+}
+
+function renderQuestCard(q, chNum, qi) {
+  var id = q.id || (chNum + '.' + (qi + 1));
+  var cls = q.optional ? 'quest optional' : 'quest';
+
+  // Surface section
+  var surfaceHtml = '';
+  if (q.surfaces && q.surfaces.length) {
+    var surfaceItems = q.surfaces.map(function(s) {
+      return '<li>' + (s.href ? '<a href="' + _esc(s.href) + '" target="_blank" rel="noopener">' + _esc(s.text) + '</a>' : _esc(s.text)) + '</li>';
+    }).join('');
+    surfaceHtml = '<section class="quest-section"><div class="section-label">Surface</div><ul class="surface-list">' + surfaceItems + '</ul></section>';
+  }
+
+  // Action steps or Sit-with-it bullets
+  var actionHtml = '';
+  if (q.steps && q.steps.length) {
+    var stepItems = q.steps.map(function(s) {
+      return '<li class="action-item"><label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label><label>' + _linkify(_esc(s)) + '</label></li>';
+    }).join('');
+    actionHtml = '<section class="quest-section"><div class="section-label">Action</div><ul class="action-list">' + stepItems + '</ul></section>';
+  } else if (q.sitWithIt && q.sitWithIt.length) {
+    var sitItems = q.sitWithIt.map(function(s) {
+      return '<li class="action-item"><label>' + _esc(s) + '</label></li>';
+    }).join('');
+    actionHtml = '<section class="quest-section"><div class="section-label">Sit with it</div><ul class="action-list sit-list">' + sitItems + '</ul></section>';
+  }
+
+  // Scenario block (scenario quests)
+  var scenarioHtml = '';
+  if (q.scenario) {
+    scenarioHtml = '<section class="quest-section"><div class="section-label">Scenario</div><p class="quest-scenario">' + _esc(q.scenario) + '</p></section>';
+  }
+
+  // Heads-up note
+  var headsupHtml = '';
+  if (q.headsup) {
+    headsupHtml = '<p class="quest-headsup"><strong>Heads-up:</strong> ' + _esc(q.headsup) + '</p>';
+  }
+
+  // Reflection input
+  var reflHtml = '';
+  if (q.reflection) {
+    reflHtml = '<div class="reflection-prompt quest-reflection"><label>' + _esc(q.reflection) + '</label><textarea class="reflection-input" placeholder="Type here..."></textarea></div>';
+  }
+
+  var titleText = _esc(q.title || '');
+  var labelText = _esc(q.label || '');
+
+  return '<article class="' + cls + '" data-quest="' + _esc(id) + '">'
+    + '<header class="quest-head">'
+    + '<label class="quest-check-wrap" aria-label="Mark ' + titleText + ' complete">'
+    + '<input type="checkbox" class="quest-check"/><span class="checkbox-pixel"></span></label>'
+    + '<div class="quest-title-area"><div class="label">' + labelText + '</div><h3>' + titleText + '</h3></div>'
+    + '</header>'
+    + '<div class="quest-body">'
+    + surfaceHtml + scenarioHtml + headsupHtml + actionHtml + reflHtml
+    + '</div></article>';
+}
+
+function renderChapterQuests(screenEl, n, persona) {
+  var chData = (PERSONA_CHAPTERS[persona] || PERSONA_CHAPTERS.jordan)[n];
+  if (!chData) return;
+
+  // Find the main content column
+  var main = screenEl.querySelector('.main');
+  if (!main) return;
+
+  // Remove existing quest/sidequest articles (but keep tonight-card, framing-card, reflection-card)
+  main.querySelectorAll('.quest').forEach(function(q) { q.remove(); });
+
+  // Find anchor before which to insert (insert before the final reflection-card)
+  var reflCard = main.querySelector('.reflection-card');
+
+  // Core quests
+  var allQuests = (chData.quests || []);
+  var sideQuests = (chData.sideQuests || []);
+  var combined = allQuests.concat(sideQuests);
+
+  combined.forEach(function(q, i) {
+    var html = renderQuestCard(q, n, i);
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    var article = tmp.firstElementChild;
+    if (reflCard) {
+      main.insertBefore(article, reflCard);
+    } else {
+      main.appendChild(article);
+    }
+  });
+
+  // Update final reflection card content
+  var fr = chData.finalReflection;
+  if (fr && reflCard) {
+    var h2 = reflCard.querySelector('h2');
+    if (h2 && fr.heading) h2.textContent = fr.heading;
+    var intro = reflCard.querySelector('.reflection-intro');
+    if (intro && fr.intro) intro.textContent = fr.intro;
+    // Update or create the final reflection textarea prompt
+    var prompts = reflCard.querySelectorAll('.reflection-prompt');
+    // The last prompt is the "final" one
+    var lastPrompt = prompts[prompts.length - 1];
+    if (lastPrompt && fr.prompt) {
+      var lbl = lastPrompt.querySelector('label');
+      if (lbl) lbl.textContent = fr.prompt;
+    }
+  }
+}
+
 // ── Chapter screens ───────────────────────────────────────────────────────
 function syncChapterScreen(n) {
   var profile  = loadProfile();
   var screenEl = document.getElementById('screen-ch' + n);
   if (!screenEl) return;
   applyPersonaTheme(profile.persona);
+
+  // ── Persona-change detection: re-render quests when persona switches ──
+  var prevPersona = screenEl.getAttribute('data-wired-persona');
+  if (n > 1 && prevPersona !== profile.persona) {
+    // Replace quest block with content for the current persona
+    renderChapterQuests(screenEl, n, profile.persona);
+    // Force re-wiring so new checkboxes and textareas are attached
+    screenEl.removeAttribute('data-ch-wired');
+    screenEl.setAttribute('data-wired-persona', profile.persona);
+  } else if (n === 1 && prevPersona !== profile.persona) {
+    // Ch1 has no quests but final reflection card still needs persona update
+    var chData1 = (PERSONA_CHAPTERS[profile.persona] || PERSONA_CHAPTERS.jordan)[1];
+    if (chData1 && chData1.finalReflection) {
+      var reflCard1 = screenEl.querySelector('.reflection-card');
+      if (reflCard1) {
+        var h2 = reflCard1.querySelector('h2');
+        if (h2 && chData1.finalReflection.heading) h2.textContent = chData1.finalReflection.heading;
+      }
+    }
+    screenEl.removeAttribute('data-ch-wired');
+    screenEl.setAttribute('data-wired-persona', profile.persona);
+  }
 
   var meta = PERSONA_META[profile.persona] || PERSONA_META.jordan;
 

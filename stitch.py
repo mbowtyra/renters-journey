@@ -5,10 +5,155 @@ Each screen's CSS is scoped to its screen ID to prevent cross-screen conflicts.
 """
 
 import re
+import json
 from pathlib import Path
 
 BASE    = Path("/Users/melissabowden/Documents/Dev/Renter's Journey")
 MOCKUPS = BASE / "mockups"
+MEMORY  = BASE / "memory"
+
+# ── Content-file parser ─────────────────────────────────────────────────────
+
+def _field(label, text):
+    """Return first occurrence of **Label:** value on same line, or None."""
+    m = re.search(r'\*\*' + re.escape(label) + r':\*\*\s*(.+)', text)
+    return m.group(1).strip() if m else None
+
+def _field_block(label, text):
+    """Return multi-line content after **Label:** until next blank line or ## heading."""
+    m = re.search(r'\*\*' + re.escape(label) + r':\*\*\s*\n([\s\S]+?)(?=\n\n|\n##|\Z)', text)
+    if not m:
+        return None
+    return m.group(1).strip()
+
+def _parse_surface(surface_str):
+    """Extract surface list from a markdown surface string."""
+    if not surface_str:
+        return []
+    surfaces = []
+    # Find all markdown links [text](url)
+    for text, href in re.findall(r'\[([^\]]+)\]\(([^)]+)\)', surface_str):
+        surfaces.append({'text': text, 'href': href})
+    # Anything left after stripping links becomes a plain-text surface
+    remainder = re.sub(r'\[[^\]]+\]\([^)]+\)', '', surface_str)
+    remainder = re.sub(r'\s*[→,]\s*', ' ', remainder).strip(' ,→')
+    if remainder and not surfaces:
+        surfaces.append({'text': remainder, 'href': None})
+    return surfaces
+
+def _parse_steps(body):
+    """Return list of action step strings from a bullet list after **Action steps:**."""
+    m = re.search(r'\*\*Action steps:\*\*\s*\n((?:[-*]\s+.+\n?)+)', body)
+    if not m:
+        return []
+    lines = m.group(1).strip().split('\n')
+    return [re.sub(r'^[-*]\s+', '', l).strip() for l in lines if l.strip()]
+
+def _parse_sit_with_it(body):
+    """Return list of sit-with-it bullet strings (scenario quests)."""
+    m = re.search(r'\*\*Sit with it:\*\*\s*\n((?:[-*]\s+.+\n?)+)', body)
+    if not m:
+        return []
+    lines = m.group(1).strip().split('\n')
+    return [re.sub(r'^[-*]\s+', '', l).strip() for l in lines if l.strip()]
+
+def _parse_quest(body, optional=False):
+    """Parse a single quest/side-quest block into a dict."""
+    label    = _field('Label', body)
+    title    = _field('Title', body)
+    surface_raw = _field('Surface', body)
+    headsup  = _field('Heads-up', body)
+    scenario = _field_block('Scenario', body)
+    steps    = _parse_steps(body)
+    sit      = _parse_sit_with_it(body)
+    refl     = _field('Reflection', body)
+    # Some reflections span multiple sentences on the same line — get full text
+    if not refl:
+        m = re.search(r'\*\*Reflection:\*\*\s*\n(.+)', body)
+        refl = m.group(1).strip() if m else None
+    return {
+        'label':    label,
+        'title':    title,
+        'optional': optional,
+        'surfaces': _parse_surface(surface_raw) if surface_raw else [],
+        'headsup':  headsup,
+        'scenario': scenario,
+        'steps':    steps,
+        'sitWithIt': sit,
+        'reflection': refl,
+    }
+
+def _parse_final_reflection(body):
+    return {
+        'heading': _field('Heading', body),
+        'intro':   _field('Intro', body),
+        'prompt':  _field('Prompt', body),
+    }
+
+def parse_content_file(fpath):
+    """Parse a content-*.md file and return dict keyed by chapter number (int)."""
+    text = open(fpath, encoding='utf-8').read()
+    result = {}
+
+    # Split on '## Chapter N:' headings
+    ch_parts = re.split(r'## Chapter (\d+):', text)
+    for i in range(1, len(ch_parts), 2):
+        ch_num = int(ch_parts[i])
+        ch_body = ch_parts[i + 1]
+
+        # Tonight-card fields
+        eyebrow = _field('Eyebrow', ch_body)
+        blurb   = _field_block('Blurb', ch_body)
+        # Reflection labels (ch1 persona-specific)
+        q1      = _field('Q1 label', ch_body)
+        q2      = _field('Q2 label', ch_body)
+        q2hint  = _field('Q2 hint', ch_body)
+        refl_intro = _field('Intro', ch_body)  # first Intro = reflection heading intro
+
+        quests      = []
+        side_quests = []
+        final_refl  = {}
+
+        # Split on ### headings for quests
+        sect_parts = re.split(r'### ((?:Quest \d+\.\d+|Side Quest|Final Reflection)[^\n]*)\n', ch_body)
+        for j in range(1, len(sect_parts), 2):
+            heading = sect_parts[j].strip()
+            body    = sect_parts[j + 1]
+            if heading.startswith('Final Reflection'):
+                final_refl = _parse_final_reflection(body)
+            elif heading.startswith('Side Quest'):
+                sq = _parse_quest(body, optional=True)
+                sq['sideLabel'] = re.sub(r'^Side Quest:\s*', '', heading).strip()
+                side_quests.append(sq)
+            elif re.match(r'Quest \d+\.\d+', heading):
+                quests.append(_parse_quest(body, optional=False))
+
+        result[ch_num] = {
+            'eyebrow':       eyebrow,
+            'blurb':         blurb,
+            'q1':            q1,
+            'q2':            q2,
+            'q2hint':        q2hint,
+            'reflectionIntro': refl_intro,
+            'quests':        quests,
+            'sideQuests':    side_quests,
+            'finalReflection': final_refl,
+        }
+
+    return result
+
+def build_persona_chapters():
+    """Read all four content files and return a dict suitable for JSON serialisation."""
+    files = [
+        ('jordan',  MEMORY / 'content-jordan.md'),
+        ('alex',    MEMORY / 'content-alex.md'),
+        ('taylor',  MEMORY / 'content-taylor-riley.md'),
+        ('jamie',   MEMORY / 'content-jamie.md'),
+    ]
+    data = {}
+    for key, path in files:
+        data[key] = parse_content_file(path)
+    return data
 
 # ── CSS scoping ────────────────────────────────────────────────────────────
 
@@ -863,12 +1008,155 @@ function refreshNotesCard(chNum) {
   });
 }
 
+// ── Quest rendering ────────────────────────────────────────────────────────
+
+function _esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function _linkify(text) {
+  // Convert markdown [label](url) links to <a> tags
+  return String(text || '').replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(_, label, href) {
+    return '<a href="' + _esc(href) + '" target="_blank" rel="noopener">' + _esc(label) + '</a>';
+  });
+}
+
+function renderQuestCard(q, chNum, qi) {
+  var id = q.id || (chNum + '.' + (qi + 1));
+  var cls = q.optional ? 'quest optional' : 'quest';
+
+  // Surface section
+  var surfaceHtml = '';
+  if (q.surfaces && q.surfaces.length) {
+    var surfaceItems = q.surfaces.map(function(s) {
+      return '<li>' + (s.href ? '<a href="' + _esc(s.href) + '" target="_blank" rel="noopener">' + _esc(s.text) + '</a>' : _esc(s.text)) + '</li>';
+    }).join('');
+    surfaceHtml = '<section class="quest-section"><div class="section-label">Surface</div><ul class="surface-list">' + surfaceItems + '</ul></section>';
+  }
+
+  // Action steps or Sit-with-it bullets
+  var actionHtml = '';
+  if (q.steps && q.steps.length) {
+    var stepItems = q.steps.map(function(s) {
+      return '<li class="action-item"><label class="step-check-wrap"><input type="checkbox" class="step-check"/><span class="checkbox-pixel"></span></label><label>' + _linkify(_esc(s)) + '</label></li>';
+    }).join('');
+    actionHtml = '<section class="quest-section"><div class="section-label">Action</div><ul class="action-list">' + stepItems + '</ul></section>';
+  } else if (q.sitWithIt && q.sitWithIt.length) {
+    var sitItems = q.sitWithIt.map(function(s) {
+      return '<li class="action-item"><label>' + _esc(s) + '</label></li>';
+    }).join('');
+    actionHtml = '<section class="quest-section"><div class="section-label">Sit with it</div><ul class="action-list sit-list">' + sitItems + '</ul></section>';
+  }
+
+  // Scenario block (scenario quests)
+  var scenarioHtml = '';
+  if (q.scenario) {
+    scenarioHtml = '<section class="quest-section"><div class="section-label">Scenario</div><p class="quest-scenario">' + _esc(q.scenario) + '</p></section>';
+  }
+
+  // Heads-up note
+  var headsupHtml = '';
+  if (q.headsup) {
+    headsupHtml = '<p class="quest-headsup"><strong>Heads-up:</strong> ' + _esc(q.headsup) + '</p>';
+  }
+
+  // Reflection input
+  var reflHtml = '';
+  if (q.reflection) {
+    reflHtml = '<div class="reflection-prompt quest-reflection"><label>' + _esc(q.reflection) + '</label><textarea class="reflection-input" placeholder="Type here..."></textarea></div>';
+  }
+
+  var titleText = _esc(q.title || '');
+  var labelText = _esc(q.label || '');
+
+  return '<article class="' + cls + '" data-quest="' + _esc(id) + '">'
+    + '<header class="quest-head">'
+    + '<label class="quest-check-wrap" aria-label="Mark ' + titleText + ' complete">'
+    + '<input type="checkbox" class="quest-check"/><span class="checkbox-pixel"></span></label>'
+    + '<div class="quest-title-area"><div class="label">' + labelText + '</div><h3>' + titleText + '</h3></div>'
+    + '</header>'
+    + '<div class="quest-body">'
+    + surfaceHtml + scenarioHtml + headsupHtml + actionHtml + reflHtml
+    + '</div></article>';
+}
+
+function renderChapterQuests(screenEl, n, persona) {
+  var chData = (PERSONA_CHAPTERS[persona] || PERSONA_CHAPTERS.jordan)[n];
+  if (!chData) return;
+
+  // Find the main content column
+  var main = screenEl.querySelector('.main');
+  if (!main) return;
+
+  // Remove existing quest/sidequest articles (but keep tonight-card, framing-card, reflection-card)
+  main.querySelectorAll('.quest').forEach(function(q) { q.remove(); });
+
+  // Find anchor before which to insert (insert before the final reflection-card)
+  var reflCard = main.querySelector('.reflection-card');
+
+  // Core quests
+  var allQuests = (chData.quests || []);
+  var sideQuests = (chData.sideQuests || []);
+  var combined = allQuests.concat(sideQuests);
+
+  combined.forEach(function(q, i) {
+    var html = renderQuestCard(q, n, i);
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    var article = tmp.firstElementChild;
+    if (reflCard) {
+      main.insertBefore(article, reflCard);
+    } else {
+      main.appendChild(article);
+    }
+  });
+
+  // Update final reflection card content
+  var fr = chData.finalReflection;
+  if (fr && reflCard) {
+    var h2 = reflCard.querySelector('h2');
+    if (h2 && fr.heading) h2.textContent = fr.heading;
+    var intro = reflCard.querySelector('.reflection-intro');
+    if (intro && fr.intro) intro.textContent = fr.intro;
+    // Update or create the final reflection textarea prompt
+    var prompts = reflCard.querySelectorAll('.reflection-prompt');
+    // The last prompt is the "final" one
+    var lastPrompt = prompts[prompts.length - 1];
+    if (lastPrompt && fr.prompt) {
+      var lbl = lastPrompt.querySelector('label');
+      if (lbl) lbl.textContent = fr.prompt;
+    }
+  }
+}
+
 // ── Chapter screens ───────────────────────────────────────────────────────
 function syncChapterScreen(n) {
   var profile  = loadProfile();
   var screenEl = document.getElementById('screen-ch' + n);
   if (!screenEl) return;
   applyPersonaTheme(profile.persona);
+
+  // ── Persona-change detection: re-render quests when persona switches ──
+  var prevPersona = screenEl.getAttribute('data-wired-persona');
+  if (n > 1 && prevPersona !== profile.persona) {
+    // Replace quest block with content for the current persona
+    renderChapterQuests(screenEl, n, profile.persona);
+    // Force re-wiring so new checkboxes and textareas are attached
+    screenEl.removeAttribute('data-ch-wired');
+    screenEl.setAttribute('data-wired-persona', profile.persona);
+  } else if (n === 1 && prevPersona !== profile.persona) {
+    // Ch1 has no quests but final reflection card still needs persona update
+    var chData1 = (PERSONA_CHAPTERS[profile.persona] || PERSONA_CHAPTERS.jordan)[1];
+    if (chData1 && chData1.finalReflection) {
+      var reflCard1 = screenEl.querySelector('.reflection-card');
+      if (reflCard1) {
+        var h2 = reflCard1.querySelector('h2');
+        if (h2 && chData1.finalReflection.heading) h2.textContent = chData1.finalReflection.heading;
+      }
+    }
+    screenEl.removeAttribute('data-ch-wired');
+    screenEl.setAttribute('data-wired-persona', profile.persona);
+  }
 
   var meta = PERSONA_META[profile.persona] || PERSONA_META.jordan;
 
@@ -1111,6 +1399,22 @@ function init() {
 document.addEventListener('DOMContentLoaded', init);
 })();
 </script>"""
+
+# ── Inject dynamic PERSONA_CHAPTERS (parsed from memory/content-*.md) ─────
+_pc_raw = build_persona_chapters()
+# json.dumps uses double-quotes which is valid JS; keys like 1,2 come out as "1","2" — fix to bare ints
+_pc_json = json.dumps(_pc_raw, ensure_ascii=False, indent=2)
+# Strip the old hardcoded PERSONA_CHAPTERS block (if still present) and replace
+JS = re.sub(
+    r'// Persona-specific tonight-cards.*?^};',
+    '__PERSONA_CHAPTERS__',
+    JS,
+    flags=re.DOTALL | re.MULTILINE,
+)
+_pc_js = 'var PERSONA_CHAPTERS = ' + _pc_json + ';'
+# JSON uses "1","2" for numeric keys — convert to bare int property names for clarity
+_pc_js = re.sub(r'"(\d+)"\s*:', r'\1:', _pc_js)
+JS = JS.replace('__PERSONA_CHAPTERS__', _pc_js)
 
 # ── Assemble screens ──────────────────────────────────────────────────────
 
