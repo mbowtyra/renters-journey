@@ -794,6 +794,98 @@
   }
   .hud-bio-body p:last-child { margin-bottom: 0; }
 
+  /* === CRITERIA (must-haves / wants) === */
+  .hud-criteria {
+    border: none;
+    margin-top: 10px;
+  }
+  .hud-criteria-summary {
+    list-style: none;
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hud-criteria-summary::-webkit-details-marker { display: none; }
+  .hud-criteria-summary::marker { content: ''; }
+  .hud-criteria-summary::before { content: '+'; font-size: 14px; }
+  .hud-criteria[open] .hud-criteria-summary::before { content: '\2212'; }
+  .hud-criteria-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 8px 0 4px;
+  }
+  .criteria-col ul {
+    list-style: disc;
+    margin: 4px 0 0 14px;
+    padding: 0;
+  }
+  .criteria-col ul li {
+    font-size: 11px;
+    line-height: 1.4;
+    margin-bottom: 4px;
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+  }
+  .criteria-col-label {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .criteria-must .criteria-col-label { color: #FF0029; }
+  .criteria-wants .criteria-col-label { color: #FF974D; }
+
+  /* === NOTES ACCORDION === */
+  .notes-chapter-group {
+    border-bottom: 1px solid var(--border, rgba(26,14,46,0.15));
+    padding: 4px 0;
+  }
+  .notes-chapter-group:last-child { border-bottom: none; }
+  .notes-group-summary {
+    list-style: none;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 4px 0;
+  }
+  .notes-group-summary::-webkit-details-marker { display: none; }
+  .notes-group-summary::marker { content: ''; }
+  .notes-group-count { color: var(--ink-soft); }
+  .notes-bullet-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 6px 0;
+  }
+  .note-item {
+    padding: 6px 0;
+    border-top: 1px dotted rgba(26,14,46,0.12);
+  }
+  .note-item:first-child { border-top: none; }
+  .note-quest-label {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 2px;
+  }
+  .note-item .note-text {
+    margin: 0 0 4px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
   /* === CORE QUESTS — checkbox + flat sections === */
   .quest .quest-num { display: none; }
   .quest-head {
@@ -1835,6 +1927,9 @@
           <p>Alex hunts with a spreadsheet (the spreadsheet was drafted before the lease notice came). Three platforms run in browser tabs at once. The standards aren't flexible, but the budget might be.</p>
         </div>
       </details>
+
+      <!-- Dynamically populated by syncChapterScreen() -->
+      <div class="hud-criteria-wrap"></div>
     </div>
 
     <!-- Field Notes journal — populates as you write notes in the chapter -->

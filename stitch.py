@@ -604,6 +604,67 @@ var PERSONA_META = {
   },
 };
 
+var PERSONA_CRITERIA = {
+  alex: {
+    mustHaves: [
+      'One bedroom with a door that closes',
+      'A real kitchen with counter space',
+      'Twelve-minute commute to the office',
+      'Monthly rent under $4,200'
+    ],
+    wants: [
+      'Two bedrooms if Hayes Valley delivers under budget',
+      'Hayes Valley neighborhood feel',
+      'Bike storage that isn\'t a wall mount',
+      'Building gym worth using'
+    ]
+  },
+  jordan: {
+    mustHaves: [
+      'Pet-friendly (Max actually welcome, not tolerated)',
+      'Move-in inside the eighteen-day window',
+      'Leasing offices that reply within 24 hours',
+      'Monthly rent under $2,400',
+      'No ghost listings or units older than 30 days'
+    ],
+    wants: [
+      'A yard for Max',
+      'A park within walking distance',
+      'A real home office (hybrid role, kitchen-table won\'t cut it)',
+      'A short commute on hybrid days'
+    ]
+  },
+  taylor: {
+    mustHaves: [
+      'Walkable neighborhood (their daily geography)',
+      'Real local food scene (taquerias, markets, roasters)',
+      'A street they can hear from the window',
+      'Combined rent under $2,500'
+    ],
+    wants: [
+      'Two-bedroom unit',
+      'Natural light Riley can shoot in',
+      'A photography scene that lives outside galleries',
+      'Weekend tours bookable without a phone call'
+    ]
+  },
+  jamie: {
+    mustHaves: [
+      'Two-bedroom (Emma\'s room is non-negotiable)',
+      'Strong, verifiable school district',
+      'Safe streets and a walkable park',
+      'Move-in before Emma\'s kindergarten start',
+      'Monthly rent under $3,200'
+    ],
+    wants: [
+      'Pet-friendly (Emma keeps asking about a small dog)',
+      'Transit-friendly to the family support network',
+      'In-unit laundry',
+      'A buzzing local park'
+    ]
+  }
+};
+
 function applyPersonaTheme(key) {
   var meta = PERSONA_META[key] || PERSONA_META.jordan;
   document.documentElement.style.setProperty('--persona-color', meta.color);
@@ -650,6 +711,14 @@ function initPersonaSelection() {
   });
 }
 function selectPersona(key) {
+  var existing = loadProfile();
+  // Clear wiring so chapter screens re-render fresh for the new persona
+  if (existing.persona && existing.persona !== key) {
+    document.querySelectorAll('.screen').forEach(function(s) {
+      s.removeAttribute('data-ch-wired');
+      s.removeAttribute('data-wired-persona');
+    });
+  }
   saveProfile({ persona: key, unlockedChapter: 1 });
   applyPersonaTheme(key);
   RJ.navigate('screen-avatar');
@@ -667,8 +736,15 @@ function showSwitchWarning(newKey) {
     +'</div></div></div>';
 }
 window._rjConfirmSwitch = function(key) {
-  localStorage.removeItem(NOTES_KEY); selectPersona(key);
-  var h=document.getElementById('rjSwitchDialogHolder'); if(h) h.innerHTML='';
+  localStorage.removeItem(NOTES_KEY);
+  // Clear wiring state so all chapter screens fully re-render for the new persona
+  document.querySelectorAll('.screen').forEach(function(s) {
+    s.removeAttribute('data-ch-wired');
+    s.removeAttribute('data-wired-persona');
+  });
+  selectPersona(key);
+  var h = document.getElementById('rjSwitchDialogHolder');
+  if (h) h.innerHTML = '';
 };
 
 // ── Avatar screen ─────────────────────────────────────────────────────────
@@ -744,9 +820,11 @@ var PERSONA_CHIPS = { jordan:'Achiever', alex:'Ambitious', taylor:'Duo Quest', j
 function syncMapScreen() {
   var profile = loadProfile();
   var meta = PERSONA_META[profile.persona] || PERSONA_META.jordan;
+  var mapEl = document.getElementById('screen-map');
+  if (!mapEl) return;
 
   // Top-bar persona name
-  var nameEl = document.querySelector('#screen-map .persona-context .name');
+  var nameEl = mapEl.querySelector('.persona-context .name');
   if (nameEl) nameEl.textContent = meta.fullName;
 
   // Sidebar HUD: persona name + class chip
@@ -764,16 +842,47 @@ function syncMapScreen() {
 
   // Show the correct hair style in the map sidebar sprite
   var hs = profile.hairStyle || 'short';
-  document.querySelectorAll('#screen-map .avatar-frame .hair-style').forEach(function(g) {
+  mapEl.querySelectorAll('.avatar-frame .hair-style').forEach(function(g) {
     g.style.display = (g.getAttribute('data-style') === hs) ? '' : 'none';
   });
 
+  // ── Persona-aware map copy (runs on every visit) ───────────────────────
+  var poss = meta.shortName + (meta.shortName.slice(-1) === 's' ? "'" : "'s");
+  var _MAP_NAMES = ['Jordan', 'Alex', 'Taylor', 'Jamie'];
+  function _swapMapName(html) {
+    _MAP_NAMES.forEach(function(n) {
+      html = html.replace(new RegExp('\\b' + n + "'s\\b", 'g'), poss);
+      html = html.replace(new RegExp('\\b' + n + '\\b', 'g'), meta.shortName);
+    });
+    return html;
+  }
+
+  // Hero lede
+  var lede = mapEl.querySelector('.hero .lede');
+  if (lede) lede.innerHTML = _swapMapName(lede.innerHTML);
+
+  // Hero-meta chips: Field Notes count + current chapter
+  var noteCount = getPersonaNotes(profile.persona).length;
+  var noteChip = mapEl.querySelector('.hero-meta .chip-notes');
+  if (noteChip) noteChip.innerHTML = '<strong>Field Notes:</strong> ' + noteCount + ' saved';
+
+  var chChip = mapEl.querySelector('.hero-meta .chip-chapter');
+  if (chChip) {
+    var curCh = profile.unlockedChapter || 1;
+    chChip.innerHTML = '<span class="dot"></span><strong>You\'re at:</strong> Chapter ' + curCh + ' \u00b7 ' + (CH_NAMES[curCh] || '');
+  }
+
+  // Chapter-card teasers (contains persona name in Ch1 and others)
+  mapEl.querySelectorAll('.chapter-card .teaser').forEach(function(t) {
+    t.innerHTML = _swapMapName(t.innerHTML);
+  });
+
   // Wire change-renter (once)
-  var changeEl = document.querySelector('#screen-map .persona-context .change:not([data-wired])');
+  var changeEl = mapEl.querySelector('.persona-context .change:not([data-wired])');
   if (changeEl) { changeEl.setAttribute('data-wired','1'); changeEl.style.cursor='pointer'; changeEl.addEventListener('click',function(){RJ.navigate('screen-intro');}); }
 
   // Apply lock/unlock state to chapter cards
-  var cards = document.querySelectorAll('#screen-map .chapter-card');
+  var cards = mapEl.querySelectorAll('.chapter-card');
   cards.forEach(function(card, idx) {
     var chNum = idx+1; var unlocked = chNum <= profile.unlockedChapter;
     card.classList.toggle('locked', !unlocked);
@@ -977,42 +1086,9 @@ var PERSONA_CHAPTERS = {
   },
 };
 
-function refreshNotesCard(chNum) {
-  var screenEl = document.getElementById('screen-ch' + chNum);
-  if (!screenEl) return;
-  var notesCard = screenEl.querySelector('.notes-card');
-  if (!notesCard) return;
-  var profile = loadProfile();
-  // Show ALL notes for this persona across every chapter, newest first
-  var notes = getPersonaNotes(profile.persona).slice().sort(function(a, b) { return (a.ts || 0) - (b.ts || 0); });
-
-  var h3 = notesCard.querySelector('h3');
-  if (h3) {
-    h3.innerHTML = 'Field Notes <span style="font-family:\'VT323\',monospace;font-size:13px;color:var(--ink-soft);letter-spacing:1px;">'
-      + notes.length + ' saved</span>';
-  }
-
-  var list = notesCard.querySelector('.notes-list');
-  if (!list) return;
-
-  if (notes.length === 0) {
-    list.innerHTML = '<div class="note empty"><p class="note-text">Nothing yet. Your reflections will appear here as you save them.</p></div>';
-    return;
-  }
-
-  list.innerHTML = notes.map(function(note, idx) {
-    var questLabel = note.label || ('Note ' + (idx + 1));
-    var chLabel    = note.chapter ? 'Ch. ' + note.chapter + ' \u00b7 ' + (CH_NAMES[note.chapter] || '') : '';
-    var metaLine   = chLabel ? escHtml(chLabel) + '<br>' + escHtml(questLabel) : escHtml(questLabel);
-    return '<div class="note">'
-      + '<div class="note-meta">' + metaLine + '</div>'
-      + '<p class="note-text">' + escHtml(note.text) + '</p>'
-      + '<div class="note-actions">'
-      + '<button class="copy-btn" data-copy="' + escHtml(note.text) + '">Copy to Slack</button>'
-      + '</div></div>';
-  }).join('');
-
-  list.querySelectorAll('.copy-btn').forEach(function(btn) {
+function _wireCopyBtns(container) {
+  container.querySelectorAll('.copy-btn:not([data-wired])').forEach(function(btn) {
+    btn.setAttribute('data-wired', '1');
     btn.addEventListener('click', function() {
       var text = btn.getAttribute('data-copy');
       if (navigator.clipboard) {
@@ -1029,6 +1105,62 @@ function refreshNotesCard(chNum) {
       }
     });
   });
+}
+
+function refreshNotesCard(chNum) {
+  var screenEl = document.getElementById('screen-ch' + chNum);
+  if (!screenEl) return;
+  var notesCard = screenEl.querySelector('.notes-card');
+  if (!notesCard) return;
+  var profile = loadProfile();
+
+  // All notes for this persona across all chapters, sorted oldest first
+  var notes = getPersonaNotes(profile.persona).slice().sort(function(a, b) { return (a.ts || 0) - (b.ts || 0); });
+
+  var h3 = notesCard.querySelector('h3');
+  if (h3) {
+    h3.innerHTML = 'Field Notes <span style="font-family:\'VT323\',monospace;font-size:13px;color:var(--ink-soft);letter-spacing:1px;">'
+      + notes.length + ' saved</span>';
+  }
+
+  var list = notesCard.querySelector('.notes-list');
+  if (!list) return;
+
+  if (notes.length === 0) {
+    list.innerHTML = '<div class="note empty"><p class="note-text">Nothing yet. Your reflections will appear here as you save them.</p></div>';
+    return;
+  }
+
+  // Group notes by chapter number
+  var groups = {};
+  var groupOrder = [];
+  notes.forEach(function(note) {
+    var key = note.chapter || 0;
+    if (!groups[key]) { groups[key] = []; groupOrder.push(key); }
+    groups[key].push(note);
+  });
+
+  var html = groupOrder.map(function(key) {
+    var groupNotes = groups[key];
+    var chLabel = key ? 'Ch. ' + key + ' \u00b7 ' + (CH_NAMES[key] || 'Chapter ' + key) : 'General';
+    var isCurrentCh = (key === chNum);
+    var openAttr = isCurrentCh ? ' open' : '';
+    var items = groupNotes.map(function(note) {
+      var questLabel = note.label ? escHtml(note.label) : '';
+      return '<li class="note-item">'
+        + (questLabel ? '<div class="note-quest-label">' + questLabel + '</div>' : '')
+        + '<p class="note-text">' + escHtml(note.text) + '</p>'
+        + '<button class="copy-btn" data-copy="' + escHtml(note.text) + '">Copy to Slack</button>'
+        + '</li>';
+    }).join('');
+    return '<details class="notes-chapter-group"' + openAttr + '>'
+      + '<summary class="notes-group-summary">' + escHtml(chLabel) + ' <span class="notes-group-count">(' + groupNotes.length + ')</span></summary>'
+      + '<ul class="notes-bullet-list">' + items + '</ul>'
+      + '</details>';
+  }).join('');
+
+  list.innerHTML = html;
+  _wireCopyBtns(list);
 }
 
 // ── Quest rendering ────────────────────────────────────────────────────────
@@ -1109,33 +1241,44 @@ function renderChapterQuests(screenEl, n, persona) {
 
   var allQuests  = (chData.quests || []);
   var sideQuests = (chData.sideQuests || []);
-  var combined   = allQuests.concat(sideQuests);
 
   // If this persona has no quest data for this chapter, the chapter HTML
   // (from the mockup) is already correct for them — leave it untouched.
-  if (combined.length === 0) return;
+  if (allQuests.length === 0 && sideQuests.length === 0) return;
 
   // Find the main content column
   var main = screenEl.querySelector('.main');
   if (!main) return;
 
-  // Remove existing quest/sidequest articles (keep tonight-card, framing-card, reflection-card)
-  main.querySelectorAll('.quest').forEach(function(q) { q.remove(); });
+  // Remove existing quest/sidequest articles and any previous type-headers
+  // (keep tonight-card, framing-card, reflection-card)
+  main.querySelectorAll('.quest, .side-quest-header').forEach(function(q) { q.remove(); });
 
   // Find anchor before which to insert (insert before the final reflection-card)
   var reflCard = main.querySelector('.reflection-card');
 
-  combined.forEach(function(q, i) {
-    var html = renderQuestCard(q, n, i);
+  function _insertBefore(html) {
     var tmp = document.createElement('div');
     tmp.innerHTML = html;
-    var article = tmp.firstElementChild;
-    if (reflCard) {
-      main.insertBefore(article, reflCard);
-    } else {
-      main.appendChild(article);
-    }
-  });
+    var el = tmp.firstElementChild;
+    if (reflCard) main.insertBefore(el, reflCard);
+    else main.appendChild(el);
+  }
+
+  // Core quests
+  allQuests.forEach(function(q, i) { _insertBefore(renderQuestCard(q, n, i)); });
+
+  // Side quest separator + cards
+  if (sideQuests.length > 0) {
+    _insertBefore(
+      '<div class="quest-type-header side-quest-header">'
+      + '<div class="label">Side Quest \u00b7 Optional</div>'
+      + '<h2>For the curious.</h2>'
+      + '<p class="sub">Optional. Skip it without consequence, or take a small detour and see what\'s out there.</p>'
+      + '</div>'
+    );
+    sideQuests.forEach(function(q, i) { _insertBefore(renderQuestCard(q, n, allQuests.length + i)); });
+  }
 
   // Update final reflection card content
   var fr = chData.finalReflection;
@@ -1215,6 +1358,21 @@ function syncChapterScreen(n) {
     bioBody.innerHTML = meta.bio.split('\n\n').map(function(p) {
       return '<p>' + p + '</p>';
     }).join('');
+  }
+
+  // ── Must-haves / Wants criteria block ───────────────────────────────────
+  var criteriaWrap = screenEl.querySelector('.hud-criteria-wrap');
+  if (criteriaWrap) {
+    var crit = PERSONA_CRITERIA[profile.persona] || PERSONA_CRITERIA.jordan;
+    var mustItems = (crit.mustHaves || []).map(function(s) { return '<li>' + escHtml(s) + '</li>'; }).join('');
+    var wantItems = (crit.wants || []).map(function(s) { return '<li>' + escHtml(s) + '</li>'; }).join('');
+    criteriaWrap.innerHTML =
+      '<details class="hud-criteria" open>'
+      + '<summary class="hud-criteria-summary">What ' + escHtml(meta.shortName) + ' is looking for</summary>'
+      + '<div class="hud-criteria-body">'
+      + '<div class="criteria-col criteria-must"><div class="criteria-col-label">Must-haves</div><ul>' + mustItems + '</ul></div>'
+      + '<div class="criteria-col criteria-wants"><div class="criteria-col-label">Wants</div><ul>' + wantItems + '</ul></div>'
+      + '</div></details>';
   }
 
   // ── Persona-specific tonight-card & reflection content ──────────────────
